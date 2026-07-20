@@ -59,15 +59,27 @@
 			linear-gradient(to right, var(--color-surface), transparent 34%),
 			linear-gradient(to left, var(--color-surface), transparent 34%),
 			linear-gradient(to bottom, var(--color-surface), transparent 40%),
-			linear-gradient(to top, var(--color-surface), transparent 52%),
+			linear-gradient(to top, var(--color-surface), transparent 22%),
 			radial-gradient(ellipse 78% 78% at 50% 44%, transparent 38%, color-mix(in oklab, var(--color-surface) 78%, transparent) 82%, var(--color-surface) 100%);"
 	></div>
 
-	<!-- Metadata sits on solid surface; a fixed-height, even fade above it
-	     lifts the block off the render and completes before the title line,
-	     so no gradient runs behind the text. -->
+	<!-- Metadata sits on solid surface; above it a tall eased scrim (ease-in-out
+	     alpha, so no visible band) dissolves the render into the surface over a
+	     long distance, reaching solid just above the title. -->
 	<div class="absolute inset-x-0 bottom-0 z-30 flex flex-col">
-		<div class="h-12 bg-gradient-to-t from-surface to-transparent"></div>
+		<div
+			class="h-32"
+			style="background: linear-gradient(to top,
+				var(--color-surface) 0%,
+				color-mix(in oklab, var(--color-surface) 97%, transparent) 12%,
+				color-mix(in oklab, var(--color-surface) 91%, transparent) 24%,
+				color-mix(in oklab, var(--color-surface) 80%, transparent) 36%,
+				color-mix(in oklab, var(--color-surface) 65%, transparent) 48%,
+				color-mix(in oklab, var(--color-surface) 48%, transparent) 60%,
+				color-mix(in oklab, var(--color-surface) 31%, transparent) 72%,
+				color-mix(in oklab, var(--color-surface) 16%, transparent) 84%,
+				transparent 100%);"
+		></div>
 		<div class="flex flex-col gap-1.5 rounded-b-[7px] bg-surface px-3.5 pb-3">
 			<div class="flex items-center gap-2">
 			<span
