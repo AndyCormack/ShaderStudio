@@ -4,6 +4,11 @@ import { defineConfig } from 'vite';
 import glsl from 'vite-plugin-glsl';
 
 export default defineConfig({
+	// Pre-bundle known deps so Vite doesn't discover them on demand and
+	// force a mid-session reload ("optimized dependencies changed").
+	optimizeDeps: {
+		include: ['three', '@threlte/core', '@threlte/extras']
+	},
 	plugins: [
 		glsl(),
 		sveltekit({
