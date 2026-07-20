@@ -63,10 +63,13 @@
 			radial-gradient(ellipse 78% 78% at 50% 44%, transparent 38%, color-mix(in oklab, var(--color-surface) 78%, transparent) 82%, var(--color-surface) 100%);"
 	></div>
 
-	<div
-		class="absolute inset-x-0 bottom-0 z-30 flex flex-col gap-1.5 rounded-b-[7px] bg-gradient-to-t from-surface from-45% via-surface/80 via-75% to-transparent px-3.5 pb-3 pt-9"
-	>
-		<div class="flex items-center gap-2">
+	<!-- Metadata sits on solid surface; a fixed-height, even fade above it
+	     lifts the block off the render and completes before the title line,
+	     so no gradient runs behind the text. -->
+	<div class="absolute inset-x-0 bottom-0 z-30 flex flex-col">
+		<div class="h-12 bg-gradient-to-t from-surface to-transparent"></div>
+		<div class="flex flex-col gap-1.5 rounded-b-[7px] bg-surface px-3.5 pb-3">
+			<div class="flex items-center gap-2">
 			<span
 				class={cn(
 					'min-w-0 truncate font-[650] text-foreground',
@@ -91,11 +94,12 @@
 				{/each}
 			</div>
 		{/if}
-		<span class="mt-1 truncate pe-7 text-[0.6875rem] tabular-nums text-muted-foreground">
-			{entry.glslVersion} &nbsp;·&nbsp; {formatSize(entry.glslBytes)} &nbsp;·&nbsp; Updated {formatAgo(
-				entry.updatedAt
-			)}
-		</span>
+			<span class="mt-1 truncate pe-7 text-[0.6875rem] tabular-nums text-muted-foreground">
+				{entry.glslVersion} &nbsp;·&nbsp; {formatSize(entry.glslBytes)} &nbsp;·&nbsp; Updated {formatAgo(
+					entry.updatedAt
+				)}
+			</span>
+		</div>
 	</div>
 
 	<!-- Select on click, open in the studio on double-click. -->
