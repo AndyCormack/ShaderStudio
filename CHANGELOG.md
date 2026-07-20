@@ -18,6 +18,8 @@ Notable changes, newest first. What/when only — the *why* lives in the [design
 - Custom scenes failed to lazy-load in dev (403/404 — `shaders/` is outside Vite's default file-serving allow list); `server.fs.allow` now includes it. Production builds were unaffected.
 
 ### Changed
+- Gallery design direction: Preview Atlas composition with a featured live preview, supporting mosaic, persistent discovery rail, search-first command band, and compact selected-shader detail strip. ([D12])
+- Electric Workbench palette: mulberry surface scale with restrained Deep Berry, Signal Red, and Hot Coral roles; active control chrome no longer uses bright accent fills broadly. ([D11])
 - Package manager: npm → pnpm (pinned via `packageManager`; `pnpm-lock.yaml` replaces `package-lock.json`).
 
 ### Added
@@ -25,6 +27,7 @@ Notable changes, newest first. What/when only — the *why* lives in the [design
 - Project inception: shader-studio, a local-first look-dev sandbox for WebGL shaders destined for games (Unreal Engine 5/6) and website effects. No code yet — design + doc architecture only.
 
 ### Docs
+- Product and visual design context: `PRODUCT.md`, the Electric Workbench token/component system in `DESIGN.md`, its Impeccable live-panel sidecar, and preconfigured SvelteKit live mode. ([D10])
 - Living-documentation bootstrap: AGENTS.md (conventions + sources-of-truth map), design log with decisions [D1]–[D8], ADR-0001 (Three.js as plumbing, raw GLSL shaders), ADR-0002 (Threlte scene composition), design synthesis, glossary, PLAN, backlog, tech-debt, this changelog.
 
 [D1]: docs/design/log.md
@@ -32,3 +35,6 @@ Notable changes, newest first. What/when only — the *why* lives in the [design
 [D5]: docs/design/log.md
 [D3]: docs/design/log.md
 [D8]: docs/design/log.md
+[D10]: docs/design/log.md
+[D11]: docs/design/log.md
+[D12]: docs/design/log.md

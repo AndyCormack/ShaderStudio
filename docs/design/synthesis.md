@@ -35,9 +35,13 @@ shaders/fireball/
 
 `meta.json`'s uniform declarations (type, range, default) drive an **auto-generated control panel** — sliders and color pickers, live-tweakable, with no per-shader UI code.
 
+## Visual system
+
+The MVP design target is **the Electric Workbench**: a canvas-first professional instrument with compact mulberry chrome and shader output as the primary source of spectacle ([D10], [D11]). Deep Berry carries broad selected surfaces, completed tracks, routine statuses, and selected-card edges; Signal Red is reserved for decisive actions and restrained focus edges; Hot Coral appears only as a tiny brand-mark spark. System sans typography, restrained 6–12px radii, and tonal layers keep the workspace familiar and focused. Persistent surfaces stay flat; only transient lifted surfaces use subtle, contact-first layered shadows. [PRODUCT.md](../../PRODUCT.md) captures the strategic context and [DESIGN.md](../../DESIGN.md) is normative for visual tokens and component rules.
+
 ## Views
 
-- **Gallery** — grid of live previews rendered from one shared WebGL context via scissored viewports (browsers cap live contexts, so no canvas-per-tile) ([D7]); click through to:
+- **Gallery** — a Preview Atlas with a persistent discovery rail, search-first command band, asymmetric live-preview field, one featured shader, supporting preview mosaic, and compact selected-shader detail strip ([D12]). Previews render from one shared WebGL context via scissored viewports (browsers cap live contexts, so no canvas-per-tile) ([D7]); click through to:
 - **Studio** — full-size canvas, camera/primitive controls, uniform panel, and GLSL compile errors overlaid with line numbers mapped back to the source file.
 
 [D1]: log.md#d1--shader-studio-is-a-local-first-look-dev-sandbox-2026-07-20
@@ -47,4 +51,6 @@ shaders/fireball/
 [D5]: log.md#d5--folder-per-shader-on-disk-format-with-metajson-2026-07-20
 [D6]: log.md#d6--ide-first-editing-in-browser-editor-rejected-outright-2026-07-20
 [D7]: log.md#d7--gallery-previews-one-shared-webgl-context-scissored-viewports-2026-07-20
+[D12]: log.md#d12--gallery-direction-preview-atlas-2026-07-20
 [D8]: log.md#d8--custom-scenes-as-svelte-components-via-threlte-2026-07-20
+[D10]: log.md#d10--ui-direction-the-electric-workbench-2026-07-20

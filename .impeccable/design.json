@@ -1,0 +1,225 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-20T16:01:45.5259034Z",
+  "title": "Design System: shader-studio",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Signal Red",
+        "canonical": "oklch(0.547 0.190 19.4)",
+        "tonalRamp": ["oklch(0.15 0.19 19.4)", "oklch(0.25 0.19 19.4)", "oklch(0.35 0.19 19.4)", "oklch(0.45 0.19 19.4)", "oklch(0.55 0.19 19.4)", "oklch(0.65 0.19 19.4)", "oklch(0.80 0.19 19.4)", "oklch(0.95 0.19 19.4)"]
+      },
+      "primary-hover": {
+        "role": "primary",
+        "displayName": "Pressed Signal",
+        "canonical": "oklch(0.508 0.178 19.5)",
+        "tonalRamp": ["oklch(0.15 0.178 19.5)", "oklch(0.25 0.178 19.5)", "oklch(0.35 0.178 19.5)", "oklch(0.45 0.178 19.5)", "oklch(0.55 0.178 19.5)", "oklch(0.65 0.178 19.5)", "oklch(0.80 0.178 19.5)", "oklch(0.95 0.178 19.5)"]
+      },
+      "primary-text": {
+        "role": "primary",
+        "displayName": "Signal Edge",
+        "canonical": "oklch(0.547 0.190 19.4)",
+        "tonalRamp": ["oklch(0.15 0.19 19.4)", "oklch(0.25 0.19 19.4)", "oklch(0.35 0.19 19.4)", "oklch(0.45 0.19 19.4)", "oklch(0.55 0.19 19.4)", "oklch(0.65 0.19 19.4)", "oklch(0.80 0.19 19.4)", "oklch(0.95 0.19 19.4)"]
+      },
+      "signature": {
+        "role": "secondary",
+        "displayName": "Hot Coral",
+        "canonical": "oklch(0.636 0.207 26.7)",
+        "tonalRamp": ["oklch(0.15 0.207 26.7)", "oklch(0.25 0.207 26.7)", "oklch(0.35 0.207 26.7)", "oklch(0.45 0.207 26.7)", "oklch(0.55 0.207 26.7)", "oklch(0.65 0.207 26.7)", "oklch(0.80 0.207 26.7)", "oklch(0.95 0.207 26.7)"]
+      },
+      "selected": {
+        "role": "secondary",
+        "displayName": "Deep Berry",
+        "canonical": "oklch(0.395 0.143 8.9)",
+        "tonalRamp": ["oklch(0.15 0.143 8.9)", "oklch(0.25 0.143 8.9)", "oklch(0.35 0.143 8.9)", "oklch(0.45 0.143 8.9)", "oklch(0.55 0.143 8.9)", "oklch(0.65 0.143 8.9)", "oklch(0.80 0.143 8.9)", "oklch(0.95 0.143 8.9)"]
+      },
+      "background": {
+        "role": "neutral",
+        "displayName": "Mulberry Canvas",
+        "canonical": "oklch(0.237 0.059 328.7)",
+        "tonalRamp": ["oklch(0.15 0.059 328.7)", "oklch(0.25 0.059 328.7)", "oklch(0.35 0.059 328.7)", "oklch(0.45 0.059 328.7)", "oklch(0.55 0.059 328.7)", "oklch(0.65 0.059 328.7)", "oklch(0.80 0.059 328.7)", "oklch(0.95 0.059 328.7)"]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Mulberry Surface",
+        "canonical": "oklch(0.267 0.071 329.6)",
+        "tonalRamp": ["oklch(0.15 0.071 329.6)", "oklch(0.25 0.071 329.6)", "oklch(0.35 0.071 329.6)", "oklch(0.45 0.071 329.6)", "oklch(0.55 0.071 329.6)", "oklch(0.65 0.071 329.6)", "oklch(0.80 0.071 329.6)", "oklch(0.95 0.071 329.6)"]
+      },
+      "surface-raised": {
+        "role": "neutral",
+        "displayName": "Raised Mulberry",
+        "canonical": "oklch(0.297 0.082 330.3)",
+        "tonalRamp": ["oklch(0.15 0.082 330.3)", "oklch(0.25 0.082 330.3)", "oklch(0.35 0.082 330.3)", "oklch(0.45 0.082 330.3)", "oklch(0.55 0.082 330.3)", "oklch(0.65 0.082 330.3)", "oklch(0.80 0.082 330.3)", "oklch(0.95 0.082 330.3)"]
+      },
+      "surface-overlay": {
+        "role": "neutral",
+        "displayName": "Overlay Mulberry",
+        "canonical": "oklch(0.325 0.090 330.9)",
+        "tonalRamp": ["oklch(0.15 0.09 330.9)", "oklch(0.25 0.09 330.9)", "oklch(0.35 0.09 330.9)", "oklch(0.45 0.09 330.9)", "oklch(0.55 0.09 330.9)", "oklch(0.65 0.09 330.9)", "oklch(0.80 0.09 330.9)", "oklch(0.95 0.09 330.9)"]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Quiet Edge",
+        "canonical": "oklch(0.398 0.063 332.2)",
+        "tonalRamp": ["oklch(0.15 0.063 332.2)", "oklch(0.25 0.063 332.2)", "oklch(0.35 0.063 332.2)", "oklch(0.45 0.063 332.2)", "oklch(0.55 0.063 332.2)", "oklch(0.65 0.063 332.2)", "oklch(0.80 0.063 332.2)", "oklch(0.95 0.063 332.2)"]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Porcelain Ink",
+        "canonical": "oklch(0.958 0.008 337.4)",
+        "tonalRamp": ["oklch(0.15 0.008 325)", "oklch(0.25 0.008 325)", "oklch(0.35 0.008 325)", "oklch(0.45 0.008 325)", "oklch(0.55 0.008 325)", "oklch(0.65 0.008 325)", "oklch(0.80 0.008 325)", "oklch(0.95 0.008 325)"]
+      },
+      "ink-muted": {
+        "role": "neutral",
+        "displayName": "Dusty Rose Ink",
+        "canonical": "oklch(0.749 0.024 337.0)",
+        "tonalRamp": ["oklch(0.15 0.018 325)", "oklch(0.25 0.018 325)", "oklch(0.35 0.018 325)", "oklch(0.45 0.018 325)", "oklch(0.55 0.018 325)", "oklch(0.65 0.018 325)", "oklch(0.80 0.018 325)", "oklch(0.95 0.018 325)"]
+      },
+      "ink-subtle": {
+        "role": "neutral",
+        "displayName": "Subtle Ink",
+        "canonical": "oklch(0.599 0.037 337.2)",
+        "tonalRamp": ["oklch(0.15 0.018 325)", "oklch(0.25 0.018 325)", "oklch(0.35 0.018 325)", "oklch(0.45 0.018 325)", "oklch(0.55 0.018 325)", "oklch(0.65 0.018 325)", "oklch(0.80 0.018 325)", "oklch(0.95 0.018 325)"]
+      },
+      "viewport": {
+        "role": "neutral",
+        "displayName": "Viewport Black",
+        "canonical": "oklch(0.08 0 0)",
+        "tonalRamp": ["oklch(0.15 0 0)", "oklch(0.25 0 0)", "oklch(0.35 0 0)", "oklch(0.45 0 0)", "oklch(0.55 0 0)", "oklch(0.65 0 0)", "oklch(0.80 0 0)", "oklch(0.95 0 0)"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Gallery titles and rare top-level headings." },
+      "headline": { "displayName": "Headline", "purpose": "Shader titles and major inspector headings." },
+      "title": { "displayName": "Title", "purpose": "Panel and control-group titles." },
+      "body": { "displayName": "Body", "purpose": "Instructions and descriptive copy." },
+      "label": { "displayName": "Label", "purpose": "Controls, navigation, and metadata." },
+      "mono": { "displayName": "Mono", "purpose": "Paths, uniforms, source identifiers, and numeric values." }
+    },
+    "shadows": [
+      {
+        "name": "lifted-control",
+        "value": "0 1px 2px rgba(0,0,0,0.34), 0 5px 14px rgba(0,0,0,0.18), 0 16px 40px rgba(0,0,0,0.10)",
+        "purpose": "Compact dropdowns and actively dragged tiles. Tight contact plus two broad faded layers."
+      },
+      {
+        "name": "workbench-overlay",
+        "value": "0 1px 2px rgba(0,0,0,0.46), 0 8px 24px rgba(0,0,0,0.24), 0 24px 64px rgba(0,0,0,0.16)",
+        "purpose": "Command search, dialogs, and large transient inspectors without an ornamental border."
+      }
+    ],
+    "motion": [
+      { "name": "state-fast", "value": "180ms", "purpose": "Hover, focus, selection, and compact disclosures." },
+      { "name": "state-deliberate", "value": "240ms", "purpose": "Panel transitions and larger state changes." },
+      { "name": "ease-out", "value": "cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "Default deceleration for state motion." }
+    ],
+    "breakpoints": [
+      { "name": "compact", "value": "720px" },
+      { "name": "workspace", "value": "1024px" },
+      { "name": "wide", "value": "1440px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The decisive action on a surface; use once per action group.",
+      "html": "<button class=\"ds-btn-primary\">Open shader</button>",
+      "css": ".ds-btn-primary { height: 36px; padding: 8px 14px; border: 0; border-radius: 6px; background: #C72C41; color: #F5EFF3; font: 550 13px/1.35 system-ui, sans-serif; cursor: pointer; transition: background 180ms cubic-bezier(0.22,1,0.36,1), transform 180ms cubic-bezier(0.22,1,0.36,1); } .ds-btn-primary:hover { background: #B52539; } .ds-btn-primary:active { transform: translateY(1px); } .ds-btn-primary:focus-visible { outline: 2px solid #C72C41; outline-offset: 2px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "A compact supporting action that remains subordinate to Signal Red primary actions.",
+      "html": "<button class=\"ds-btn-secondary\">Reset</button>",
+      "css": ".ds-btn-secondary { height: 36px; padding: 8px 14px; border: 1px solid #5B3A56; border-radius: 6px; background: #431B40; color: #F5EFF3; font: 550 13px/1.35 system-ui, sans-serif; cursor: pointer; transition: background 180ms cubic-bezier(0.22,1,0.36,1), border-color 180ms cubic-bezier(0.22,1,0.36,1); } .ds-btn-secondary:hover { background: #4D2049; border-color: #6A4865; } .ds-btn-secondary:focus-visible { outline: 2px solid #C72C41; outline-offset: 2px; }"
+    },
+    {
+      "name": "Search Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "The direct entry point for finding shaders by name, tag, harness, or path.",
+      "html": "<label class=\"ds-search\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"m21 21-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"/></svg><input type=\"search\" placeholder=\"Search shaders\" /></label>",
+      "css": ".ds-search { height: 36px; display: flex; align-items: center; gap: 8px; padding: 0 10px; border: 1px solid #5B3A56; border-radius: 6px; background: #381736; color: #B8A8B3; } .ds-search svg { width: 17px; height: 17px; flex: none; } .ds-search input { min-width: 0; flex: 1; border: 0; outline: 0; background: transparent; color: #F5EFF3; font: 400 15px/1.5 system-ui, sans-serif; } .ds-search input::placeholder { color: #8F7888; opacity: 1; } .ds-search:focus-within { border-color: #801336; outline: 2px solid #C72C41; outline-offset: 2px; }"
+    },
+    {
+      "name": "Filter Chip",
+      "kind": "chip",
+      "refersTo": "filter-chip",
+      "description": "A compact, minimally curved filter for harnesses and shader tags.",
+      "html": "<button class=\"ds-chip\" aria-pressed=\"true\"><svg viewBox=\"0 0 20 20\" aria-hidden=\"true\"><path d=\"m5 10 3 3 7-7\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg>Mesh</button>",
+      "css": ".ds-chip { display: inline-flex; align-items: center; gap: 5px; padding: 5px 9px; border: 1px solid #5B3A56; border-radius: 6px; background: #431B40; color: #B8A8B3; font: 550 13px/1.35 system-ui, sans-serif; cursor: pointer; transition: border-color 180ms cubic-bezier(0.22,1,0.36,1), color 180ms cubic-bezier(0.22,1,0.36,1); } .ds-chip svg { width: 14px; height: 14px; } .ds-chip[aria-pressed=\"true\"] { border-color: #C72C41; color: #F5EFF3; } .ds-chip:hover { color: #F5EFF3; } .ds-chip:focus-visible { outline: 2px solid #C72C41; outline-offset: 2px; }"
+    },
+    {
+      "name": "Navigation Item",
+      "kind": "nav",
+      "refersTo": "nav-item-active",
+      "description": "Compact icon-and-label navigation with one unambiguous active state.",
+      "html": "<a class=\"ds-nav-item\" href=\"#\" aria-current=\"page\"><svg viewBox=\"0 0 24 24\" aria-hidden=\"true\"><path d=\"M4 5h16v14H4zM8 9h8M8 13h5\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\"/></svg>Gallery</a>",
+      "css": ".ds-nav-item { position: relative; height: 36px; display: inline-flex; align-items: center; gap: 8px; padding: 0 10px; border-radius: 6px; color: #B8A8B3; font: 550 13px/1.35 system-ui, sans-serif; text-decoration: none; transition: background 180ms cubic-bezier(0.22,1,0.36,1), color 180ms cubic-bezier(0.22,1,0.36,1); } .ds-nav-item svg { width: 17px; height: 17px; } .ds-nav-item:hover { background: #381736; color: #F5EFF3; } .ds-nav-item[aria-current=\"page\"] { background: #801336; color: #F5EFF3; } .ds-nav-item[aria-current=\"page\"]::after { content: \"\"; position: absolute; left: 8px; right: 8px; bottom: 0; height: 2px; border-radius: 1px; background: #C72C41; } .ds-nav-item:focus-visible { outline: 2px solid #C72C41; outline-offset: 2px; }"
+    },
+    {
+      "name": "Shader Preview Tile",
+      "kind": "card",
+      "refersTo": "shader-tile",
+      "description": "A preview-led gallery result with compact source metadata and no decorative card chrome.",
+      "html": "<article class=\"ds-shader-tile\" aria-selected=\"true\"><div class=\"ds-shader-canvas\"><span>fx</span></div><div class=\"ds-shader-meta\"><div><strong>Fireball</strong><code>fireball</code></div><span>mesh</span></div></article>",
+      "css": ".ds-shader-tile { overflow: hidden; border: 1px solid #5B3A56; border-radius: 8px; background: #381736; color: #F5EFF3; transition: border-color 180ms cubic-bezier(0.22,1,0.36,1), transform 180ms cubic-bezier(0.22,1,0.36,1); } .ds-shader-tile[aria-selected=\"true\"] { border-color: #801336; background: #431B40; } .ds-shader-tile:hover { border-color: #801336; transform: translateY(-1px); } .ds-shader-tile:focus-within { outline: 2px solid #C72C41; outline-offset: 2px; } .ds-shader-canvas { min-height: 150px; display: grid; place-items: center; background: #020202; color: #EE4540; font: 650 24px/1 system-ui, sans-serif; } .ds-shader-meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 12px; font: 550 13px/1.35 system-ui, sans-serif; } .ds-shader-meta div { min-width: 0; display: flex; flex-direction: column; gap: 2px; } .ds-shader-meta code, .ds-shader-meta > span { color: #B8A8B3; font: 500 12px/1.4 ui-monospace, monospace; }"
+    },
+    {
+      "name": "Uniform Slider",
+      "kind": "custom",
+      "description": "A precise live parameter control with tabular value feedback.",
+      "html": "<label class=\"ds-uniform\"><span><code>u_intensity</code><output>1.25</output></span><input type=\"range\" min=\"0\" max=\"2\" value=\"1.25\" /></label>",
+      "css": ".ds-uniform { display: grid; gap: 8px; color: #F5EFF3; font: 500 13px/1.4 ui-monospace, monospace; } .ds-uniform > span { display: flex; justify-content: space-between; gap: 12px; } .ds-uniform output { color: #B8A8B3; font-variant-numeric: tabular-nums; } .ds-uniform input { width: 100%; accent-color: #801336; } .ds-uniform input::-webkit-slider-thumb { border: 1px solid #801336; box-shadow: none; background: #C72C41; } .ds-uniform input::-moz-range-thumb { border: 1px solid #801336; box-shadow: none; background: #C72C41; } .ds-uniform input:focus-visible { outline: 2px solid #C72C41; outline-offset: 3px; border-radius: 2px; }"
+    },
+    {
+      "name": "Command Search Overlay",
+      "kind": "custom",
+      "description": "The keyboard-first discovery surface for a growing shader collection.",
+      "html": "<section class=\"ds-command\"><header><span>Search shaders</span><kbd>Esc</kbd></header><button><span><strong>Fireball</strong><code>mesh · glow</code></span><kbd>↵</kbd></button><button><span><strong>Plasma</strong><code>quad · procedural</code></span></button></section>",
+      "css": ".ds-command { width: min(520px, 90vw); overflow: hidden; border-radius: 12px; background: #4D2049; color: #F5EFF3; box-shadow: 0 1px 2px rgba(0,0,0,.46), 0 8px 24px rgba(0,0,0,.24), 0 24px 64px rgba(0,0,0,.16); font-family: system-ui, sans-serif; } .ds-command header { display: flex; justify-content: space-between; padding: 12px 14px; color: #B8A8B3; font-size: 13px; } .ds-command button { width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 14px; border: 0; background: transparent; color: #F5EFF3; text-align: left; cursor: pointer; } .ds-command button:hover, .ds-command button:focus-visible { outline: 0; background: #801336; } .ds-command button span { display: grid; gap: 2px; } .ds-command code { color: #B8A8B3; font: 500 12px/1.4 ui-monospace, monospace; } .ds-command button:hover code, .ds-command button:focus-visible code { color: #F5EFF3; } .ds-command kbd { color: #B8A8B3; font: 500 11px/1.2 ui-monospace, monospace; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Electric Workbench",
+    "overview": "shader-studio is a calm professional instrument with an electric edge. The rendered shader is always the brightest, most expressive object in the room; the surrounding interface is compact, dark, precise, and quiet enough to disappear during focused work. Mulberry surfaces create a distinct environment without turning the product into a themed spectacle.\n\nThis is the MVP design target. The existing interface implements only part of it, so the tokens above are normative for new work and should replace one-off values as touched. The visual system takes ComfyUI Desktop's personality, Rive's approachability, PlayCanvas's durable workspace structure, and Shadertoy's visual discovery model without copying their feature metaphors.\n\nThe system explicitly rejects the generic SaaS dashboard, dense Blender or Unity cockpit, RGB-gamer cyberpunk interface, and bubbly creative toy. Familiar controls and disciplined density make the tool trustworthy; focused color, a distinctive mark, and polished feedback make it memorable.",
+    "keyCharacteristics": [
+      "Canvas-first layouts with compact, contextual chrome.",
+      "Dark mulberry tonal layers rather than decorative containers.",
+      "Signal Red for decisive interaction; Deep Berry for quiet active-state structure and routine status; Hot Coral for a tiny brand-mark spark.",
+      "Refined, minimally curved geometry with a 12px absolute ceiling.",
+      "Fast state motion and carefully layered elevation only where an element truly lifts."
+    ],
+    "rules": [
+      { "name": "The Content-Is-Light Rule", "body": "Shader output supplies the spectacle. Application surfaces never compete with it through decorative gradients, glow fields, or ornamental animation.", "section": "overview" },
+      { "name": "The Berry-Structures Rule", "body": "Deep Berry carries broad selected surfaces, completed tracks, checkbox fills, and persistent active destinations. Use Signal Red only where decisive interaction needs a sharper edge.", "section": "colors" },
+      { "name": "The Coral-Sparks Rule", "body": "Hot Coral is a tiny brand-mark spark. It never becomes operational status, structural chrome, or a large-area fill.", "section": "colors" },
+      { "name": "The Contrast Rule", "body": "Body and placeholder text must maintain at least 4.5:1 contrast against their surface. Use Porcelain Ink or Dusty Rose Ink for ordinary text; Signal Red is a control fill and focus color, not body copy.", "section": "colors" },
+      { "name": "The Instrument Type Rule", "body": "Labels remain compact and familiar. Do not use a display face, excessive tracking, or uppercase section kickers to manufacture personality.", "section": "typography" },
+      { "name": "The Contact-First Rule", "body": "Every elevated surface begins with a tight one-to-two-pixel contact shadow, then fades through broader, lighter layers. A single dark floating shadow is forbidden.", "section": "elevation" },
+      { "name": "The Flat-at-Rest Rule", "body": "Gallery tiles, inspectors, toolbars, and controls do not float by default. If everything casts a shadow, nothing has hierarchy.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do let live shader previews carry most of the screen's color and visual energy.",
+      "Do use Deep Berry for broad active structure and routine status, Signal Red for decisive interaction, and Hot Coral only as a tiny brand-mark spark.",
+      "Do keep controls at 6px, tiles at 8px, panels at 10px, and overlays at no more than 12px radius.",
+      "Do use tonal layering for static structure and the layered contact-first shadows only for genuine lift.",
+      "Do make gallery search, tags, filters, and keyboard navigation first-class as the collection grows.",
+      "Do preserve at least 4.5:1 text contrast, visible focus, reduced motion, and color-independent state cues."
+    ],
+    "donts": [
+      "Don't turn the interface into a generic SaaS dashboard.",
+      "Don't reproduce a dense Blender or Unity cockpit; reveal specialist controls contextually.",
+      "Don't use an RGB-gamer cyberpunk interface or spread saturated accents across inactive states.",
+      "Don't make controls feel like a bubbly creative toy through oversized pills or extreme curves.",
+      "Don't use hazy low-contrast treatments, decorative marketing-page scaffolding, or effects that compete with the shader being evaluated.",
+      "Don't use gradient text, decorative grid backgrounds, repeating stripe backgrounds, or glassmorphism as a default material.",
+      "Don't use colored side-stripe borders, cards above 12px radius, or a one-pixel border paired decoratively with a broad shadow.",
+      "Don't animate page-load choreography or gate content visibility behind reveal animations."
+    ]
+  }
+}

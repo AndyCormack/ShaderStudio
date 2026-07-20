@@ -73,3 +73,21 @@ Custom per-shader scenes are Svelte components composed of Three.js elements usi
 The MVP harness is single-pass. Outline-glow-class effects (a stated target) typically need a post-process or multi-pass technique — inverted hull, blurred-mask compositing, etc. — so multi-pass support is confirmed as wanted, but deferred: it rides in [backlog.md](../../backlog.md) until the single-pass MVP proves the iteration loop.
 
 **Rejected:** designing multi-pass into the MVP harness now — speculative complexity ahead of a working single-pass loop.
+
+## D10 — UI direction: the Electric Workbench (2026-07-20)
+
+The product UI is a **canvas-first professional instrument with an electric edge**. Shader output carries the spectacle while compact carbon-plum chrome recedes around it. **Pulse Magenta** is the interaction color; **Signal Cyan** is reserved for the mark and rare signature moments. The system uses familiar system sans typography, refined radii with a 12px ceiling, flat tonal layering for persistent structure, and subtle multi-layer shadows only when transient surfaces genuinely lift. Gallery discovery — live previews, search, tags, and filtering — is a core interaction concern as the collection grows. [PRODUCT.md](../../PRODUCT.md) captures the strategy; [DESIGN.md](../../DESIGN.md) owns the normative visual tokens and rules.
+
+**Rejected:** Rive's neutral visual language as the complete identity — approachable but insufficiently distinctive. Also rejected: a dense Blender/Unity cockpit, generic SaaS dashboard styling, RGB-gamer cyberpunk, bubbly creative-tool geometry, acid citron as the signature color, and decorative effects that compete with shader output. ComfyUI Desktop remains the main personality reference, combined with Rive's approachability, PlayCanvas's workspace structure, and Shadertoy's discovery model.
+
+## D11 — Mulberry and restrained signal palette (2026-07-20)
+
+The Electric Workbench uses **Mulberry Canvas `#2D132C`** as its foundation, with same-hue surface steps for persistent depth. **Deep Berry `#801336`** carries broad active-state structure and routine statuses; **Signal Red `#C72C41`** is reserved for decisive actions and restrained focus edges; **Hot Coral `#EE4540`** is limited to a tiny brand-mark spark. Slider tracks, checkbox fills, input borders, view toggles, selected rows, card selection, and similar operational chrome stay Deep Berry or restrained Signal Red so active states do not compete with shader output. Slider thumbs never use a white ring or glow. [DESIGN.md](../../DESIGN.md) owns the exact derived surface and text tokens.
+
+**Rejected:** the earlier Pulse Magenta / Signal Cyan pairing, a navy/teal foundation, teal or deep-aubergine signature colors, and bright-red structural chrome. These directions either felt generic creative-tech, under-contrasted, or too loud across routine controls.
+
+## D12 — Gallery direction: Preview Atlas (2026-07-20)
+
+The Gallery uses a **Preview Atlas**: a persistent discovery rail and search-first command band frame an asymmetric live-preview field, with one large featured shader, supporting medium and small previews, and a compact selected-shader detail strip across the bottom. This balances rapid visual scanning with enough metadata to rediscover shaders as the collection grows. The Gallery remains a discovery and launch surface; detailed tuning belongs to the Studio.
+
+**Rejected:** a uniform catalog grid as the primary composition, a selected-preview shelf that reduces whole-library scanability, and a command-results list as the default view. Those structures remain useful secondary modes or interaction patterns but do not provide the chosen balance of visual identity, comparison, and scalable discovery.
