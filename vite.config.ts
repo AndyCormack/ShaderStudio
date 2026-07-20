@@ -11,6 +11,13 @@ export default defineConfig({
 	optimizeDeps: {
 		entries: ['src/**/*.{svelte,ts}', 'shaders/*/Scene.svelte']
 	},
+	server: {
+		fs: {
+			// shaders/ lives outside src/, and custom scenes are lazy-loaded
+			// as real module URLs in dev — allow serving them.
+			allow: ['shaders']
+		}
+	},
 	plugins: [
 		glsl(),
 		sveltekit({

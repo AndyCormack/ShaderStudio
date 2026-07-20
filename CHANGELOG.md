@@ -14,6 +14,9 @@ Notable changes, newest first. What/when only — the *why* lives in the [design
 ### Added
 - Shader loading (PLAN item 2): glob-built catalog (`src/lib/shaders/catalog.ts`) discovers `shaders/*/` folders, validates `meta.json` (harness mode, `u_`-prefixed uniform defs), and exposes typed entries; the front page lists discovered entries. Seeded with two entries: `plasma` (quad) and `fireball` (mesh, custom vertex shader + UE porting notes). Seed shaders load but don't render yet — that's the render harness, next in PLAN. ([D5])
 
+### Fixed
+- Custom scenes failed to lazy-load in dev (403/404 — `shaders/` is outside Vite's default file-serving allow list); `server.fs.allow` now includes it. Production builds were unaffected.
+
 ### Changed
 - Package manager: npm → pnpm (pinned via `packageManager`; `pnpm-lock.yaml` replaces `package-lock.json`).
 
