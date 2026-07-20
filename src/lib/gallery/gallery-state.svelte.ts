@@ -9,7 +9,7 @@ const RECENTS_CAP = 12;
 
 export type RailSection = 'gallery' | 'favorites' | 'recent';
 export type HarnessFilter = 'all' | 'quad' | 'mesh';
-export type SortOrder = 'recent' | 'name';
+export type SortOrder = 'updated' | 'recent' | 'name';
 
 function readStringArray(key: string): string[] {
 	if (!browser) return [];
@@ -43,7 +43,7 @@ export class GalleryState {
 	section = $state<RailSection>('gallery');
 	tag = $state<string | null>(null);
 	harness = $state<HarnessFilter>('all');
-	sort = $state<SortOrder>('recent');
+	sort = $state<SortOrder>('updated');
 	paletteOpen = $state(false);
 
 	favorites = $state<string[]>(readStringArray(FAVORITES_KEY));
@@ -85,6 +85,8 @@ export class GalleryState {
 			list = [...list].sort(
 				(a, b) => (rank.get(a.slug) ?? Infinity) - (rank.get(b.slug) ?? Infinity)
 			);
+		} else if (this.sort === 'updated') {
+			list = [...list].sort((a, b) => b.updatedAt - a.updatedAt);
 		}
 		return list;
 	});

@@ -265,7 +265,7 @@ Components are compact, tactile, precise, and familiar. Controls use restrained 
 
 ### Shader Preview Tile
 
-A bordered Shadow Plum card: the live preview fills the top (on Viewport Black), and a metadata block sits below it on the card surface — title with an outlined harness badge, a mono path line, tag chips, then a compact meta row (primitive, scene, uniform count). The favorite star sits top-left over the preview, always visible: Muted Ink at rest, Favorite Rose filled when active. Selection is a dimmed Signal Red card border. Hot Coral never appears as tile chrome or status.
+A bordered Shadow Plum card: the live preview fills the top (on Viewport Black), and a metadata block sits below it on the card surface — title with an outlined harness badge, the full mono fragment path, tag chips, then a muted tabular meta row (GLSL version · source size · updated-ago) with a quiet ⋯ overflow menu at its right. The favorite star sits top-left over the preview, always visible: Muted Ink at rest, Favorite Rose filled when active. Selection is a dimmed Signal Red card border. Hot Coral never appears as tile chrome or status.
 
 ### Command Search
 

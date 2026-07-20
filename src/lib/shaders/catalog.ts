@@ -1,3 +1,4 @@
+import shaderStats from 'virtual:shader-stats';
 import type { ShaderEntry, ShaderMeta } from './types';
 
 // The catalog is derived at build time from the shaders/ tree — adding a shader
@@ -18,6 +19,14 @@ const scenePaths = new Set(Object.keys(import.meta.glob('/shaders/*/Scene.svelte
 
 function slugOf(path: string): string {
 	return path.split('/')[2];
+}
+
+// Raw portable GLSL without a `#version` directive compiles as GLSL ES 1.00
+// under WebGL (D3), so that's the honest default label.
+function glslVersionOf(fragment: string): string {
+	const match = fragment.match(/^\s*#version\s+(\d+)(\s+es)?/m);
+	if (!match) return 'GLSL ES 100';
+	return match[2] ? `GLSL ES ${match[1]}` : `GLSL ${match[1]}`;
 }
 
 function validateMeta(slug: string, raw: unknown): ShaderMeta {
@@ -60,12 +69,16 @@ function buildCatalog(): ShaderEntry[] {
 		}
 		const vertex = vertexModules[`/shaders/${slug}/vertex.glsl`];
 		const notes = notesModules[`/shaders/${slug}/notes.md`];
+		const stats = shaderStats[slug];
 		entries.push({
 			slug,
 			meta: validateMeta(slug, rawMeta),
 			fragment,
 			vertex: typeof vertex === 'string' ? vertex : undefined,
-			notes: typeof notes === 'string' ? notes : undefined
+			notes: typeof notes === 'string' ? notes : undefined,
+			glslVersion: glslVersionOf(fragment),
+			glslBytes: stats?.glslBytes ?? 0,
+			updatedAt: stats?.updatedAt ?? 0
 		});
 	}
 	for (const path of Object.keys(fragmentModules)) {

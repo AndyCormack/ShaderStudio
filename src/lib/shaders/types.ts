@@ -26,4 +26,10 @@ export interface ShaderEntry {
 	vertex?: string;
 	/** Raw notes.md contents when the entry ships one (design intent + porting notes). */
 	notes?: string;
+	/** GLSL version label derived from the fragment's `#version` directive ("GLSL ES 100" when absent). */
+	glslVersion: string;
+	/** Total bytes of the entry's GLSL source files. */
+	glslBytes: number;
+	/** Newest mtime (epoch ms) across the entry's folder; 0 when stats are unavailable. */
+	updatedAt: number;
 }

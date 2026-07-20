@@ -26,7 +26,7 @@ Canonical terms for shader-studio. One term per concept; alternatives listed und
 
 **discovery rail** — the gallery's persistent left navigation: Gallery, Favorites, Recent, and Tags, each count-aware. _Avoid: sidebar (in gallery context)._
 
-**command band** — the gallery's top bar: inline search first, harness filter chips and sort subordinate. _Avoid: toolbar, header._
+**command band** — the gallery's top bar: inline search first, a filters menu and sort subordinate. _Avoid: toolbar, header._
 
 **detail strip** — the compact selected-shader panel spanning the gallery's bottom edge: metadata, tags, favorite toggle, and the single **Open shader** action. _Avoid: inspector (that's the studio's uniform panel territory)._
 

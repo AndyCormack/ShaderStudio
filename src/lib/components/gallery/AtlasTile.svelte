@@ -1,6 +1,11 @@
 <script lang="ts">
 	import Star from 'phosphor-svelte/lib/Star';
+	import DotsThree from 'phosphor-svelte/lib/DotsThree';
+	import ArrowUpRight from 'phosphor-svelte/lib/ArrowUpRight';
+	import LinkSimple from 'phosphor-svelte/lib/LinkSimple';
 	import { Badge } from '$lib/components/ui/badge';
+	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
+	import { formatAgo, formatSize } from '$lib/gallery/format';
 	import type { ShaderEntry } from '$lib/shaders/types';
 	import type { GalleryState } from '$lib/gallery/gallery-state.svelte';
 	import type { PreviewRegistry } from '$lib/gallery/preview-registry';
@@ -20,17 +25,7 @@
 
 	const selected = $derived(gallery.selected?.slug === entry.slug);
 	const favorite = $derived(gallery.isFavorite(entry.slug));
-
-	const metaParts = $derived(
-		[
-			entry.meta.harness === 'mesh' ? (entry.meta.primitive ?? 'sphere') : undefined,
-			entry.meta.scene ? 'custom scene' : undefined,
-			entry.vertex ? 'custom vertex' : undefined,
-			entry.meta.uniforms?.length
-				? `${entry.meta.uniforms.length} uniform${entry.meta.uniforms.length === 1 ? '' : 's'}`
-				: undefined
-		].filter(Boolean) as string[]
-	);
+	const fragmentPath = $derived(`shaders/${entry.slug}/fragment.glsl`);
 </script>
 
 <!--
@@ -68,7 +63,7 @@
 				{entry.meta.harness}
 			</Badge>
 		</div>
-		<span class="truncate font-mono text-xs text-muted-foreground">shaders/{entry.slug}/</span>
+		<span class="truncate font-mono text-xs text-muted-foreground">{fragmentPath}</span>
 		{#if entry.meta.tags?.length}
 			<div class="flex flex-wrap gap-1">
 				{#each entry.meta.tags as tag (tag)}
@@ -80,9 +75,11 @@
 				{/each}
 			</div>
 		{/if}
-		{#if metaParts.length}
-			<span class="truncate text-[0.6875rem] text-muted-foreground">{metaParts.join(' · ')}</span>
-		{/if}
+		<span class="mt-0.5 truncate pe-7 text-[0.6875rem] tabular-nums text-muted-foreground">
+			{entry.glslVersion} &nbsp;·&nbsp; {formatSize(entry.glslBytes)} &nbsp;·&nbsp; Updated {formatAgo(
+				entry.updatedAt
+			)}
+		</span>
 	</div>
 
 	<!-- Select on click, open in the studio on double-click. -->
@@ -110,4 +107,29 @@
 	>
 		<Star size={16} weight={favorite ? 'fill' : 'regular'} />
 	</button>
+
+	<!-- Overflow actions: bottom-right of the meta row, per the mockup. -->
+	<DropdownMenu.Root>
+		<DropdownMenu.Trigger
+			class="absolute bottom-1.5 end-1.5 z-30 flex size-6 items-center justify-center rounded-[4px] text-muted-foreground transition-colors duration-150 hover:bg-surface-raised hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring data-open:bg-surface-raised data-open:text-foreground"
+			aria-label={`More actions for ${entry.meta.name}`}
+		>
+			<DotsThree size={18} weight="bold" />
+		</DropdownMenu.Trigger>
+		<DropdownMenu.Content align="end" class="w-48">
+			<DropdownMenu.Item onclick={() => gallery.open(entry)}>
+				<ArrowUpRight size={15} aria-hidden="true" />
+				Open shader
+			</DropdownMenu.Item>
+			<DropdownMenu.Item onclick={() => navigator.clipboard.writeText(fragmentPath)}>
+				<LinkSimple size={15} aria-hidden="true" />
+				Copy path
+			</DropdownMenu.Item>
+			<DropdownMenu.Separator />
+			<DropdownMenu.Item onclick={() => gallery.toggleFavorite(entry.slug)}>
+				<Star size={15} aria-hidden="true" />
+				{favorite ? 'Remove from favorites' : 'Add to favorites'}
+			</DropdownMenu.Item>
+		</DropdownMenu.Content>
+	</DropdownMenu.Root>
 </div>
