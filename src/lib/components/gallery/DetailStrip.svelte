@@ -60,21 +60,24 @@
 </script>
 
 {#if entry}
-	<div
-		class="flex shrink-0 flex-col gap-4 border-t border-border bg-surface px-4 py-3.5 lg:flex-row lg:items-center lg:gap-7"
-	>
-		<div class="flex min-w-0 items-center gap-3.5 lg:w-72 lg:shrink-0">
+	<!-- Full-window band with a top divider; the strip itself is a raised
+	     rounded panel inset within it (the mockup's double container). -->
+	<div class="shrink-0 border-t border-border px-4 py-3.5">
+		<div
+			class="flex flex-col gap-4 rounded-panel border border-border bg-surface px-5 py-4 lg:flex-row lg:items-start lg:gap-8"
+		>
+		<div class="flex min-w-0 items-center gap-4 lg:w-96 lg:shrink-0">
 			<div
-				class="relative size-16 shrink-0 overflow-hidden rounded-lg border border-primary/60"
+				class="relative size-20 shrink-0 overflow-hidden rounded-lg border border-primary/60"
 				{@attach (el) => registry.register('detail', entry.slug, el, { frozen: true })}
 			>
 				<div
-					class="pointer-events-none absolute inset-0 z-30 rounded-[5px] shadow-[0_0_0_24px_var(--color-surface)]"
+					class="pointer-events-none absolute inset-0 z-30 rounded-[7px] shadow-[0_0_0_24px_var(--color-surface)]"
 				></div>
 			</div>
 			<div class="min-w-0">
-				<div class="flex items-center gap-2">
-					<h2 class="truncate text-[1.0625rem] font-[650] leading-tight tracking-[-0.01em]">
+				<div class="flex items-center gap-2.5">
+					<h2 class="truncate text-[1.125rem] font-[650] leading-tight tracking-[-0.01em]">
 						{entry.meta.name}
 					</h2>
 					<Badge
@@ -83,6 +86,25 @@
 					>
 						{entry.meta.harness}
 					</Badge>
+				</div>
+				<p class="mt-1 truncate font-mono text-xs text-muted-foreground">{fragmentPath}</p>
+				<div class="mt-2 flex items-center gap-3">
+					{#if entry.meta.tags?.length}
+						<div class="flex min-w-0 flex-wrap gap-1">
+							{#each entry.meta.tags as tag (tag)}
+								<button
+									type="button"
+									class="rounded-[5px] border border-border/70 bg-surface-raised/60 px-2 py-0.5 text-[0.6875rem] text-muted-foreground transition-colors duration-150 hover:border-border hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+									onclick={() => {
+										gallery.tag = tag;
+										gallery.section = 'gallery';
+									}}
+								>
+									{tag}
+								</button>
+							{/each}
+						</div>
+					{/if}
 					<button
 						type="button"
 						class={favorite
@@ -95,20 +117,19 @@
 						<Star size={16} weight={favorite ? 'fill' : 'regular'} />
 					</button>
 				</div>
-				<p class="mt-1 truncate font-mono text-xs text-muted-foreground">{fragmentPath}</p>
 			</div>
 		</div>
 
 		{#if description}
 			<div class="hidden min-w-0 max-w-[36ch] lg:block">
-				<p class="mb-1 text-[0.6875rem] font-[550] text-muted-foreground">Description</p>
+				<p class="mb-1.5 text-[0.6875rem] font-[550] text-muted-foreground">Description</p>
 				<p class="line-clamp-3 text-xs leading-relaxed text-muted-foreground">{description}</p>
 			</div>
 		{/if}
 
 		<div class="hidden shrink-0 xl:block">
-			<p class="mb-1 text-[0.6875rem] font-[550] text-muted-foreground">Details</p>
-			<dl class="grid grid-cols-[auto_auto] gap-x-4 gap-y-0.5 text-xs tabular-nums">
+			<p class="mb-1.5 text-[0.6875rem] font-[550] text-muted-foreground">Details</p>
+			<dl class="grid grid-cols-[auto_auto] gap-x-6 gap-y-1 text-xs tabular-nums">
 				{#each details as [term, value] (term)}
 					<dt class="text-muted-foreground">{term}</dt>
 					<dd class={term === 'Harness' ? 'capitalize text-foreground' : 'text-foreground'}>
@@ -125,7 +146,7 @@
 					{#each entry.meta.tags as tag (tag)}
 						<button
 							type="button"
-							class="rounded-[4px] bg-surface-raised px-1.5 py-0.5 font-mono text-[0.6875rem] text-muted-foreground transition-colors duration-150 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+							class="rounded-[5px] border border-border/70 bg-surface-raised/60 px-2 py-0.5 text-[0.6875rem] text-muted-foreground transition-colors duration-150 hover:border-border hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
 							onclick={() => {
 								gallery.tag = tag;
 								gallery.section = 'gallery';
@@ -139,22 +160,24 @@
 		{/if}
 
 		<div class="hidden shrink-0 2xl:block">
-			<p class="mb-1 text-[0.6875rem] font-[550] text-muted-foreground">Usage</p>
+			<p class="mb-1.5 text-[0.6875rem] font-[550] text-muted-foreground">Usage</p>
 			<p class="text-xs text-foreground">{usage.lead}</p>
 			{#each usage.rest as line (line)}
 				<p class="mt-0.5 text-xs text-muted-foreground">{line}</p>
 			{/each}
 		</div>
 
-		<div class="flex shrink-0 items-center gap-2 lg:ms-auto">
-			<Button class="h-10 px-5" onclick={() => gallery.open(entry)}>Open shader</Button>
+		<div class="flex shrink-0 items-center gap-2.5 lg:ms-auto">
+			<Button class="h-11 px-7 text-[0.875rem]" onclick={() => gallery.open(entry)}>
+				Open shader
+			</Button>
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger>
 					{#snippet child({ props })}
 						<Button
 							{...props}
 							variant="secondary"
-							class="size-10 p-0"
+							class="size-11 border border-border p-0"
 							aria-label={`More actions for ${entry.meta.name}`}
 						>
 							<DotsThree size={20} weight="bold" />
@@ -172,6 +195,7 @@
 					</DropdownMenu.Item>
 				</DropdownMenu.Content>
 			</DropdownMenu.Root>
+			</div>
 		</div>
 	</div>
 {/if}

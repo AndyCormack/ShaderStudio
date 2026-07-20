@@ -47,14 +47,30 @@
 		renderer.clear();
 		renderer.setScissorTest(true);
 
+		// The canvas spans the whole window (the detail strip is outside the
+		// atlas scroll area), so canvas bounds no longer cull scrolled tiles.
+		// Each viewport clips to its nearest [data-preview-clip] ancestor —
+		// the atlas scroll container — falling back to the canvas itself.
+		const clipRects = new Map<Element, DOMRect>();
+
 		for (const [key, { slug, el, frozen }] of registry.targets()) {
 			const rect = el.getBoundingClientRect();
-			// Cull viewports scrolled out of the atlas area.
+			const clipEl = el.closest('[data-preview-clip]');
+			let clipRect = canvasRect;
+			if (clipEl) {
+				let r = clipRects.get(clipEl);
+				if (!r) {
+					r = clipEl.getBoundingClientRect();
+					clipRects.set(clipEl, r);
+				}
+				clipRect = r;
+			}
+			// Cull viewports scrolled out of their clip area.
 			if (
-				rect.bottom <= canvasRect.top ||
-				rect.top >= canvasRect.bottom ||
-				rect.right <= canvasRect.left ||
-				rect.left >= canvasRect.right
+				rect.bottom <= clipRect.top ||
+				rect.top >= clipRect.bottom ||
+				rect.right <= clipRect.left ||
+				rect.left >= clipRect.right
 			) {
 				continue;
 			}
@@ -88,13 +104,18 @@
 			const x = Math.round(rect.left - canvasRect.left) + inset;
 			const y = Math.round(canvasRect.bottom - rect.bottom) + inset;
 
-			// Clip the scissor to the canvas so partially scrolled tiles crop
-			// instead of drawing outside the atlas viewport; the viewport keeps
-			// the full tile size so the image isn't squashed.
-			const sx = Math.max(x, 0);
-			const sy = Math.max(y, 0);
-			const sw = Math.min(x + width, canvasRect.width) - sx;
-			const sh = Math.min(y + height, canvasRect.height) - sy;
+			// Clip the scissor to the clip area (in canvas space) so partially
+			// scrolled tiles crop at the atlas edge instead of drawing over the
+			// command band or detail strip; the viewport keeps the full tile
+			// size so the image isn't squashed.
+			const cx0 = Math.max(Math.round(clipRect.left - canvasRect.left), 0);
+			const cx1 = Math.min(Math.round(clipRect.right - canvasRect.left), canvasRect.width);
+			const cy0 = Math.max(Math.round(canvasRect.bottom - clipRect.bottom), 0);
+			const cy1 = Math.min(Math.round(canvasRect.bottom - clipRect.top), canvasRect.height);
+			const sx = Math.max(x, cx0);
+			const sy = Math.max(y, cy0);
+			const sw = Math.min(x + width, cx1) - sx;
+			const sh = Math.min(y + height, cy1) - sy;
 			if (sw <= 0 || sh <= 0) continue;
 
 			if (!frozen) ps.tick(delta);

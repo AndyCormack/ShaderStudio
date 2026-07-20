@@ -24,32 +24,39 @@
 	const activeFilters = $derived((gallery.harness !== 'all' ? 1 : 0) + (gallery.tag ? 1 : 0));
 </script>
 
-<div class="flex min-h-14 shrink-0 items-center gap-3 border-b border-border px-4 py-2 md:h-14 md:py-0">
-	<div class="relative min-w-0 flex-1 md:max-w-xl">
+<div
+	class="flex min-h-16 shrink-0 items-center gap-3 border-b border-border px-4 py-2.5 md:h-[4.5rem] md:py-0 md:pe-5 md:ps-4"
+>
+	<div class="relative min-w-0 flex-1">
 		<MagnifyingGlass
-			size={16}
-			class="pointer-events-none absolute start-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+			size={17}
+			class="pointer-events-none absolute start-3.5 top-1/2 -translate-y-1/2 text-muted-foreground"
 		/>
 		<Input
 			id="gallery-search"
 			type="search"
 			placeholder="Search shaders…"
-			class="h-9 bg-surface pe-9 ps-9"
+			class="h-11 bg-surface pe-10 ps-10"
 			bind:value={gallery.search}
 			aria-label="Search shaders by name, path, or tag"
 		/>
 		<kbd
-			class="pointer-events-none absolute end-2.5 top-1/2 -translate-y-1/2 rounded-sm border border-border bg-background px-1.5 py-px font-mono text-[0.6875rem] text-muted-foreground"
+			class="pointer-events-none absolute end-3 top-1/2 -translate-y-1/2 rounded-sm border border-border bg-background px-1.5 py-0.5 font-mono text-[0.6875rem] text-muted-foreground"
 		>
 			/
 		</kbd>
 	</div>
 
-	<div class="ms-auto flex items-center gap-2">
+	<div class="flex items-center gap-2.5">
 		<DropdownMenu.Root>
 			<DropdownMenu.Trigger>
 				{#snippet child({ props })}
-					<Button {...props} variant="secondary" class="h-9 gap-2" aria-label="Filter shaders">
+					<Button
+						{...props}
+						variant="secondary"
+						class="h-11 gap-2 border border-border px-4"
+						aria-label="Filter shaders"
+					>
 						<Funnel size={16} aria-hidden="true" />
 						Filters
 						{#if activeFilters > 0}
@@ -89,7 +96,7 @@
 		</DropdownMenu.Root>
 
 		<Select.Select type="single" bind:value={gallery.sort}>
-			<Select.SelectTrigger class="hidden h-9 w-44 sm:flex" aria-label="Sort order">
+			<Select.SelectTrigger class="hidden !h-11 w-48 sm:flex" aria-label="Sort order">
 				{sortLabels[gallery.sort]}
 			</Select.SelectTrigger>
 			<Select.SelectContent>

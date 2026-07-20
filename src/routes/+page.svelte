@@ -58,18 +58,19 @@
 
 <svelte:window {onkeydown} />
 
-<div class="flex h-svh">
-	<DiscoveryRail {gallery} />
+<!-- The canvas overlays the whole window (pointer-events-none, transparent
+     outside registered viewports) so both the atlas tiles and the full-width
+     detail strip's thumbnail can be windows onto it. Descendants that must
+     overlay the z-20 canvas use z-30; everything else shows through. -->
+<div class="relative flex h-svh flex-col">
+	{#if gallery.entries.length > 0}
+		<PreviewCanvas {registry} />
+	{/if}
 
-	<main class="relative flex min-w-0 flex-1 flex-col">
-		{#if gallery.entries.length > 0}
-			<PreviewCanvas {registry} />
-		{/if}
+	<div class="flex min-h-0 flex-1">
+		<DiscoveryRail {gallery} />
 
-		<!-- No z-index: descendants that must overlay the z-20 canvas use z-30
-		     in the root stacking context; everything else shows through the
-		     canvas's transparent pixels. -->
-		<div class="relative flex min-h-0 flex-1 flex-col">
+		<main class="relative flex min-w-0 flex-1 flex-col">
 			<CommandBand {gallery} />
 
 			<div class="relative min-h-0 flex-1">
@@ -96,15 +97,15 @@
 						</Button>
 					</div>
 				{:else}
-					<div class="absolute inset-0 overflow-y-auto">
+					<div class="absolute inset-0 overflow-y-auto" data-preview-clip>
 						<AtlasGrid {gallery} {registry} />
 					</div>
 				{/if}
 			</div>
+		</main>
+	</div>
 
-			<DetailStrip {gallery} {registry} />
-		</div>
-	</main>
+	<DetailStrip {gallery} {registry} />
 </div>
 
 <CommandSearch {gallery} />

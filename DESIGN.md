@@ -217,7 +217,7 @@ The Gallery follows the **Preview Atlas** topology. A persistent discovery rail 
 - **Discovery rail:** Gallery, Favorites, Collections, Presets, Tags, Recent, and harness shortcuts remain compact and count-aware. **Open shaders folder** stays a secondary utility.
 - **Command band:** search is visually first; filters and sorting remain subordinate; no editable shader controls appear in the Gallery.
 - **Detail strip:** selection exposes title, path, harness, renderer/version, size, tags, usage, favorite state, and **Open shader** without turning the Gallery into the Studio.
-- **Selection:** a quiet, dimmed Signal Red card edge; Berry Shadow fields carry rail and filter selection. Full-strength Signal Red belongs to the final open action or keyboard focus.
+- **Selection:** a quiet, dimmed Signal Red card edge with a faint matching outer and inner glow; Berry Shadow fields carry rail and filter selection. Full-strength Signal Red belongs to the final open action or keyboard focus.
 - **Density:** target 8–12 visible live previews at a 16:10 desktop workspace while keeping names and compact metadata legible.
 
 ## Studio Layout
@@ -265,7 +265,7 @@ Components are compact, tactile, precise, and familiar. Controls use restrained 
 
 ### Shader Preview Tile
 
-A bordered Shadow Plum card: the live preview fills the top (on Viewport Black), and a metadata block sits below it on the card surface — title with an outlined harness badge, the full mono fragment path, tag chips, then a muted tabular meta row (GLSL version · source size · updated-ago) with a quiet ⋯ overflow menu at its right. The favorite star sits top-left over the preview, always visible: Muted Ink at rest, Favorite Rose filled when active. Selection is a dimmed Signal Red card border. Hot Coral never appears as tile chrome or status.
+A bordered card the live preview fills edge to edge (on Viewport Black), with a soft radial vignette tinting the render's outer edges toward the frame color. Metadata overlays the preview's lower portion on a vertical vignette fading into Shadow Plum — title with an outlined harness badge, the full mono fragment path, outlined tag chips, then a muted tabular meta row (GLSL version · source size · updated-ago) with a quiet ⋯ overflow menu at its right. The favorite star sits top-left over the preview, always visible: Muted Ink at rest, Favorite Rose filled when active. Selection is a dimmed Signal Red card border with a faint outer and inner glow. Hot Coral never appears as tile chrome or status.
 
 ### Command Search
 

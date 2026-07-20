@@ -29,32 +29,42 @@
 </script>
 
 <!--
-	Card anatomy per the Preview Atlas mockup: live preview on top (a
-	transparent window onto the shared canvas, D7), metadata block below on
-	the card surface. The corner mask paints over the square scissored
-	corners so the card's rounded top stays clean.
+	Card anatomy per the Preview Atlas mockup: the live preview (a transparent
+	window onto the shared canvas, D7) fills the whole card; metadata overlays
+	its lower edge on a vignette that fades the render into the card's plum
+	surface so text stays legible over any shader. The corner mask paints over
+	the square scissored corners so the rounded card edge stays clean.
 -->
 <div
 	class={cn(
-		'group relative flex h-full flex-col overflow-hidden rounded-tile border transition-colors duration-150',
-		selected ? 'border-primary/60' : 'border-border'
+		'group relative flex h-full flex-col overflow-hidden rounded-tile border transition-[border-color,box-shadow] duration-150',
+		selected
+			? 'border-primary/60 shadow-[0_0_18px_-6px_oklch(0.55_0.21_18/0.28)]'
+			: 'border-border'
 	)}
 >
-	<div
-		class="relative min-h-0 flex-1 overflow-hidden"
-		{@attach (el) => registry.register(entry.slug, entry.slug, el)}
-	>
-		<div
-			class="pointer-events-none absolute inset-0 z-30 rounded-t-[7px] shadow-[0_0_0_32px_var(--color-background)]"
-		></div>
-	</div>
+	<div class="absolute inset-0" {@attach (el) => registry.register(entry.slug, entry.slug, el)}></div>
 
-	<div class="flex flex-col gap-1 bg-surface px-3 pb-2.5 pt-2">
+	<!-- Corner mask + a radial vignette over the render, tinting its edges
+	     toward Overlay Plum; selection adds an inset Signal glow. -->
+	<div
+		class={cn(
+			'pointer-events-none absolute inset-0 z-30 rounded-[7px]',
+			selected
+				? 'shadow-[0_0_0_32px_var(--color-background),inset_0_0_30px_2px_oklch(0.55_0.21_18/0.3)]'
+				: 'shadow-[0_0_0_32px_var(--color-background)]'
+		)}
+		style="background: radial-gradient(130% 110% at 50% 35%, transparent 42%, color-mix(in oklab, var(--color-surface-overlay) 85%, transparent) 100%);"
+	></div>
+
+	<div
+		class="absolute inset-x-0 bottom-0 z-30 flex flex-col gap-1.5 rounded-b-[7px] bg-gradient-to-t from-surface from-45% via-surface/80 via-75% to-transparent px-3.5 pb-3 pt-9"
+	>
 		<div class="flex items-center gap-2">
 			<span
 				class={cn(
-					'min-w-0 truncate font-[600] text-foreground',
-					featured ? 'text-[1.0625rem]' : 'text-[0.9375rem]'
+					'min-w-0 truncate font-[650] text-foreground',
+					featured ? 'text-[1.25rem] tracking-[-0.015em]' : 'text-[1rem]'
 				)}
 			>
 				{entry.meta.name}
@@ -68,14 +78,14 @@
 			<div class="flex flex-wrap gap-1">
 				{#each entry.meta.tags as tag (tag)}
 					<span
-						class="rounded-[4px] bg-surface-raised px-1.5 py-0.5 text-[0.6875rem] text-muted-foreground"
+						class="rounded-[5px] border border-border/70 bg-surface-raised/60 px-2 py-0.5 text-[0.6875rem] text-muted-foreground"
 					>
 						{tag}
 					</span>
 				{/each}
 			</div>
 		{/if}
-		<span class="mt-0.5 truncate pe-7 text-[0.6875rem] tabular-nums text-muted-foreground">
+		<span class="mt-1 truncate pe-7 text-[0.6875rem] tabular-nums text-muted-foreground">
 			{entry.glslVersion} &nbsp;·&nbsp; {formatSize(entry.glslBytes)} &nbsp;·&nbsp; Updated {formatAgo(
 				entry.updatedAt
 			)}
@@ -111,7 +121,7 @@
 	<!-- Overflow actions: bottom-right of the meta row, per the mockup. -->
 	<DropdownMenu.Root>
 		<DropdownMenu.Trigger
-			class="absolute bottom-1.5 end-1.5 z-30 flex size-6 items-center justify-center rounded-[4px] text-muted-foreground transition-colors duration-150 hover:bg-surface-raised hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring data-open:bg-surface-raised data-open:text-foreground"
+			class="absolute bottom-2 end-2 z-30 flex size-6 items-center justify-center rounded-[5px] text-muted-foreground transition-colors duration-150 hover:bg-surface-raised hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring data-open:bg-surface-raised data-open:text-foreground"
 			aria-label={`More actions for ${entry.meta.name}`}
 		>
 			<DotsThree size={18} weight="bold" />

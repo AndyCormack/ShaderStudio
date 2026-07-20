@@ -2,6 +2,11 @@
 
 Notable changes, newest first. What/when only — the *why* lives in the [design log](docs/design/log.md) and [ADRs](docs/adr/).
 
+## 2026-07-21
+
+### Changed
+- Gallery visual fidelity pass against the Preview Atlas mockup ([D20]): live previews now fill their cards with metadata overlaid on a vignette fading into the card surface, plus a soft radial vignette tinting each render's edges; selection adds a faint Signal Red outer + inner glow to the dimmed border; tag chips everywhere became quiet outlined rects. The detail strip became a full-window double container — an edge-to-edge divider band holding an inset rounded panel spanning beneath the rail — with a larger selected-edge thumbnail, top-aligned columns, and tag chips restored beside the favorite star in the identity block. The top row is framed (brand block on the darker frame color with its own divider, command band bottom border), rail groups gained inset dividers and a faint Signal Red outline on the active pill, and density was recalibrated: 72px top row, 44px search/controls/rail rows, 288px rail, larger 650-weight titles, search stretching to meet the controls.
+
 ## 2026-07-20
 
 ### Changed
@@ -61,3 +66,4 @@ Notable changes, newest first. What/when only — the *why* lives in the [design
 [D17]: docs/design/log.md
 [D18]: docs/design/log.md
 [D19]: docs/design/log.md
+[D20]: docs/design/log.md
