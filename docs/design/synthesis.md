@@ -18,7 +18,7 @@ shader-studio is a **local-first look-dev sandbox**: a web app you run while wor
 - **Mesh** — shader as material on a switchable primitive, for game-material effects (fireballs, outline glows).
 - **Custom scene** — `Scene.svelte` in the shader's folder composes arbitrary Threlte geometry; the harness passes the compiled material in as a prop and the scene attaches it to the meshes it chooses.
 
-All modes share the standard uniform contract (`u_time`, `u_resolution`, `u_mouse`) plus per-shader declared uniforms.
+All modes share the standard uniform contract (`u_time`, `u_resolution`, `u_mouse`) plus per-shader declared uniforms; quad fragments additionally receive a `varying vec2 vUv` from the harness's default vertex shader.
 
 ## Shader entries
 

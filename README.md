@@ -11,7 +11,7 @@ pnpm install
 pnpm dev --open
 ```
 
-What you'll see today is the scaffold smoke test: a torus knot shaded by raw GLSL (`src/lib/scaffold-smoke/`). Edit its `fragment.glsl` with the dev server running to watch HMR hot-swap the shader.
+What you'll see today: the scaffold smoke test (a torus knot shaded by raw GLSL from `src/lib/scaffold-smoke/` — edit its `fragment.glsl` with the dev server running to watch HMR), plus the catalog listing of shader entries discovered under `shaders/`. Entries don't render yet — the harness is next in [PLAN.md](PLAN.md).
 
 ## How it will work
 

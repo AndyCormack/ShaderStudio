@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { Canvas } from '@threlte/core';
 	import Scene from '$lib/scaffold-smoke/Scene.svelte';
+	import { shaderEntries } from '$lib/shaders/catalog';
 </script>
 
 <main>
@@ -14,6 +15,23 @@
 			<Scene />
 		</Canvas>
 	</div>
+
+	<h2>Catalog</h2>
+	<p>Shader entries discovered under <code>shaders/</code> (rendering lands with the harness):</p>
+	<ul>
+		{#each shaderEntries as entry (entry.slug)}
+			<li>
+				<strong>{entry.meta.name}</strong>
+				<code>{entry.slug}</code> — {entry.meta.harness} harness{entry.meta.primitive
+					? ` (${entry.meta.primitive})`
+					: ''},
+				{entry.meta.uniforms?.length ?? 0} uniforms{entry.vertex ? ', custom vertex shader' : ''}
+				{#if entry.meta.tags?.length}
+					<em>[{entry.meta.tags.join(', ')}]</em>
+				{/if}
+			</li>
+		{/each}
+	</ul>
 </main>
 
 <style>

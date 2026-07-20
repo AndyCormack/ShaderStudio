@@ -12,6 +12,8 @@ Canonical terms for shader-studio. One term per concept; alternatives listed und
 
 **custom scene** — a `Scene.svelte` in a shader entry's folder: a Threlte component composing arbitrary geometry, which receives the compiled material as a prop and attaches it to the meshes it chooses.
 
+**catalog** — the runtime index of shader entries, derived by glob-importing `shaders/*/` at build time. Not a hand-maintained registry — adding a shader is adding a folder. _Avoid: registry._
+
 **uniform contract** — the standard uniforms every harness supplies (`u_time`, `u_resolution`, `u_mouse`) plus the entry's own uniforms declared in `meta.json`.
 
 **uniform panel** — the auto-generated live controls (sliders, color pickers) built from `meta.json`'s uniform declarations. _Avoid: inspector, tweakpane._

@@ -4,6 +4,9 @@ Notable changes, newest first. What/when only — the *why* lives in the [design
 
 ## 2026-07-20
 
+### Added
+- Shader loading (PLAN item 2): glob-built catalog (`src/lib/shaders/catalog.ts`) discovers `shaders/*/` folders, validates `meta.json` (harness mode, `u_`-prefixed uniform defs), and exposes typed entries; the front page lists discovered entries. Seeded with two entries: `plasma` (quad) and `fireball` (mesh, custom vertex shader + UE porting notes). Seed shaders load but don't render yet — that's the render harness, next in PLAN. ([D5])
+
 ### Changed
 - Package manager: npm → pnpm (pinned via `packageManager`; `pnpm-lock.yaml` replaces `package-lock.json`).
 
@@ -16,5 +19,6 @@ Notable changes, newest first. What/when only — the *why* lives in the [design
 
 [D1]: docs/design/log.md
 [D2]: docs/design/log.md
+[D5]: docs/design/log.md
 [D3]: docs/design/log.md
 [D8]: docs/design/log.md
