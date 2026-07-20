@@ -4,7 +4,11 @@
 	import { Color, type RawShaderMaterial } from 'three';
 	import type { ShaderEntry } from '$lib/shaders/types';
 
-	let { entry, material }: { entry: ShaderEntry; material: RawShaderMaterial } = $props();
+	let {
+		entry,
+		material,
+		onhide
+	}: { entry: ShaderEntry; material: RawShaderMaterial; onhide: () => void } = $props();
 
 	const defs = $derived(entry.meta.uniforms ?? []);
 	let values = $state<Record<string, number | string>>({});
@@ -51,10 +55,29 @@
 <aside class="uniform-panel" aria-label="Uniform panel">
 	<header>
 		<h2>Uniforms</h2>
-		<button type="button" class="reset-button" onclick={reset} disabled={defs.length === 0}>
-			<ArrowCounterClockwise size={15} />
-			<span>Reset</span>
-		</button>
+		<div class="header-actions">
+			<button
+				type="button"
+				class="header-button"
+				onclick={reset}
+				disabled={defs.length === 0}
+				aria-label="Reset uniforms"
+				title="Reset uniforms"
+			>
+				<ArrowCounterClockwise size={15} />
+			</button>
+			<button
+				type="button"
+				class="header-button"
+				onclick={onhide}
+				aria-label="Hide controls"
+				aria-controls="uniform-panel-region"
+				aria-expanded="true"
+				title="Hide controls"
+			>
+				<SlidersHorizontal size={15} />
+			</button>
+		</div>
 	</header>
 
 	{#if defs.length}
@@ -130,33 +153,37 @@
 		line-height: 1.2;
 	}
 
-	.reset-button {
+	.header-actions {
+		display: flex;
+		align-items: center;
+		gap: 0.125rem;
+	}
+
+	.header-button {
 		display: inline-flex;
+		width: 2rem;
 		height: 2rem;
 		align-items: center;
-		gap: 0.375rem;
+		justify-content: center;
 		border-radius: 6px;
-		padding: 0 0.625rem;
 		color: var(--muted-foreground);
-		font-size: 0.75rem;
-		font-weight: 550;
 		transition:
 			background 180ms var(--ease-workbench),
 			color 180ms var(--ease-workbench);
 	}
 
-	.reset-button:hover:not(:disabled) {
+	.header-button:hover:not(:disabled) {
 		background: var(--surface-raised);
 		color: var(--foreground);
 	}
 
-	.reset-button:focus-visible,
+	.header-button:focus-visible,
 	input:focus-visible {
 		outline: 2px solid var(--ring);
 		outline-offset: 2px;
 	}
 
-	.reset-button:disabled {
+	.header-button:disabled {
 		cursor: not-allowed;
 		color: var(--ink-subtle);
 	}
@@ -261,7 +288,7 @@
 	}
 
 	@media (prefers-reduced-motion: reduce) {
-		.reset-button {
+		.header-button {
 			transition: none;
 		}
 	}

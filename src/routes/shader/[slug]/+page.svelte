@@ -2,7 +2,9 @@
 	import Cube from 'phosphor-svelte/lib/Cube';
 	import FrameCorners from 'phosphor-svelte/lib/FrameCorners';
 	import Hexagon from 'phosphor-svelte/lib/Hexagon';
-	import SlidersHorizontal from 'phosphor-svelte/lib/SlidersHorizontal';
+	import SlidersHorizontalIcon from 'phosphor-svelte/lib/SlidersHorizontalIcon';
+	import { quintOut } from 'svelte/easing';
+	import { fade } from 'svelte/transition';
 	import type { MeshPrimitive } from '$lib/shaders/types';
 	import { loadCustomScene, type SceneComponent } from '$lib/harness/scenes';
 	import { createEntryMaterial } from '$lib/harness/material';
@@ -32,6 +34,13 @@
 	let useCustomScene = $state(true);
 	let sceneComponent = $state<SceneComponent | undefined>();
 	let panelOpen = $state(true);
+	let prefersReducedMotion = $state(false);
+
+	const panelFade = $derived(
+		prefersReducedMotion
+			? { duration: 80, easing: quintOut }
+			: { duration: 150, easing: quintOut }
+	);
 
 	const activeSceneLabel = $derived(
 		entry.meta.harness === 'quad'
@@ -46,6 +55,14 @@
 	$effect(() => {
 		primitive = entry.meta.primitive ?? 'sphere';
 		useCustomScene = Boolean(entry.meta.scene);
+	});
+
+	$effect(() => {
+		const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+		const updatePreference = () => (prefersReducedMotion = media.matches);
+		updatePreference();
+		media.addEventListener('change', updatePreference);
+		return () => media.removeEventListener('change', updatePreference);
 	});
 
 	$effect(() => {
@@ -88,18 +105,6 @@
 				<code>shaders/{entry.slug}/</code>
 			</div>
 		</div>
-
-		<button
-			type="button"
-			class="panel-toggle"
-			class:active={panelOpen}
-			aria-pressed={panelOpen}
-			aria-label={panelOpen ? 'Hide uniform panel' : 'Show uniform panel'}
-			onclick={() => (panelOpen = !panelOpen)}
-		>
-			<SlidersHorizontal size={16} />
-			<span>{panelOpen ? 'Hide controls' : 'Show controls'}</span>
-		</button>
 	</header>
 
 	<section class="scene-controls" aria-label="Scene controls">
@@ -158,9 +163,23 @@
 		{/if}
 	</section>
 
-	<div class="uniform-region">
-		<UniformPanel {entry} {material} />
-	</div>
+	{#if panelOpen}
+		<div id="uniform-panel-region" class="uniform-region" transition:fade={panelFade}>
+			<UniformPanel {entry} {material} onhide={() => (panelOpen = false)} />
+		</div>
+	{:else}
+		<button
+			type="button"
+			class="panel-reveal"
+			aria-label="Show controls"
+			aria-controls="uniform-panel-region"
+			aria-expanded="false"
+			title="Show controls"
+			onclick={() => (panelOpen = true)}
+		>
+			<SlidersHorizontalIcon size={16} />
+		</button>
+	{/if}
 
 	<footer class="status-strip">
 		<span class="render-status"><span></span>Live preview</span>
@@ -206,8 +225,7 @@
 		padding: 0 0.75rem;
 	}
 
-	.gallery-link,
-	.panel-toggle {
+	.gallery-link {
 		display: inline-flex;
 		height: 2.125rem;
 		flex: 0 0 auto;
@@ -227,15 +245,13 @@
 		padding: 0 0.625rem;
 	}
 
-	.gallery-link:hover,
-	.panel-toggle:hover,
-	.panel-toggle.active {
+	.gallery-link:hover {
 		background: var(--surface-raised);
 		color: var(--foreground);
 	}
 
 	.gallery-link:focus-visible,
-	.panel-toggle:focus-visible,
+	.panel-reveal:focus-visible,
 	.scene-options button:focus-visible {
 		outline: 2px solid var(--ring);
 		outline-offset: 2px;
@@ -292,11 +308,6 @@
 		font-size: 0.625rem;
 		font-weight: 550;
 		text-transform: capitalize;
-	}
-
-	.panel-toggle {
-		margin-left: auto;
-		padding: 0 0.625rem;
 	}
 
 	.scene-controls {
@@ -446,8 +457,32 @@
 		overflow: hidden;
 	}
 
-	.panel-hidden .uniform-region {
-		display: none;
+	.panel-reveal {
+		position: absolute;
+		top: 5.625rem;
+		right: 1.5rem;
+		z-index: var(--z-chrome);
+		display: grid;
+		width: 2rem;
+		height: 2rem;
+		place-items: center;
+		border-radius: 6px;
+		background: var(--surface);
+		box-shadow: var(--shadow-lifted);
+		color: var(--muted-foreground);
+		opacity: 0.5;
+		transition:
+			opacity 180ms var(--ease-workbench),
+			background 180ms var(--ease-workbench),
+			color 180ms var(--ease-workbench);
+	}
+
+	.panel-reveal:hover,
+	.panel-reveal:focus-visible,
+	.panel-reveal:active {
+		background: var(--surface-raised);
+		color: var(--foreground);
+		opacity: 1;
 	}
 
 	.status-strip {
@@ -553,6 +588,13 @@
 			border-top: 1px solid var(--border);
 		}
 
+		.panel-reveal {
+			position: static;
+			grid-area: uniforms;
+			justify-self: end;
+			margin: 0.75rem;
+		}
+
 		.viewport-hint,
 		.panel-hidden .viewport-hint {
 			right: 0.75rem;
@@ -567,7 +609,6 @@
 		.gallery-link span:last-child,
 		.shader-identity code,
 		.harness-badge,
-		.panel-toggle span,
 		.status-strip > span:not(.render-status) {
 			display: none;
 		}
@@ -575,7 +616,7 @@
 
 	@media (prefers-reduced-motion: reduce) {
 		.gallery-link,
-		.panel-toggle,
+		.panel-reveal,
 		.scene-options button,
 		.viewport-hint {
 			transition: none;

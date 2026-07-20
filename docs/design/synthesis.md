@@ -44,7 +44,7 @@ The MVP design target is **the Electric Workbench**: a canvas-first professional
 ## Views
 
 - **Gallery** — a Preview Atlas with a persistent discovery rail (Gallery/Favorites/Recent/Tags, count-aware), search-first command band, asymmetric live-preview field with one featured shader, a compact selected-shader detail strip, and a ⌘K command search overlay ([D12], [D14]). Previews render from one shared WebGL context via scissored viewports inside a single Threlte canvas (browsers cap live contexts, so no canvas-per-tile) ([D7]); custom-scene entries preview as their default primitive for now (backlog). Favorites and recents persist in localStorage; Collections and Presets are deferred ([D14]). Click through to:
-- **Studio** — the Focus Canvas topology: a full-bleed shader canvas with compact opaque identity, scene, and hideable uniform surfaces lifted at its edges, plus a quiet bottom status strip ([D16]). Camera/primitive controls remain directly accessible; below 760px the composition becomes identity, scene controls, canvas, uniform panel, then status. GLSL compile errors will overlay the canvas with line numbers mapped back to the source file.
+- **Studio** — the Focus Canvas topology: a full-bleed shader canvas with compact opaque identity, scene, and hideable uniform surfaces lifted at its edges, plus a quiet bottom status strip ([D16]). Reset and collapse are icon-only actions in the uniform-panel heading; collapsed state leaves one show-controls toggle in the Hide action's exact position at 10% resting opacity, fully visible on hover/focus/press. The surrounding panel fades over 150ms with a shorter reduced-motion fade ([D17]). Camera/primitive controls remain directly accessible; below 760px the composition becomes identity, scene controls, canvas, uniform panel, then status. GLSL compile errors will overlay the canvas with line numbers mapped back to the source file.
 
 [D1]: log.md#d1--shader-studio-is-a-local-first-look-dev-sandbox-2026-07-20
 [D2]: log.md#d2--stack-sveltekit--vite--typescript-2026-07-20
@@ -60,3 +60,4 @@ The MVP design target is **the Electric Workbench**: a canvas-first professional
 [D14]: log.md#d14--gallery-mvp-state-localstorage-favoritesrecents-collections-and-presets-deferred-2026-07-20
 [D15]: log.md#d15--palette-and-tile-anatomy-corrected-to-the-preview-atlas-mockup-2026-07-20
 [D16]: log.md#d16--studio-direction-focus-canvas-2026-07-20
+[D17]: log.md#d17--uniform-panel-owns-its-collapse-control-2026-07-20
