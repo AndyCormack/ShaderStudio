@@ -8,6 +8,8 @@ const fragmentModules = import.meta.glob('/shaders/*/fragment.glsl', {
 	import: 'default'
 });
 const vertexModules = import.meta.glob('/shaders/*/vertex.glsl', { eager: true, import: 'default' });
+// Keys only — custom scene components are lazy-loaded by the harness (D8).
+const scenePaths = new Set(Object.keys(import.meta.glob('/shaders/*/Scene.svelte')));
 
 function slugOf(path: string): string {
 	return path.split('/')[2];
@@ -20,6 +22,16 @@ function validateMeta(slug: string, raw: unknown): ShaderMeta {
 	}
 	if (meta.harness !== 'quad' && meta.harness !== 'mesh') {
 		throw new Error(`shaders/${slug}/meta.json: "harness" must be "quad" or "mesh"`);
+	}
+	if (meta.scene !== undefined && meta.scene !== 'Scene.svelte') {
+		throw new Error(`shaders/${slug}/meta.json: "scene" must be "Scene.svelte" when present`);
+	}
+	const hasSceneFile = scenePaths.has(`/shaders/${slug}/Scene.svelte`);
+	if (meta.scene && !hasSceneFile) {
+		throw new Error(`shaders/${slug}/meta.json declares "scene" but Scene.svelte is missing`);
+	}
+	if (!meta.scene && hasSceneFile) {
+		throw new Error(`shaders/${slug}/ has a Scene.svelte not declared in meta.json ("scene")`);
 	}
 	for (const u of meta.uniforms ?? []) {
 		const { name, type } = u as { name?: unknown; type?: unknown };

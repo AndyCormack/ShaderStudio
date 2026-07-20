@@ -11,7 +11,7 @@ pnpm install
 pnpm dev --open
 ```
 
-What you'll see today: the scaffold smoke test (a torus knot shaded by raw GLSL from `src/lib/scaffold-smoke/` — edit its `fragment.glsl` with the dev server running to watch HMR), plus the catalog listing of shader entries discovered under `shaders/`. Entries don't render yet — the harness is next in [PLAN.md](PLAN.md).
+The front page lists shader entries discovered under `shaders/`; click one to open its studio view (`/shader/<slug>`) — live canvas, orbit camera + geometry switcher for mesh shaders, custom-scene toggle where an entry ships a `Scene.svelte`. Edit an entry's `.glsl` with the dev server running to see it hot-reload. The uniform control panel is next in [PLAN.md](PLAN.md).
 
 ## How it will work
 
