@@ -5,6 +5,8 @@ Notable changes, newest first. What/when only — the *why* lives in the [design
 ## 2026-07-20
 
 ### Added
+- Gallery view (PLAN item 5): the Preview Atlas at `/` — discovery rail (Gallery/Favorites/Recent/Tags with counts), search-first command band (inline search, harness filter chips, sort), asymmetric live-preview grid (featured + medium + small tiles), selected-shader detail strip with **Open shader**, and a ⌘K Command Search overlay grouping shaders/tags/views. Live previews render from one shared WebGL context via scissored viewports inside a single Threlte `<Canvas>` (`src/lib/gallery/`); custom-scene entries preview as their default primitive (full scene in the studio). Favorites/recents persist in localStorage; keyboard: arrows select, Enter opens, `/` focuses search, Ctrl/⌘K opens the palette. Replaces the placeholder entry list on the front page. ([D7], [D12], [D14])
+- Styling stack: Tailwind v4 (`@tailwindcss/vite`, CSS-first — no `tailwind.config.*`) + shadcn-svelte (nova style, neutral base, phosphor icons, CLI as devDep for non-interactive adds), with `src/app.css` overriding the scaffolded token values with DESIGN.md's Electric Workbench palette in OKLCH plus workbench-specific tokens (`surface-raised`, `selected`, `signature`, `viewport`, radii, contact-first shadows). Installed components: button, input, badge, separator, tooltip, select, command, dialog (+ CLI-pulled input-group/textarea). ([D13])
 - Uniform panel (PLAN item 4): studio sidebar auto-generated from `meta.json` uniform declarations — range sliders for floats (min/max/step), color pickers for colors, live write-through into the running material's uniforms, per-entry reset. Values are re-applied when the material is recreated, so tweaks survive shader HMR. Material ownership moved from `Harness` to the studio page so panel and canvas share it. ([D5], [D6])
 - Render harness + studio route (PLAN item 3): `src/lib/harness/` renders entries via `RawShaderMaterial` with the standard uniform contract (`u_time`, `u_resolution`, `u_mouse` from pointer tracking). Quad mode draws a fullscreen quad (default vertex shader supplies `vUv`); mesh mode adds PerspectiveCamera + OrbitControls + a 5-primitive geometry switcher; custom scenes (`Scene.svelte`, lazy-loaded, material passed as prop) render arbitrary Threlte geometry — demonstrated by fireball's core-plus-orbiting-embers scene. Studio view at `/shader/[slug]` (404 on unknown slugs); catalog validates `meta.json` `"scene"` against `Scene.svelte` presence. ([D3], [D4], [D8])
 
@@ -38,3 +40,6 @@ Notable changes, newest first. What/when only — the *why* lives in the [design
 [D10]: docs/design/log.md
 [D11]: docs/design/log.md
 [D12]: docs/design/log.md
+[D7]: docs/design/log.md
+[D13]: docs/design/log.md
+[D14]: docs/design/log.md

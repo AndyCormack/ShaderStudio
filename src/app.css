@@ -1,0 +1,138 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn-svelte/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Electric Workbench theme (D10/D11) — dark-only.
+ * Values are DESIGN.md's normative palette converted to OKLCH; DESIGN.md
+ * stays the source of truth for what each token may be used for.
+ */
+:root {
+	color-scheme: dark;
+
+	--background: oklch(0.237 0.059 328.7); /* Mulberry Canvas #2D132C */
+	--foreground: oklch(0.958 0.008 337.4); /* Workbench Ink #F5EFF3 */
+	--card: oklch(0.267 0.071 329.6); /* Mulberry Surface #381736 */
+	--card-foreground: oklch(0.958 0.008 337.4);
+	--popover: oklch(0.325 0.09 330.9); /* Overlay Mulberry #4D2049 */
+	--popover-foreground: oklch(0.958 0.008 337.4);
+	--primary: oklch(0.547 0.19 19.4); /* Signal Red #C72C41 */
+	--primary-foreground: oklch(0.958 0.008 337.4);
+	--secondary: oklch(0.297 0.082 330.3); /* Raised Mulberry #431B40 */
+	--secondary-foreground: oklch(0.958 0.008 337.4);
+	--muted: oklch(0.267 0.071 329.6);
+	--muted-foreground: oklch(0.749 0.024 337); /* Muted Ink #B8A8B3 */
+	--accent: oklch(0.297 0.082 330.3); /* hover fields = Raised Mulberry */
+	--accent-foreground: oklch(0.958 0.008 337.4);
+	--destructive: oklch(0.547 0.19 19.4); /* Signal family; pair icon + wording */
+	--border: oklch(0.398 0.063 332.2); /* Quiet Edge #5B3A56 */
+	--input: oklch(0.398 0.063 332.2);
+	--ring: oklch(0.547 0.19 19.4); /* focus = Signal Red, crisp not glowy */
+	--radius: 0.375rem; /* 6px control radius */
+
+	/* Electric Workbench tokens beyond shadcn's vocabulary */
+	--primary-hover: oklch(0.508 0.178 19.5); /* Pressed Signal #B52539 */
+	--surface: oklch(0.267 0.071 329.6); /* Mulberry Surface #381736 */
+	--surface-raised: oklch(0.297 0.082 330.3); /* Raised Mulberry #431B40 */
+	--surface-overlay: oklch(0.325 0.09 330.9); /* Overlay Mulberry #4D2049 */
+	--selected: oklch(0.395 0.143 8.9); /* Deep Berry #801336 — quiet active structure */
+	--signature: oklch(0.636 0.207 26.7); /* Hot Coral #EE4540 — brand-mark spark ONLY */
+	--viewport: oklch(0.085 0 0); /* Viewport Black #020202 — shader surrounds */
+	--ink-subtle: oklch(0.599 0.037 337.2); /* Subtle Ink #8F7888 — disabled/tertiary */
+
+	/* Discovery rail */
+	--sidebar: oklch(0.237 0.059 328.7);
+	--sidebar-foreground: oklch(0.958 0.008 337.4);
+	--sidebar-primary: oklch(0.547 0.19 19.4);
+	--sidebar-primary-foreground: oklch(0.958 0.008 337.4);
+	--sidebar-accent: oklch(0.267 0.071 329.6); /* rail hover = Mulberry Surface */
+	--sidebar-accent-foreground: oklch(0.958 0.008 337.4);
+	--sidebar-border: oklch(0.398 0.063 332.2);
+	--sidebar-ring: oklch(0.547 0.19 19.4);
+
+	--chart-1: oklch(0.547 0.19 19.4);
+	--chart-2: oklch(0.395 0.143 8.9);
+	--chart-3: oklch(0.749 0.024 337);
+	--chart-4: oklch(0.398 0.063 332.2);
+	--chart-5: oklch(0.297 0.082 330.3);
+}
+
+@theme inline {
+	--font-sans:
+		system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	--font-mono:
+		ui-monospace, SFMono-Regular, Consolas, 'Liberation Mono', monospace;
+	--color-sidebar-ring: var(--sidebar-ring);
+	--color-sidebar-border: var(--sidebar-border);
+	--color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+	--color-sidebar-accent: var(--sidebar-accent);
+	--color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+	--color-sidebar-primary: var(--sidebar-primary);
+	--color-sidebar-foreground: var(--sidebar-foreground);
+	--color-sidebar: var(--sidebar);
+	--color-chart-5: var(--chart-5);
+	--color-chart-4: var(--chart-4);
+	--color-chart-3: var(--chart-3);
+	--color-chart-2: var(--chart-2);
+	--color-chart-1: var(--chart-1);
+	--color-ring: var(--ring);
+	--color-input: var(--input);
+	--color-border: var(--border);
+	--color-destructive: var(--destructive);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-accent: var(--accent);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-muted: var(--muted);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-secondary: var(--secondary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-primary: var(--primary);
+	--color-primary-hover: var(--primary-hover);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-popover: var(--popover);
+	--color-card-foreground: var(--card-foreground);
+	--color-card: var(--card);
+	--color-foreground: var(--foreground);
+	--color-background: var(--background);
+	--color-surface: var(--surface);
+	--color-surface-raised: var(--surface-raised);
+	--color-surface-overlay: var(--surface-overlay);
+	--color-selected: var(--selected);
+	--color-signature: var(--signature);
+	--color-viewport: var(--viewport);
+	--color-ink-subtle: var(--ink-subtle);
+	--radius-sm: calc(var(--radius) * 0.6);
+	--radius-md: calc(var(--radius) * 0.8);
+	--radius-lg: var(--radius); /* 6px — controls */
+	--radius-xl: 0.75rem; /* 12px — transient overlays (dialog, command) */
+	--radius-2xl: 0.75rem; /* 12px absolute ceiling */
+	--radius-3xl: 0.75rem;
+	--radius-4xl: 0.75rem;
+	--radius-tile: 0.5rem; /* 8px — shader tiles */
+	--radius-panel: 0.625rem; /* 10px — persistent panels */
+	--radius-overlay: 0.75rem; /* 12px — transient overlays */
+
+	/* Contact-first elevation — only for surfaces that genuinely lift */
+	--shadow-lifted:
+		0 1px 2px rgba(0, 0, 0, 0.34), 0 5px 14px rgba(0, 0, 0, 0.18),
+		0 16px 40px rgba(0, 0, 0, 0.1);
+	--shadow-overlay:
+		0 1px 2px rgba(0, 0, 0, 0.46), 0 8px 24px rgba(0, 0, 0, 0.24),
+		0 24px 64px rgba(0, 0, 0, 0.16);
+
+	--ease-workbench: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+	* {
+		@apply border-border outline-ring/50;
+	}
+	body {
+		@apply bg-background text-foreground;
+	}
+	html {
+		@apply font-sans;
+	}
+}

@@ -2,11 +2,18 @@
 	import type { MeshPrimitive } from '$lib/shaders/types';
 	import { loadCustomScene, type SceneComponent } from '$lib/harness/scenes';
 	import { createEntryMaterial } from '$lib/harness/material';
+	import { recordRecent } from '$lib/gallery/gallery-state.svelte';
 	import Harness from '$lib/harness/Harness.svelte';
 	import UniformPanel from '$lib/harness/UniformPanel.svelte';
 
 	let { data } = $props();
 	const entry = $derived(data.entry);
+
+	// Direct navigations count as visits too, so the gallery's Recent section
+	// stays truthful (D14).
+	$effect(() => {
+		recordRecent(entry.slug);
+	});
 
 	// Recreated when the entry changes (including shader HMR updates).
 	const material = $derived(createEntryMaterial(entry));

@@ -20,6 +20,16 @@ Canonical terms for shader-studio. One term per concept; alternatives listed und
 
 **gallery** — the grid view of live shader-entry previews, rendered from one shared WebGL context.
 
+**preview atlas** — the gallery's composition: one featured live preview, supporting medium and small tiles on a shared 12-column grid, framed by the discovery rail, command band, and detail strip. _Avoid: dashboard, mosaic view._
+
+**discovery rail** — the gallery's persistent left navigation: Gallery, Favorites, Recent, and Tags, each count-aware. _Avoid: sidebar (in gallery context)._
+
+**command band** — the gallery's top bar: inline search first, harness filter chips and sort subordinate. _Avoid: toolbar, header._
+
+**detail strip** — the compact selected-shader panel spanning the gallery's bottom edge: metadata, tags, favorite toggle, and the single **Open shader** action. _Avoid: inspector (that's the studio's uniform panel territory)._
+
+**command search** — the ⌘K overlay listing shaders, tags, and views with keyboard-first navigation; selecting a shader opens it in the studio. _Avoid: command palette, quick switcher._
+
 **studio** — the full-size single-entry view: canvas, camera, uniform panel, compile-error overlay.
 
 **look-dev sandbox** — the project's role: a cheap place to iterate on a shader's look and algorithm before manually translating it to its destination engine.
