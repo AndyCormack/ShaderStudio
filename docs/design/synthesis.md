@@ -1,0 +1,50 @@
+# Design synthesis — shader-studio
+
+> Derived from [log.md](log.md); if this conflicts with a log entry or ADR, they win — fix this file.
+
+## What it is
+
+shader-studio is a **local-first look-dev sandbox**: a web app you run while working on other projects, for quickly iterating on WebGL shaders destined for games and website effects. The primary destination is **Unreal Engine 5/6** — a shader's exit is a manual translation into UE materials/HLSL, so the studio optimizes for iterating on the *look and algorithm* cheaply, and each shader carries its own UE porting notes ([D1], [D5]).
+
+## Architecture
+
+**Stack:** SvelteKit + Vite + TypeScript ([D2]). Vite's `.glsl` imports + HMR provide the core iteration loop: edit in your IDE, the running studio hot-swaps the compiled shader in ~100ms without losing camera or uniform-slider state ([D6]). There is no in-browser code editor — rejected outright, not deferred ([D6]).
+
+**Rendering:** Three.js supplies scene/camera/OrbitControls/primitives, via **Threlte** (`@threlte/core`) as the single rendering path ([D3], [D8]). Authored shaders are standalone portable GLSL compiled with `RawShaderMaterial` (`ShaderMaterial` allowed for injected matrices); Three's lighting/fog/shadow chunks are forbidden in authored shaders — effect shaders carry their own lighting math, which is what keeps them portable ([D3], ADR-0001).
+
+**Harness modes** ([D4], [D8]):
+
+- **Quad** — Shadertoy-style fullscreen fragment shader, for 2D/website effects.
+- **Mesh** — shader as material on a switchable primitive, for game-material effects (fireballs, outline glows).
+- **Custom scene** — `Scene.svelte` in the shader's folder composes arbitrary Threlte geometry; the harness passes the compiled material in as a prop and the scene attaches it to the meshes it chooses.
+
+All modes share the standard uniform contract (`u_time`, `u_resolution`, `u_mouse`) plus per-shader declared uniforms.
+
+## Shader entries
+
+One folder per shader under `shaders/`, discovered by Vite glob-import — no registry ([D5]):
+
+```
+shaders/fireball/
+  fragment.glsl   # required
+  vertex.glsl     # optional (default supplied)
+  meta.json       # name, tags, harness mode, primitive, uniform declarations
+  notes.md        # optional — design intent + UE porting notes
+  Scene.svelte    # optional — custom Threlte scene
+```
+
+`meta.json`'s uniform declarations (type, range, default) drive an **auto-generated control panel** — sliders and color pickers, live-tweakable, with no per-shader UI code.
+
+## Views
+
+- **Gallery** — grid of live previews rendered from one shared WebGL context via scissored viewports (browsers cap live contexts, so no canvas-per-tile) ([D7]); click through to:
+- **Studio** — full-size canvas, camera/primitive controls, uniform panel, and GLSL compile errors overlaid with line numbers mapped back to the source file.
+
+[D1]: log.md#d1--shader-studio-is-a-local-first-look-dev-sandbox-2026-07-20
+[D2]: log.md#d2--stack-sveltekit--vite--typescript-2026-07-20
+[D3]: log.md#d3--threejs-as-scene-plumbing-only-shaders-stay-raw-portable-glsl-2026-07-20
+[D4]: log.md#d4--two-core-harness-modes-fullscreen-quad--mesh-2026-07-20
+[D5]: log.md#d5--folder-per-shader-on-disk-format-with-metajson-2026-07-20
+[D6]: log.md#d6--ide-first-editing-in-browser-editor-rejected-outright-2026-07-20
+[D7]: log.md#d7--gallery-previews-one-shared-webgl-context-scissored-viewports-2026-07-20
+[D8]: log.md#d8--custom-scenes-as-svelte-components-via-threlte-2026-07-20
