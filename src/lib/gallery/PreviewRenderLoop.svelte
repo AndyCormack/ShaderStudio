@@ -93,11 +93,13 @@
 				cache.set(key, ps);
 			}
 
-			// Round to whole CSS pixels, then inset by 1px: fractional rects get
-			// floored/scaled inside Three at non-integer pixel ratios, and a rect
-			// that lands 1px proud of its container bleeds past the card's
-			// rounded border. The 1px sacrifice is invisible on these surfaces.
-			const inset = 1;
+			// Round to whole CSS pixels, then inset by a few: fractional rects get
+			// floored/scaled inside Three at non-integer pixel ratios, and the
+			// square scissor corners otherwise poke past the card's ~8px rounded
+			// border (the shared canvas is a page-root layer, so the card's own
+			// overflow-clip can't contain it). The inset keeps the square inside
+			// the corner arc; the edge feather hides the sacrificed pixels.
+			const inset = 4;
 			const width = Math.round(rect.width) - inset * 2;
 			const height = Math.round(rect.height) - inset * 2;
 			if (width < 1 || height < 1) continue;

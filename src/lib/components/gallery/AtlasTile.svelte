@@ -45,8 +45,9 @@
 >
 	<div class="absolute inset-0" {@attach (el) => registry.register(entry.slug, entry.slug, el)}></div>
 
-	<!-- Corner mask + a radial vignette over the render, tinting its edges
-	     toward Overlay Plum; selection adds an inset Signal glow. -->
+	<!-- Corner mask + an edge feather that dissolves the render into the card
+	     surface on every side (the scissored canvas can't be CSS-masked, so
+	     the blend is painted over it); selection adds an inset Signal glow. -->
 	<div
 		class={cn(
 			'pointer-events-none absolute inset-0 z-30 rounded-[7px]',
@@ -54,7 +55,12 @@
 				? 'shadow-[0_0_0_32px_var(--color-background),inset_0_0_30px_2px_oklch(0.55_0.21_18/0.3)]'
 				: 'shadow-[0_0_0_32px_var(--color-background)]'
 		)}
-		style="background: radial-gradient(130% 110% at 50% 35%, transparent 42%, color-mix(in oklab, var(--color-surface-overlay) 85%, transparent) 100%);"
+		style="background:
+			linear-gradient(to right, var(--color-surface), transparent 34%),
+			linear-gradient(to left, var(--color-surface), transparent 34%),
+			linear-gradient(to bottom, var(--color-surface), transparent 40%),
+			linear-gradient(to top, var(--color-surface), transparent 52%),
+			radial-gradient(ellipse 78% 78% at 50% 44%, transparent 38%, color-mix(in oklab, var(--color-surface) 78%, transparent) 82%, var(--color-surface) 100%);"
 	></div>
 
 	<div
