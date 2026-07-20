@@ -4,10 +4,12 @@ import { defineConfig } from 'vite';
 import glsl from 'vite-plugin-glsl';
 
 export default defineConfig({
-	// Pre-bundle known deps so Vite doesn't discover them on demand and
-	// force a mid-session reload ("optimized dependencies changed").
+	// Crawl all app code at startup so deps are discovered and pre-bundled
+	// before the first request, instead of on demand (which forces a
+	// mid-session "optimized dependencies changed" reload). Covers future
+	// deps too — no hand-maintained package list.
 	optimizeDeps: {
-		include: ['three', '@threlte/core', '@threlte/extras']
+		entries: ['src/**/*.{svelte,ts}', 'shaders/*/Scene.svelte']
 	},
 	plugins: [
 		glsl(),
