@@ -62,11 +62,11 @@
 {#if entry}
 	<!-- Full-window band with a subtle top divider; the strip itself is a
 	     raised rounded panel inset within it (the mockup's double container).
-	     Panel bg/border sampled from the mockup: clearly lifted above the
-	     surface chrome, with a lighter purple edge. -->
+	     Panel bg/border sampled from the mockup: a dark plum panel with a
+	     subtle top→bottom lift and a lighter purple edge. -->
 	<div class="shrink-0 border-t border-[#221d2a] px-4 py-3.5">
 		<div
-			class="flex flex-col gap-4 rounded-panel border border-[#332738] bg-surface-raised px-5 py-4 lg:flex-row lg:items-start lg:gap-8"
+			class="flex flex-col gap-4 rounded-panel border border-[#332738] bg-gradient-to-b from-[#211d2b] to-[#1b1725] px-5 py-4 lg:flex-row lg:items-start lg:gap-8"
 		>
 		<div class="flex min-w-0 items-center gap-4 lg:w-96 lg:shrink-0">
 			<div
@@ -96,7 +96,7 @@
 							{#each entry.meta.tags as tag (tag)}
 								<button
 									type="button"
-									class="rounded-[5px] border border-border/70 bg-surface-raised/60 px-2 py-0.5 text-[0.6875rem] text-muted-foreground transition-colors duration-150 hover:border-border hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+									class="rounded-[5px] border border-primary/40 bg-primary/5 px-2 py-0.5 text-[0.6875rem] text-muted-foreground transition-colors duration-150 hover:border-primary/70 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
 									onclick={() => {
 										gallery.tag = tag;
 										gallery.section = 'gallery';
@@ -148,7 +148,7 @@
 					{#each entry.meta.tags as tag (tag)}
 						<button
 							type="button"
-							class="rounded-[5px] border border-border/70 bg-surface-raised/60 px-2 py-0.5 text-[0.6875rem] text-muted-foreground transition-colors duration-150 hover:border-border hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+							class="rounded-[5px] border border-primary/40 bg-primary/5 px-2 py-0.5 text-[0.6875rem] text-muted-foreground transition-colors duration-150 hover:border-primary/70 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
 							onclick={() => {
 								gallery.tag = tag;
 								gallery.section = 'gallery';
