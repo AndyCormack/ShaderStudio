@@ -1,8 +1,17 @@
 # shader-studio
 
-> Derived doc: describes the code; on conflict, code wins — fix this file. **Status: docs-only — the MVP is not yet built.** See [PLAN.md](PLAN.md) for what's next and [CHANGELOG.md](CHANGELOG.md) for history.
+> Derived doc: describes the code; on conflict, code wins — fix this file. **Status: MVP in progress** — the app scaffold runs (smoke-test scene only); gallery and studio views are not yet built. See [PLAN.md](PLAN.md) for what's next and [CHANGELOG.md](CHANGELOG.md) for history.
 
 A **local-first visual gallery + development studio for WebGL shaders** — a look-dev sandbox for quickly iterating on effects destined for games (Unreal Engine 5/6) and websites. Edit GLSL in your own IDE; the running studio hot-reloads it in place, with live-tweakable uniform controls, a 3D camera, and compile errors overlaid on the canvas.
+
+## Quick start
+
+```sh
+npm install
+npm run dev -- --open
+```
+
+What you'll see today is the scaffold smoke test: a torus knot shaded by raw GLSL (`src/lib/scaffold-smoke/`). Edit its `fragment.glsl` with the dev server running to watch HMR hot-swap the shader.
 
 ## How it will work
 

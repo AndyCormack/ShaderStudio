@@ -1,6 +1,6 @@
 # AGENTS.md — how to work on shader-studio
 
-**Status: active build — MVP.** Nothing is implemented yet; the doc architecture and design decisions exist, the code does not. Build from `PLAN.md`, top item first.
+**Status: active build — MVP.** Build from `PLAN.md`, top item first.
 
 ## Start here
 
