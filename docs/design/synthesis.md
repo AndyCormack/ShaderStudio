@@ -35,7 +35,7 @@ shaders/fireball/
   Scene.svelte    # optional — custom Threlte scene
 ```
 
-`meta.json`'s uniform declarations (type, range, default) drive an **auto-generated control panel** — sliders and color pickers, live-tweakable, with no per-shader UI code.
+`meta.json`'s uniform declarations (type, range, default) drive an **auto-generated control panel** — sliders and color pickers, live-tweakable, with no per-shader UI code. Controls render at dat.gui-style single-row density on shadcn primitives, headed by a derived uniform label with the raw GLSL name muted beneath it ([D18]).
 
 ## Visual system
 
@@ -61,3 +61,4 @@ The MVP design target is **the Electric Workbench**: a canvas-first professional
 [D15]: log.md#d15--palette-and-tile-anatomy-corrected-to-the-preview-atlas-mockup-2026-07-20
 [D16]: log.md#d16--studio-direction-focus-canvas-2026-07-20
 [D17]: log.md#d17--uniform-panel-owns-its-collapse-control-2026-07-20
+[D18]: log.md#d18--uniform-panel-controls-datgui-density-single-rows-on-shadcn-primitives-derived-labels-2026-07-20

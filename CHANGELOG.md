@@ -5,6 +5,7 @@ Notable changes, newest first. What/when only — the *why* lives in the [design
 ## 2026-07-20
 
 ### Changed
+- Uniform-panel controls rebuilt at single-row density on shadcn primitives ([D18]): per-control cards and the min/max legend replaced by one row per uniform — a derived **uniform label** over the muted raw GLSL name, then the control. Floats use the shadcn Slider (newly installed) plus an always-editable value field (Enter/blur commits, Esc reverts, clamps to min/max without snapping typed values to `step`); colors pair a themed swatch over the native picker with an editable hex field (normalizes `abc`/`#abc` shorthand). Header Reset/Hide actions are now ghost icon Buttons with real Tooltips. Label derivation lives in `src/lib/harness/uniform-label.ts`.
 - Uniform-panel visibility is now panel-local ([D17]): icon-only Reset and Hide controls actions share the heading; after collapse, only a show-controls toggle remains in the Hide action's exact position, resting at 10% opacity and becoming fully visible on hover, focus, or press. The surrounding panel fades over 150ms in both directions, with a shorter reduced-motion fade. Both icon actions retain explicit accessible names.
 - Studio design finalized as Focus Canvas ([D16]): the shader now fills the work area behind compact opaque identity, scene, and hideable uniform surfaces, with a quiet bottom status strip and a linear mobile layout. The temporary five-layout comparison switcher and the four unselected structures were removed after live evaluation.
 - Gallery visuals reconciled with the Preview Atlas mockup ([D15]): palette darkened to near-black violet-plum (sampled from the mockup) with Berry Shadow active fields, deepened Signal Red, and a new Favorite Rose star state; tiles rebuilt as bordered cards (preview on top; title + harness badge, mono path, tag chips, and meta row below); favoriting is an always-visible top-left star; the rail gained the brand mark, an Electric Workbench subtitle, and harness filters (moved out of the command band); the detail strip gained a preview thumbnail (a frozen frame seeded from the live tile at selection), a Description column read from each entry's `notes.md`, and a key-value Details column. DESIGN.md token values and component rules updated to match.
@@ -43,7 +44,9 @@ Notable changes, newest first. What/when only — the *why* lives in the [design
 
 [D1]: docs/design/log.md
 [D2]: docs/design/log.md
+[D4]: docs/design/log.md
 [D5]: docs/design/log.md
+[D6]: docs/design/log.md
 [D3]: docs/design/log.md
 [D8]: docs/design/log.md
 [D10]: docs/design/log.md
@@ -53,3 +56,6 @@ Notable changes, newest first. What/when only — the *why* lives in the [design
 [D13]: docs/design/log.md
 [D14]: docs/design/log.md
 [D15]: docs/design/log.md
+[D16]: docs/design/log.md
+[D17]: docs/design/log.md
+[D18]: docs/design/log.md

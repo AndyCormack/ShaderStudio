@@ -18,6 +18,8 @@ Canonical terms for shader-studio. One term per concept; alternatives listed und
 
 **uniform panel** — the auto-generated live controls (sliders, color pickers) built from `meta.json`'s uniform declarations. _Avoid: inspector, tweakpane._
 
+**uniform label** — the human-readable name the uniform panel derives from a uniform's **raw name** (its GLSL identifier): Hungarian prefix dropped, words split and title-cased. Both are shown; the raw name is the one referenced in shader source. _Avoid: pretty name, display name._
+
 **gallery** — the grid view of live shader-entry previews, rendered from one shared WebGL context.
 
 **preview atlas** — the gallery's composition: one featured live preview, supporting medium and small tiles on a shared 12-column grid, framed by the discovery rail, command band, and detail strip. _Avoid: dashboard, mosaic view._

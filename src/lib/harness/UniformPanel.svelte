@@ -2,7 +2,16 @@
 	import ArrowCounterClockwise from 'phosphor-svelte/lib/ArrowCounterClockwise';
 	import SlidersHorizontal from 'phosphor-svelte/lib/SlidersHorizontal';
 	import { Color, type RawShaderMaterial } from 'three';
-	import type { ShaderEntry } from '$lib/shaders/types';
+	import { Button } from '$lib/components/ui/button';
+	import { Input } from '$lib/components/ui/input';
+	import { InputGroup, InputGroupAddon, InputGroupInput } from '$lib/components/ui/input-group';
+	import { Slider } from '$lib/components/ui/slider';
+	import * as Tooltip from '$lib/components/ui/tooltip';
+	import type { ShaderEntry, UniformDef } from '$lib/shaders/types';
+	import { uniformLabel } from './uniform-label';
+
+	type FloatDef = Extract<UniformDef, { type: 'float' }>;
+	type ColorDef = Extract<UniformDef, { type: 'color' }>;
 
 	let {
 		entry,
@@ -37,259 +46,185 @@
 		values = {};
 	}
 
-	function currentValue(definition: (typeof defs)[number]): number | string {
-		return values[definition.name] ?? definition.default;
+	function floatValue(definition: FloatDef): number {
+		return (values[definition.name] as number | undefined) ?? definition.default;
 	}
 
-	function displayValue(definition: (typeof defs)[number]): string {
-		const value = currentValue(definition);
-		return definition.type === 'float' ? Number(value).toFixed(2) : String(value);
+	function colorValue(definition: ColorDef): string {
+		return (values[definition.name] as string | undefined) ?? definition.default;
 	}
 
-	function setValue(name: string, event: Event) {
+	// Trims slider float artifacts (0.1 + 0.05 → 0.15000000000000002) while
+	// keeping typed precision beyond the step (D18: clamp, don't snap).
+	function formatFloat(value: number): string {
+		return String(Number(value.toFixed(4)));
+	}
+
+	function commitFloat(definition: FloatDef, input: HTMLInputElement) {
+		const parsed = Number.parseFloat(input.value);
+		if (Number.isFinite(parsed)) {
+			values[definition.name] = Math.min(definition.max, Math.max(definition.min, parsed));
+		}
+		input.value = formatFloat(floatValue(definition));
+	}
+
+	/** `abc123` / `#abc` → `#abc123` / `#aabbcc`; undefined when not a hex color. */
+	function normalizeHex(text: string): string | undefined {
+		let hex = text.trim().toLowerCase();
+		if (!hex.startsWith('#')) hex = `#${hex}`;
+		if (/^#[0-9a-f]{3}$/.test(hex)) hex = `#${[...hex.slice(1)].map((c) => c + c).join('')}`;
+		return /^#[0-9a-f]{6}$/.test(hex) ? hex : undefined;
+	}
+
+	function commitHex(definition: ColorDef, input: HTMLInputElement) {
+		const normalized = normalizeHex(input.value);
+		if (normalized) values[definition.name] = normalized;
+		input.value = colorValue(definition);
+	}
+
+	function onCommitKeydown(
+		event: KeyboardEvent,
+		commit: (input: HTMLInputElement) => void,
+		revert: () => string
+	) {
 		const input = event.currentTarget as HTMLInputElement;
-		values[name] = input.type === 'range' ? Number(input.value) : input.value;
+		if (event.key === 'Enter') commit(input);
+		else if (event.key === 'Escape') {
+			event.stopPropagation();
+			input.value = revert();
+			input.blur();
+		}
 	}
 </script>
 
-<aside class="uniform-panel" aria-label="Uniform panel">
-	<header>
-		<h2>Uniforms</h2>
-		<div class="header-actions">
-			<button
-				type="button"
-				class="header-button"
-				onclick={reset}
-				disabled={defs.length === 0}
-				aria-label="Reset uniforms"
-				title="Reset uniforms"
-			>
-				<ArrowCounterClockwise size={15} />
-			</button>
-			<button
-				type="button"
-				class="header-button"
-				onclick={onhide}
-				aria-label="Hide controls"
-				aria-controls="uniform-panel-region"
-				aria-expanded="true"
-				title="Hide controls"
-			>
-				<SlidersHorizontal size={15} />
-			</button>
-		</div>
+<aside class="flex h-full min-h-0 flex-col bg-surface text-foreground" aria-label="Uniform panel">
+	<header class="flex min-h-13 items-center justify-between gap-3 border-b border-border px-3 py-2">
+		<h2 class="text-sm font-[650] leading-tight">Uniforms</h2>
+		<Tooltip.Provider delayDuration={300}>
+			<div class="flex items-center gap-0.5">
+				<Tooltip.Root>
+					<Tooltip.Trigger>
+						{#snippet child({ props })}
+							<Button
+								{...props}
+								variant="ghost"
+								size="icon-sm"
+								class="text-muted-foreground hover:text-foreground"
+								onclick={reset}
+								disabled={defs.length === 0}
+								aria-label="Reset uniforms"
+							>
+								<ArrowCounterClockwise size={15} />
+							</Button>
+						{/snippet}
+					</Tooltip.Trigger>
+					<Tooltip.Content side="bottom">Reset uniforms</Tooltip.Content>
+				</Tooltip.Root>
+				<Tooltip.Root>
+					<Tooltip.Trigger>
+						{#snippet child({ props })}
+							<Button
+								{...props}
+								variant="ghost"
+								size="icon-sm"
+								class="text-muted-foreground hover:text-foreground"
+								onclick={onhide}
+								aria-label="Hide controls"
+								aria-controls="uniform-panel-region"
+								aria-expanded="true"
+							>
+								<SlidersHorizontal size={15} />
+							</Button>
+						{/snippet}
+					</Tooltip.Trigger>
+					<Tooltip.Content side="bottom">Hide controls</Tooltip.Content>
+				</Tooltip.Root>
+			</div>
+		</Tooltip.Provider>
 	</header>
 
 	{#if defs.length}
-		<div class="controls">
+		<div class="min-h-0 flex-1 overflow-y-auto p-2">
 			{#each defs as definition (definition.name)}
-				<label class="uniform-control">
-					<span class="control-heading">
-						<code>{definition.name}</code>
-						<output for={`uniform-${definition.name}`}>
-							{displayValue(definition)}
-						</output>
-					</span>
+				<div
+					class="grid grid-cols-[6.75rem_minmax(0,1fr)] items-center gap-x-2.5 rounded-md px-2 py-1.5 transition-colors hover:bg-surface-raised/50"
+				>
+					<div class="min-w-0" title={definition.name}>
+						<p id={`uniform-label-${definition.name}`} class="truncate text-xs font-medium leading-4">
+							{uniformLabel(definition.name)}
+						</p>
+						<code class="block truncate font-mono text-[0.6875rem] leading-4 text-muted-foreground">
+							{definition.name}
+						</code>
+					</div>
 					{#if definition.type === 'float'}
-						<input
-							id={`uniform-${definition.name}`}
-							type="range"
-							min={definition.min}
-							max={definition.max}
-							step={definition.step ?? 0.01}
-							value={currentValue(definition)}
-							oninput={(event) => setValue(definition.name, event)}
-						/>
-						<span class="range-ends" aria-hidden="true">
-							<span>{definition.min}</span>
-							<span>{definition.max}</span>
-						</span>
-					{:else}
-						<span class="color-field">
-							<input
-								id={`uniform-${definition.name}`}
-								type="color"
-								value={currentValue(definition)}
-								oninput={(event) => setValue(definition.name, event)}
+						<div class="flex items-center gap-2">
+							<Slider
+								type="single"
+								min={definition.min}
+								max={definition.max}
+								step={definition.step ?? 0.01}
+								bind:value={
+									() => floatValue(definition), (next) => (values[definition.name] = next)
+								}
+								aria-labelledby={`uniform-label-${definition.name}`}
+								class="min-w-0 grow"
 							/>
-							<span class="swatch-value">{currentValue(definition)}</span>
-						</span>
+							<Input
+								class="h-6 w-14 shrink-0 rounded-md border-transparent bg-transparent px-1 text-right font-mono text-xs tabular-nums text-muted-foreground focus-visible:text-foreground dark:bg-transparent"
+								value={formatFloat(floatValue(definition))}
+								inputmode="decimal"
+								aria-label={`${uniformLabel(definition.name)} value`}
+								onkeydown={(event) =>
+									onCommitKeydown(
+										event,
+										(input) => commitFloat(definition, input),
+										() => formatFloat(floatValue(definition))
+									)}
+								onblur={(event) => commitFloat(definition, event.currentTarget as HTMLInputElement)}
+							/>
+						</div>
+					{:else}
+						<InputGroup class="h-7 rounded-md">
+							<InputGroupAddon>
+								<span
+									class="relative size-4.5 shrink-0 overflow-hidden rounded-[5px] border border-border"
+									style={`background:${colorValue(definition)}`}
+								>
+									<input
+										type="color"
+										class="absolute inset-0 size-full cursor-pointer opacity-0"
+										value={colorValue(definition)}
+										aria-label={`${uniformLabel(definition.name)} color picker`}
+										oninput={(event) =>
+											(values[definition.name] = (event.currentTarget as HTMLInputElement).value)}
+									/>
+								</span>
+							</InputGroupAddon>
+							<InputGroupInput
+								class="px-1.5 font-mono text-xs tabular-nums text-muted-foreground focus-visible:text-foreground md:text-xs"
+								value={colorValue(definition)}
+								spellcheck={false}
+								aria-label={`${uniformLabel(definition.name)} hex value`}
+								onkeydown={(event) =>
+									onCommitKeydown(
+										event,
+										(input) => commitHex(definition, input),
+										() => colorValue(definition)
+									)}
+								onblur={(event) => commitHex(definition, event.currentTarget as HTMLInputElement)}
+							/>
+						</InputGroup>
 					{/if}
-				</label>
+				</div>
 			{/each}
 		</div>
 	{:else}
-		<div class="empty-state">
+		<div
+			class="flex min-h-32 flex-1 items-center justify-center gap-2.5 p-6 text-[0.8125rem] text-muted-foreground"
+		>
 			<SlidersHorizontal size={18} />
-			<p>This shader has no authored uniforms.</p>
+			<p class="max-w-[22ch] text-center">This shader has no authored uniforms.</p>
 		</div>
 	{/if}
 </aside>
-
-<style>
-	.uniform-panel {
-		display: flex;
-		height: 100%;
-		min-height: 0;
-		flex-direction: column;
-		background: var(--surface);
-		color: var(--foreground);
-	}
-
-	header {
-		display: flex;
-		min-height: 3.25rem;
-		align-items: center;
-		justify-content: space-between;
-		gap: 0.75rem;
-		border-bottom: 1px solid var(--border);
-		padding: 0.625rem 0.75rem;
-	}
-
-	h2 {
-		margin: 0;
-		font-size: 0.875rem;
-		font-weight: 650;
-		line-height: 1.2;
-	}
-
-	.header-actions {
-		display: flex;
-		align-items: center;
-		gap: 0.125rem;
-	}
-
-	.header-button {
-		display: inline-flex;
-		width: 2rem;
-		height: 2rem;
-		align-items: center;
-		justify-content: center;
-		border-radius: 6px;
-		color: var(--muted-foreground);
-		transition:
-			background 180ms var(--ease-workbench),
-			color 180ms var(--ease-workbench);
-	}
-
-	.header-button:hover:not(:disabled) {
-		background: var(--surface-raised);
-		color: var(--foreground);
-	}
-
-	.header-button:focus-visible,
-	input:focus-visible {
-		outline: 2px solid var(--ring);
-		outline-offset: 2px;
-	}
-
-	.header-button:disabled {
-		cursor: not-allowed;
-		color: var(--ink-subtle);
-	}
-
-	.controls {
-		display: flex;
-		min-height: 0;
-		flex: 1;
-		flex-direction: column;
-		gap: 0.375rem;
-		overflow: auto;
-		padding: 0.75rem;
-	}
-
-	.uniform-control {
-		display: flex;
-		flex-direction: column;
-		gap: 0.625rem;
-		border-radius: 8px;
-		background: color-mix(in oklch, var(--surface-raised) 60%, var(--surface));
-		padding: 0.75rem;
-	}
-
-	.control-heading,
-	.range-ends,
-	.color-field {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 0.75rem;
-	}
-
-	code,
-	output,
-	.swatch-value,
-	.range-ends {
-		font-family: var(--font-mono);
-		font-variant-numeric: tabular-nums;
-	}
-
-	code {
-		font-size: 0.75rem;
-		font-weight: 550;
-	}
-
-	output {
-		color: var(--muted-foreground);
-		font-size: 0.6875rem;
-	}
-
-	input[type='range'] {
-		width: 100%;
-		height: 0.875rem;
-		cursor: pointer;
-		accent-color: var(--primary);
-	}
-
-	.range-ends {
-		margin-top: -0.375rem;
-		color: var(--ink-subtle);
-		font-size: 0.625rem;
-	}
-
-	.color-field {
-		justify-content: flex-start;
-		border: 1px solid var(--border);
-		border-radius: 6px;
-		background: var(--background);
-		padding: 0.375rem 0.5rem;
-	}
-
-	input[type='color'] {
-		width: 1.75rem;
-		height: 1.75rem;
-		cursor: pointer;
-		border: 0;
-		border-radius: 4px;
-		background: transparent;
-		padding: 0;
-	}
-
-	.swatch-value {
-		color: var(--muted-foreground);
-		font-size: 0.6875rem;
-	}
-
-	.empty-state {
-		display: flex;
-		min-height: 8rem;
-		flex: 1;
-		align-items: center;
-		justify-content: center;
-		gap: 0.625rem;
-		padding: 1.5rem;
-		color: var(--muted-foreground);
-		font-size: 0.8125rem;
-		text-align: center;
-	}
-
-	.empty-state p {
-		max-width: 22ch;
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.header-button {
-			transition: none;
-		}
-	}
-</style>
