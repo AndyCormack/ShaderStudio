@@ -100,12 +100,13 @@
 				</div>
 			{/if}
 		</div>
+		<!-- Footer bg/border sampled from the Preview Atlas mockup: a subtle
+		     divider over surface when idle; a berry-magenta tint (less green
+		     than surface, so no token mix reproduces it) when selected. -->
 		<div
 			class={cn(
 				'flex h-9 items-center border-t px-3.5',
-				selected
-					? 'border-primary/25 bg-[color-mix(in_oklab,var(--color-primary)_11%,var(--color-surface))]'
-					: 'border-border bg-surface'
+				selected ? 'border-[#221522] bg-[#1d1321]' : 'border-[#1d1d27] bg-surface'
 			)}
 		>
 			<span class="truncate pe-7 text-[0.6875rem] tabular-nums text-muted-foreground">
