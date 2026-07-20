@@ -47,7 +47,7 @@
 		<div class="flex min-w-0 items-center gap-3.5 lg:w-96 lg:shrink-0">
 			<div
 				class="relative size-16 shrink-0 overflow-hidden rounded-lg border border-border"
-				{@attach (el) => registry.register('detail', entry.slug, el)}
+				{@attach (el) => registry.register('detail', entry.slug, el, { frozen: true })}
 			>
 				<div
 					class="pointer-events-none absolute inset-0 z-30 rounded-[5px] shadow-[0_0_0_24px_var(--color-surface)]"

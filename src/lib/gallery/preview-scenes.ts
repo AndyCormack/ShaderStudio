@@ -26,6 +26,8 @@ export interface PreviewScene {
 	tick(delta: number): void;
 	/** Keeps u_resolution and the camera in step with the tile's pixel size. */
 	setSize(width: number, height: number): void;
+	getTime(): number;
+	setTime(value: number): void;
 	dispose(): void;
 }
 
@@ -83,6 +85,12 @@ export function createPreviewScene(entry: ShaderEntry): PreviewScene {
 				camera.aspect = aspect;
 				camera.updateProjectionMatrix();
 			}
+		},
+		getTime() {
+			return material.uniforms.u_time.value as number;
+		},
+		setTime(value: number) {
+			material.uniforms.u_time.value = value;
 		},
 		dispose() {
 			geometry.dispose();

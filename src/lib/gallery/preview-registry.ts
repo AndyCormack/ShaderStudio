@@ -8,13 +8,15 @@
 export interface PreviewTarget {
 	slug: string;
 	el: HTMLElement;
+	/** Frozen targets render a static frame — time never advances. */
+	frozen: boolean;
 }
 
 export class PreviewRegistry {
 	#targets = new Map<string, PreviewTarget>();
 
-	register(key: string, slug: string, el: HTMLElement): () => void {
-		const target = { slug, el };
+	register(key: string, slug: string, el: HTMLElement, opts?: { frozen?: boolean }): () => void {
+		const target = { slug, el, frozen: opts?.frozen ?? false };
 		this.#targets.set(key, target);
 		return () => {
 			if (this.#targets.get(key) === target) this.#targets.delete(key);
