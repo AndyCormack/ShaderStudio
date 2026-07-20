@@ -220,6 +220,12 @@ The Gallery follows the **Preview Atlas** topology. A persistent discovery rail 
 - **Selection:** a quiet, dimmed Signal Red card edge; Berry Shadow fields carry rail and filter selection. Full-strength Signal Red belongs to the final open action or keyboard focus.
 - **Density:** target 8–12 visible live previews at a 16:10 desktop workspace while keeping names and compact metadata legible.
 
+## Studio Layout
+
+The Studio uses **Focus Canvas** ([D16](docs/design/log.md)): the rendered shader fills the work area while three compact, opaque surfaces sit at its edges. Identity and Gallery navigation lift at the upper left, scene controls lift at the upper right, and the hideable uniform panel occupies the right edge below them. A quiet status strip anchors the bottom. These are functional surfaces with contact-first elevation, not decorative glass; the canvas remains visually continuous behind them and available for the planned compile-error overlay.
+
+The uniform panel is visible by default because live parameter tuning is core to the iteration loop, but one direct control removes it for uninterrupted visual evaluation. Scene choice stays independent so hiding uniforms never hides camera or primitive context. Below 760px the lifted composition becomes a clear vertical order—identity, scene controls, canvas, uniform panel, status—without shrinking labels or overlaying touch targets on the shader.
+
 ## Components
 
 Components are compact, tactile, precise, and familiar. Controls use restrained corner curves and direct state changes; no static control should look inflated, glassy, or toy-like.

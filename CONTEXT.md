@@ -32,6 +32,8 @@ Canonical terms for shader-studio. One term per concept; alternatives listed und
 
 **studio** — the full-size single-entry view: canvas, camera, uniform panel, compile-error overlay.
 
+**focus canvas** — the Studio's canvas-first topology: shader output fills the work area while compact identity, scene, and hideable uniform surfaces lift at its edges. _Avoid: floating dashboard, inspector layout._
+
 **look-dev sandbox** — the project's role: a cheap place to iterate on a shader's look and algorithm before manually translating it to its destination engine.
 
 **porting notes** — a shader entry's `notes.md`: design intent plus how the effect would be rebuilt in Unreal Engine.
