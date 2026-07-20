@@ -60,11 +60,13 @@
 </script>
 
 {#if entry}
-	<!-- Full-window band with a top divider; the strip itself is a raised
-	     rounded panel inset within it (the mockup's double container). -->
-	<div class="shrink-0 border-t border-border px-4 py-3.5">
+	<!-- Full-window band with a subtle top divider; the strip itself is a
+	     raised rounded panel inset within it (the mockup's double container).
+	     Panel bg/border sampled from the mockup: clearly lifted above the
+	     surface chrome, with a lighter purple edge. -->
+	<div class="shrink-0 border-t border-[#221d2a] px-4 py-3.5">
 		<div
-			class="flex flex-col gap-4 rounded-panel border border-border bg-surface px-5 py-4 lg:flex-row lg:items-start lg:gap-8"
+			class="flex flex-col gap-4 rounded-panel border border-[#332738] bg-surface-raised px-5 py-4 lg:flex-row lg:items-start lg:gap-8"
 		>
 		<div class="flex min-w-0 items-center gap-4 lg:w-96 lg:shrink-0">
 			<div
