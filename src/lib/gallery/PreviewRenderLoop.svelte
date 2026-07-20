@@ -77,11 +77,16 @@
 				cache.set(key, ps);
 			}
 
-			const width = rect.width;
-			const height = rect.height;
+			// Round to whole CSS pixels, then inset by 1px: fractional rects get
+			// floored/scaled inside Three at non-integer pixel ratios, and a rect
+			// that lands 1px proud of its container bleeds past the card's
+			// rounded border. The 1px sacrifice is invisible on these surfaces.
+			const inset = 1;
+			const width = Math.round(rect.width) - inset * 2;
+			const height = Math.round(rect.height) - inset * 2;
 			if (width < 1 || height < 1) continue;
-			const x = rect.left - canvasRect.left;
-			const y = canvasRect.bottom - rect.bottom;
+			const x = Math.round(rect.left - canvasRect.left) + inset;
+			const y = Math.round(canvasRect.bottom - rect.bottom) + inset;
 
 			// Clip the scissor to the canvas so partially scrolled tiles crop
 			// instead of drawing outside the atlas viewport; the viewport keeps

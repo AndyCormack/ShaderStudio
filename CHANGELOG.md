@@ -9,6 +9,7 @@ Notable changes, newest first. What/when only — the *why* lives in the [design
 
 ### Fixed
 - Live previews rendered offset/scaled away from their tiles on displays with a device pixel ratio other than 1 (e.g. Windows display scaling): the scissored render loop pre-multiplied viewport/scissor rects by the pixel ratio, which Three.js also does internally. Coordinates are now passed in CSS pixels; only `u_resolution` uses device pixels.
+- Preview corners bled past the tile's rounded border at fractional pixel ratios: sub-pixel rects get floored/scaled inside Three, letting the scissored render land 1px proud of its container. Rects are now rounded to whole CSS pixels and inset by 1px, so the draw region can never escape the card; verified pixel-level at DPR 1.25 and 1.5.
 
 ### Added
 - Gallery view (PLAN item 5): the Preview Atlas at `/` — discovery rail (Gallery/Favorites/Recent/Tags with counts), search-first command band (inline search, harness filter chips, sort), asymmetric live-preview grid (featured + medium + small tiles), selected-shader detail strip with **Open shader**, and a ⌘K Command Search overlay grouping shaders/tags/views. Live previews render from one shared WebGL context via scissored viewports inside a single Threlte `<Canvas>` (`src/lib/gallery/`); custom-scene entries preview as their default primitive (full scene in the studio). Favorites/recents persist in localStorage; keyboard: arrows select, Enter opens, `/` focuses search, Ctrl/⌘K opens the palette. Replaces the placeholder entry list on the front page. ([D7], [D12], [D14])
