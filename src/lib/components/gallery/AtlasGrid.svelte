@@ -15,7 +15,7 @@
 </script>
 
 <div
-	class="grid auto-rows-[9.5rem] grid-cols-2 gap-3 p-4 md:grid-cols-6 xl:grid-cols-12"
+	class="grid auto-rows-[13.5rem] grid-cols-2 gap-3.5 p-4 md:grid-cols-6 xl:grid-cols-12"
 	role="list"
 	aria-label="Shader previews"
 >

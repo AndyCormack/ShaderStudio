@@ -1,24 +1,31 @@
 /**
- * Maps shader slugs to their tile's preview element. The shared-context
- * renderer (D7) walks this every frame to scissor each live preview into
- * place; tiles register on mount via an attachment and unregister on unmount.
- * Deliberately non-reactive — the render loop polls it imperatively.
+ * Maps viewport keys to a shader slug + the DOM element the preview should
+ * fill. The shared-context renderer (D7) walks this every frame to scissor
+ * each live preview into place. Keys are arbitrary (atlas tiles use the
+ * slug; the detail strip uses a fixed key whose slug changes with the
+ * selection). Deliberately non-reactive — the render loop polls it.
  */
-export class PreviewRegistry {
-	#tiles = new Map<string, HTMLElement>();
+export interface PreviewTarget {
+	slug: string;
+	el: HTMLElement;
+}
 
-	register(slug: string, el: HTMLElement): () => void {
-		this.#tiles.set(slug, el);
+export class PreviewRegistry {
+	#targets = new Map<string, PreviewTarget>();
+
+	register(key: string, slug: string, el: HTMLElement): () => void {
+		const target = { slug, el };
+		this.#targets.set(key, target);
 		return () => {
-			if (this.#tiles.get(slug) === el) this.#tiles.delete(slug);
+			if (this.#targets.get(key) === target) this.#targets.delete(key);
 		};
 	}
 
-	has(slug: string): boolean {
-		return this.#tiles.has(slug);
+	has(key: string): boolean {
+		return this.#targets.has(key);
 	}
 
-	tiles(): IterableIterator<[string, HTMLElement]> {
-		return this.#tiles.entries();
+	targets(): IterableIterator<[string, PreviewTarget]> {
+		return this.#targets.entries();
 	}
 }

@@ -8,6 +8,11 @@ const fragmentModules = import.meta.glob('/shaders/*/fragment.glsl', {
 	import: 'default'
 });
 const vertexModules = import.meta.glob('/shaders/*/vertex.glsl', { eager: true, import: 'default' });
+const notesModules = import.meta.glob('/shaders/*/notes.md', {
+	eager: true,
+	query: '?raw',
+	import: 'default'
+});
 // Keys only — custom scene components are lazy-loaded by the harness (D8).
 const scenePaths = new Set(Object.keys(import.meta.glob('/shaders/*/Scene.svelte')));
 
@@ -54,11 +59,13 @@ function buildCatalog(): ShaderEntry[] {
 			throw new Error(`shaders/${slug}/ has a meta.json but no fragment.glsl`);
 		}
 		const vertex = vertexModules[`/shaders/${slug}/vertex.glsl`];
+		const notes = notesModules[`/shaders/${slug}/notes.md`];
 		entries.push({
 			slug,
 			meta: validateMeta(slug, rawMeta),
 			fragment,
-			vertex: typeof vertex === 'string' ? vertex : undefined
+			vertex: typeof vertex === 'string' ? vertex : undefined,
+			notes: typeof notes === 'string' ? notes : undefined
 		});
 	}
 	for (const path of Object.keys(fragmentModules)) {

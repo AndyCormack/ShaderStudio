@@ -4,6 +4,9 @@ Notable changes, newest first. What/when only — the *why* lives in the [design
 
 ## 2026-07-20
 
+### Changed
+- Gallery visuals reconciled with the Preview Atlas mockup ([D15]): palette darkened to near-black violet-plum (sampled from the mockup) with Berry Shadow active fields, deepened Signal Red, and a new Favorite Rose star state; tiles rebuilt as bordered cards (preview on top; title + harness badge, mono path, tag chips, and meta row below); favoriting is an always-visible top-left star; the rail gained the brand mark, an Electric Workbench subtitle, and harness filters (moved out of the command band); the detail strip gained a live preview thumbnail, a Description column read from each entry's `notes.md`, and a key-value Details column. DESIGN.md token values and component rules updated to match.
+
 ### Added
 - Gallery view (PLAN item 5): the Preview Atlas at `/` — discovery rail (Gallery/Favorites/Recent/Tags with counts), search-first command band (inline search, harness filter chips, sort), asymmetric live-preview grid (featured + medium + small tiles), selected-shader detail strip with **Open shader**, and a ⌘K Command Search overlay grouping shaders/tags/views. Live previews render from one shared WebGL context via scissored viewports inside a single Threlte `<Canvas>` (`src/lib/gallery/`); custom-scene entries preview as their default primitive (full scene in the studio). Favorites/recents persist in localStorage; keyboard: arrows select, Enter opens, `/` focuses search, Ctrl/⌘K opens the palette. Replaces the placeholder entry list on the front page. ([D7], [D12], [D14])
 - Styling stack: Tailwind v4 (`@tailwindcss/vite`, CSS-first — no `tailwind.config.*`) + shadcn-svelte (nova style, neutral base, phosphor icons, CLI as devDep for non-interactive adds), with `src/app.css` overriding the scaffolded token values with DESIGN.md's Electric Workbench palette in OKLCH plus workbench-specific tokens (`surface-raised`, `selected`, `signature`, `viewport`, radii, contact-first shadows). Installed components: button, input, badge, separator, tooltip, select, command, dialog (+ CLI-pulled input-group/textarea). ([D13])
@@ -43,3 +46,4 @@ Notable changes, newest first. What/when only — the *why* lives in the [design
 [D7]: docs/design/log.md
 [D13]: docs/design/log.md
 [D14]: docs/design/log.md
+[D15]: docs/design/log.md

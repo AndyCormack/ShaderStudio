@@ -39,7 +39,7 @@ shaders/fireball/
 
 ## Visual system
 
-The MVP design target is **the Electric Workbench**: a canvas-first professional instrument with compact mulberry chrome and shader output as the primary source of spectacle ([D10], [D11]). Deep Berry carries broad selected surfaces, completed tracks, routine statuses, and selected-card edges; Signal Red is reserved for decisive actions and restrained focus edges; Hot Coral appears only as a tiny brand-mark spark. System sans typography, restrained 6–12px radii, and tonal layers keep the workspace familiar and focused. Persistent surfaces stay flat; only transient lifted surfaces use subtle, contact-first layered shadows. [PRODUCT.md](../../PRODUCT.md) captures the strategic context and [DESIGN.md](../../DESIGN.md) is normative for visual tokens and component rules.
+The MVP design target is **the Electric Workbench**: a canvas-first professional instrument with compact near-black violet-plum chrome and shader output as the primary source of spectacle ([D10], [D11], values corrected to the Preview Atlas mockup by [D15]). Berry Shadow carries broad active fields; Signal Red is reserved for decisive actions, state fills, and dimmed selection edges; Favorite Rose marks only the active favorite star; Hot Coral appears only as a tiny brand-mark spark. System sans typography, restrained 6–12px radii, and tonal layers keep the workspace familiar and focused. Persistent surfaces stay flat; only transient lifted surfaces use subtle, contact-first layered shadows. [PRODUCT.md](../../PRODUCT.md) captures the strategic context and [DESIGN.md](../../DESIGN.md) is normative for visual tokens and component rules.
 
 ## Views
 
@@ -58,3 +58,4 @@ The MVP design target is **the Electric Workbench**: a canvas-first professional
 [D10]: log.md#d10--ui-direction-the-electric-workbench-2026-07-20
 [D13]: log.md#d13--styling-stack-tailwind-v4--shadcn-svelte-themed-by-designmd-tokens-2026-07-20
 [D14]: log.md#d14--gallery-mvp-state-localstorage-favoritesrecents-collections-and-presets-deferred-2026-07-20
+[D15]: log.md#d15--palette-and-tile-anatomy-corrected-to-the-preview-atlas-mockup-2026-07-20

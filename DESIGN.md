@@ -2,19 +2,20 @@
 name: shader-studio
 description: A calm, canvas-first shader workbench with an electric edge.
 colors:
-  primary: "#C72C41"
-  primary-hover: "#B52539"
-  primary-text: "#C72C41"
-  signature: "#EE4540"
-  selected: "#801336"
-  background: "#2D132C"
-  surface: "#381736"
-  surface-raised: "#431B40"
-  surface-overlay: "#4D2049"
-  border: "#5B3A56"
-  ink: "#F5EFF3"
-  ink-muted: "#B8A8B3"
-  ink-subtle: "#8F7888"
+  primary: "#A81D33"
+  primary-hover: "#8E1930"
+  primary-text: "#A81D33"
+  signature: "#E52C35"
+  favorite: "#DA5672"
+  selected: "#2A1B2E"
+  background: "#13121C"
+  surface: "#191824"
+  surface-raised: "#262432"
+  surface-overlay: "#211F2E"
+  border: "#2B2938"
+  ink: "#F5F4FA"
+  ink-muted: "#8E8B99"
+  ink-subtle: "#6A6775"
   viewport: "#020202"
 typography:
   display:
@@ -111,10 +112,10 @@ components:
     padding: "8px 10px"
     height: "36px"
   shader-tile:
-    backgroundColor: "{colors.viewport}"
+    backgroundColor: "{colors.surface}"
     textColor: "{colors.ink}"
     rounded: "{rounded.tile}"
-    padding: "8px"
+    padding: "10px 12px"
 ---
 
 # Design System: shader-studio
@@ -123,7 +124,7 @@ components:
 
 **Creative North Star: "The Electric Workbench"**
 
-shader-studio is a calm professional instrument with an electric edge. The rendered shader is always the brightest, most expressive object in the room; the surrounding interface is compact, dark, precise, and quiet enough to disappear during focused work. Mulberry surfaces create a distinct environment without turning the product into a themed spectacle.
+shader-studio is a calm professional instrument with an electric edge. The rendered shader is always the brightest, most expressive object in the room; the surrounding interface is compact, dark, precise, and quiet enough to disappear during focused work. Near-black violet-plum surfaces create a distinct environment without turning the product into a themed spectacle.
 
 This is the MVP design target. The existing interface implements only part of it, so the tokens above are normative for new work and should replace one-off values as touched. The visual system takes ComfyUI Desktop's personality, Rive's approachability, PlayCanvas's durable workspace structure, and Shadertoy's visual discovery model without copying their feature metaphors.
 
@@ -132,8 +133,8 @@ The system explicitly rejects the generic SaaS dashboard, dense Blender or Unity
 **Key Characteristics:**
 
 - Canvas-first layouts with compact, contextual chrome.
-- Dark mulberry tonal layers rather than decorative containers.
-- Signal Red for decisive interaction; Deep Berry for quiet active-state structure; Hot Coral for tiny signature moments.
+- Near-black violet tonal layers rather than decorative containers.
+- Signal Red for decisive interaction; Berry Shadow for quiet active-state fields; Hot Coral for tiny signature moments.
 - Refined, minimally curved geometry with a 12px absolute ceiling.
 - Fast state motion and carefully layered elevation only where an element truly lifts.
 
@@ -141,7 +142,7 @@ The system explicitly rejects the generic SaaS dashboard, dense Blender or Unity
 
 ## Colors
 
-The palette is restrained and dark: a mulberry architecture derived from `#2D132C`, deep berry active fields, and a controlled red-to-coral signal scale. The accents stay rare enough for shader output to remain the visual focus.
+The palette is restrained and dark: a near-black violet-plum architecture derived from `#13121C`, berry-tinted active fields, and a controlled red-to-coral signal scale (values ratified against the Preview Atlas mockup, D15). The accents stay rare enough for shader output to remain the visual focus.
 
 ### Primary
 
@@ -151,26 +152,27 @@ The palette is restrained and dark: a mulberry architecture derived from `#2D132
 
 ### Secondary
 
-- **Deep Berry** (`selected`): selected navigation, broad active surfaces, completed range tracks, checkbox fills, and other quiet structural state. It carries active chrome without shouting.
+- **Berry Shadow** (`selected`): selected navigation fields, active filter rows, and other quiet structural state surfaces. It carries active chrome without shouting.
+- **Favorite Rose** (`favorite`): the active favorite-star state on tiles and the detail strip. It appears nowhere else.
 - **Hot Coral** (`signature`): a tiny brand-mark spark only. It is forbidden on status dots, range tracks, checkbox fills, input borders, card borders, toggle tracks, view toggles, or large surfaces.
 
 ### Neutral
 
-- **Mulberry Canvas** (`background`): the application frame and deepest persistent chrome.
-- **Mulberry Surface** (`surface`): inspectors, toolbars, and static panels.
-- **Raised Mulberry** (`surface-raised`): cards, nested control groups, and elevated tonal separation.
-- **Overlay Mulberry** (`surface-overlay`): transient menus, command search, and floating inspectors.
+- **Void Plum** (`background`): the application frame and deepest persistent chrome.
+- **Shadow Plum** (`surface`): the rail, tile metadata blocks, inspectors, inputs, and static panels.
+- **Raised Plum** (`surface-raised`): chips, nested control groups, and elevated tonal separation.
+- **Overlay Plum** (`surface-overlay`): transient menus, command search, and floating inspectors.
 - **Quiet Edge** (`border`): one-pixel structural dividers and input outlines.
 - **Workbench Ink** (`ink`): primary text and icons.
 - **Muted Ink** (`ink-muted`): secondary descriptions and metadata.
-- **Subtle Ink** (`ink-subtle`): disabled and tertiary text; never place it on anything lighter than Raised Plum.
+- **Subtle Ink** (`ink-subtle`): disabled and decorative text only; real metadata uses Muted Ink for contrast.
 - **Viewport Black** (`viewport`): neutral surround for shader rendering so preview color is not contaminated by the brand surface.
 
-**The Berry-Structures Rule.** Deep Berry carries broad selected surfaces, completed tracks, checkbox fills, and persistent active destinations. Use Signal Red only where decisive interaction needs a sharper edge.
+**The Berry-Structures Rule.** Berry Shadow carries broad selected fields — rail items, selected chips, active filters, persistent active destinations. Signal Red carries decisive interaction, state fills (checks, completed tracks, thumbs), and the dimmed selected-card edge.
 
 **The Coral-Sparks Rule.** Hot Coral is a tiny brand-mark spark. It never becomes operational status, structural chrome, or a large-area fill.
 
-**The Contrast Rule.** Body and placeholder text must maintain at least 4.5:1 contrast against their surface. Use Porcelain Ink or Dusty Rose Ink for ordinary text; Signal Red is a control fill and focus color, not body copy.
+**The Contrast Rule.** Body and placeholder text must maintain at least 4.5:1 contrast against their surface. Use Workbench Ink or Muted Ink for ordinary text; Signal Red is a control fill and focus color, not body copy.
 
 ## Typography
 
@@ -215,7 +217,7 @@ The Gallery follows the **Preview Atlas** topology. A persistent discovery rail 
 - **Discovery rail:** Gallery, Favorites, Collections, Presets, Tags, Recent, and harness shortcuts remain compact and count-aware. **Open shaders folder** stays a secondary utility.
 - **Command band:** search is visually first; filters and sorting remain subordinate; no editable shader controls appear in the Gallery.
 - **Detail strip:** selection exposes title, path, harness, renderer/version, size, tags, usage, favorite state, and **Open shader** without turning the Gallery into the Studio.
-- **Selection:** quiet Deep Berry edge/tint only. Signal Red belongs to the final open action or keyboard focus, not selected-card decoration.
+- **Selection:** a quiet, dimmed Signal Red card edge; Berry Shadow fields carry rail and filter selection. Full-strength Signal Red belongs to the final open action or keyboard focus.
 - **Density:** target 8–12 visible live previews at a 16:10 desktop workspace while keeping names and compact metadata legible.
 
 ## Components
@@ -225,39 +227,39 @@ Components are compact, tactile, precise, and familiar. Controls use restrained 
 ### Buttons
 
 - **Shape:** a precise 6px radius and 36px default height. Icon-only buttons are square, not circular, unless the symbol represents a directional handle.
-- **Primary:** Signal Red fill with Porcelain Ink text and 8px 14px padding.
+- **Primary:** Signal Red fill with Workbench Ink text and 8px 14px padding.
 - **Hover / Focus:** deepen to Pressed Signal over 180ms; use a 2px Signal Red focus ring with 2px separation. Active state may translate by 1px but never bounce.
-- **Secondary / Ghost:** Raised Mulberry or transparent background with Quiet Edge structure. Ghost controls gain a Raised Mulberry background on hover.
+- **Secondary / Ghost:** Raised Plum or transparent background with Quiet Edge structure. Ghost controls gain a Raised Plum background on hover.
 
 ### Chips
 
-- **Style:** compact rectangular filters with a 6px radius, Raised Mulberry background, and Dusty Rose Ink text. Chips do not use exaggerated pill geometry.
-- **State:** selected chips use a restrained one-pixel Signal Red outline or Deep Berry fill with Porcelain Ink text; a checkmark or state icon accompanies color when ambiguity is possible.
+- **Style:** compact rectangular filters with a 6px radius, Raised Plum background, and Muted Ink text. Chips do not use exaggerated pill geometry.
+- **State:** selected chips use a restrained one-pixel Signal Red outline or Berry Shadow fill with Workbench Ink text; a checkmark or state icon accompanies color when ambiguity is possible.
 
 ### Cards / Containers
 
 - **Corner Style:** 8px for shader tiles, 10px for persistent panels, and 12px only for transient overlays.
-- **Background:** Mulberry Surface for panels; Viewport Black for render tiles.
+- **Background:** Shadow Plum for panels and tile metadata; Viewport Black behind live previews.
 - **Shadow Strategy:** flat at rest. Only transient or actively dragged surfaces use the Elevation vocabulary.
 - **Border:** one-pixel Quiet Edge only where tonal separation is insufficient. Never combine it decoratively with a broad shadow.
 - **Internal Padding:** 12px for compact tiles and 16px for panels.
 
 ### Inputs / Fields
 
-- **Style:** Mulberry Surface fill, one-pixel Quiet Edge outline, 6px radius, and a 36px default height.
+- **Style:** Shadow Plum fill, one-pixel Quiet Edge outline, 6px radius, and a 36px default height.
 - **Focus:** use a restrained Signal Red outline and separated 2px ring. Focus is crisp, not glowy.
 - **Error / Disabled:** pair semantic iconography and plain-language text with color. Disabled controls use Subtle Ink but remain legible.
-- **Ranges:** Deep Berry fills the completed track; the remaining track uses Quiet Edge. A small solid Signal Red thumb is permitted with no white ring, halo, or glow. Values use tabular numerals. Hot Coral never appears on the track.
+- **Ranges:** a dimmed Signal Red fills the completed track; the remaining track uses Quiet Edge. A small solid Signal Red thumb is permitted with no white ring, halo, or glow. Values use tabular numerals. Hot Coral never appears on the track.
 
 ### Navigation
 
-- **Style:** compact icon-and-label navigation on Mulberry Canvas. Active items use a Deep Berry field with Porcelain Ink; hover uses Mulberry Surface. Keep persistent navigation flat and structurally separated.
+- **Style:** compact icon-and-label navigation on Shadow Plum. Active items use a Berry Shadow field with Workbench Ink; hover uses Raised Plum. Keep persistent navigation flat and structurally separated.
 - **Responsive behavior:** below 720px, move the inspector beneath the viewport and expose secondary navigation through a standard menu or disclosure. Never shrink labels into illegibility.
 - **Motion:** use 180ms state transitions with `cubic-bezier(0.22, 1, 0.36, 1)`. Reduced-motion mode removes translation and uses immediate state changes or a short crossfade.
 
 ### Shader Preview Tile
 
-The preview occupies most of the tile. Name, harness type, and tags sit in a compact metadata strip rather than overlaying the shader. Hover reveals only immediately useful actions; selection uses a quiet one-pixel Deep Berry outline plus an optional Deep Berry surface tint. Hot Coral never appears as tile chrome or status.
+A bordered Shadow Plum card: the live preview fills the top (on Viewport Black), and a metadata block sits below it on the card surface — title with an outlined harness badge, a mono path line, tag chips, then a compact meta row (primitive, scene, uniform count). The favorite star sits top-left over the preview, always visible: Muted Ink at rest, Favorite Rose filled when active. Selection is a dimmed Signal Red card border. Hot Coral never appears as tile chrome or status.
 
 ### Command Search
 
@@ -268,7 +270,7 @@ Search is the fastest route into a growing shader collection. It uses the 12px o
 ### Do:
 
 - **Do** let live shader previews carry most of the screen's color and visual energy.
-- **Do** use Deep Berry for broad active structure and routine statuses, Signal Red for decisive interaction, and Hot Coral only as a tiny brand-mark spark.
+- **Do** use Berry Shadow for broad active fields, Signal Red for decisive interaction and selection edges, Favorite Rose only for the active favorite state, and Hot Coral only as a tiny brand-mark spark.
 - **Do** keep controls at 6px, tiles at 8px, panels at 10px, and overlays at no more than 12px radius.
 - **Do** use tonal layering for static structure and the layered contact-first shadows only for genuine lift.
 - **Do** make gallery search, tags, filters, and keyboard navigation first-class as the collection grows.

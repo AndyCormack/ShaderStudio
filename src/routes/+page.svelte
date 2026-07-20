@@ -61,41 +61,49 @@
 <div class="flex h-svh">
 	<DiscoveryRail {gallery} />
 
-	<main class="flex min-w-0 flex-1 flex-col">
-		<CommandBand {gallery} />
+	<main class="relative flex min-w-0 flex-1 flex-col">
+		{#if gallery.entries.length > 0}
+			<PreviewCanvas {registry} />
+		{/if}
 
-		<div class="relative min-h-0 flex-1">
-			{#if gallery.entries.length === 0}
-				<div class="flex h-full flex-col items-center justify-center gap-4 p-8 text-center">
-					<h1 class="text-[1.5rem] font-[650] tracking-[-0.02em]">Add your first shader</h1>
-					<p class="max-w-[44ch] text-[0.9375rem] leading-relaxed text-muted-foreground">
-						A shader entry is a folder — drop one under <code class="font-mono">shaders/</code> and
-						it appears here, live. No registration step.
-					</p>
-					<pre
-						class="rounded-panel bg-surface px-5 py-4 text-start font-mono text-[0.8125rem] leading-relaxed text-muted-foreground">shaders/my-effect/
+		<!-- No z-index: descendants that must overlay the z-20 canvas use z-30
+		     in the root stacking context; everything else shows through the
+		     canvas's transparent pixels. -->
+		<div class="relative flex min-h-0 flex-1 flex-col">
+			<CommandBand {gallery} />
+
+			<div class="relative min-h-0 flex-1">
+				{#if gallery.entries.length === 0}
+					<div class="flex h-full flex-col items-center justify-center gap-4 p-8 text-center">
+						<h1 class="text-[1.5rem] font-[650] tracking-[-0.02em]">Add your first shader</h1>
+						<p class="max-w-[44ch] text-[0.9375rem] leading-relaxed text-muted-foreground">
+							A shader entry is a folder — drop one under <code class="font-mono">shaders/</code> and
+							it appears here, live. No registration step.
+						</p>
+						<pre
+							class="rounded-panel bg-surface px-5 py-4 text-start font-mono text-[0.8125rem] leading-relaxed text-muted-foreground">shaders/my-effect/
   fragment.glsl
   meta.json</pre>
-				</div>
-			{:else if gallery.visible.length === 0}
-				<div class="flex h-full flex-col items-center justify-center gap-3 p-8 text-center">
-					<h1 class="text-[1.25rem] font-[650] tracking-[-0.015em]">No shaders match</h1>
-					<p class="text-[0.9375rem] text-muted-foreground">
-						Nothing in the collection matches the current search and filters.
-					</p>
-					<Button variant="secondary" class="mt-1 h-9" onclick={() => gallery.clearFilters()}>
-						Clear filters
-					</Button>
-				</div>
-			{:else}
-				<PreviewCanvas {registry} />
-				<div class="absolute inset-0 z-10 overflow-y-auto">
-					<AtlasGrid {gallery} {registry} />
-				</div>
-			{/if}
-		</div>
+					</div>
+				{:else if gallery.visible.length === 0}
+					<div class="flex h-full flex-col items-center justify-center gap-3 p-8 text-center">
+						<h1 class="text-[1.25rem] font-[650] tracking-[-0.015em]">No shaders match</h1>
+						<p class="text-[0.9375rem] text-muted-foreground">
+							Nothing in the collection matches the current search and filters.
+						</p>
+						<Button variant="secondary" class="mt-1 h-9" onclick={() => gallery.clearFilters()}>
+							Clear filters
+						</Button>
+					</div>
+				{:else}
+					<div class="absolute inset-0 overflow-y-auto">
+						<AtlasGrid {gallery} {registry} />
+					</div>
+				{/if}
+			</div>
 
-		<DetailStrip {gallery} />
+			<DetailStrip {gallery} {registry} />
+		</div>
 	</main>
 </div>
 

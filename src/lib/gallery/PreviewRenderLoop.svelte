@@ -33,11 +33,11 @@
 		const canvasW = Math.round(canvasRect.width * dpr);
 		const canvasH = Math.round(canvasRect.height * dpr);
 
-		// Sweep scenes whose tiles unmounted (filtering, section switches).
-		for (const slug of [...cache.keys()]) {
-			if (!registry.has(slug)) {
-				cache.get(slug)!.dispose();
-				cache.delete(slug);
+		// Sweep scenes whose viewports unmounted (filtering, section switches).
+		for (const key of [...cache.keys()]) {
+			if (!registry.has(key)) {
+				cache.get(key)!.dispose();
+				cache.delete(key);
 			}
 		}
 
@@ -47,9 +47,9 @@
 		renderer.clear();
 		renderer.setScissorTest(true);
 
-		for (const [slug, el] of registry.tiles()) {
+		for (const [key, { slug, el }] of registry.targets()) {
 			const rect = el.getBoundingClientRect();
-			// Cull tiles scrolled out of the atlas viewport.
+			// Cull viewports scrolled out of the atlas area.
 			if (
 				rect.bottom <= canvasRect.top ||
 				rect.top >= canvasRect.bottom ||
@@ -61,10 +61,15 @@
 			const entry = getEntry(slug);
 			if (!entry) continue;
 
-			let ps = cache.get(slug);
+			// A key can switch shaders in place (the detail-strip thumb).
+			let ps = cache.get(key);
+			if (ps && ps.entry.slug !== slug) {
+				ps.dispose();
+				ps = undefined;
+			}
 			if (!ps) {
 				ps = createPreviewScene(entry);
-				cache.set(slug, ps);
+				cache.set(key, ps);
 			}
 
 			const width = Math.round(rect.width * dpr);

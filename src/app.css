@@ -5,58 +5,60 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * Electric Workbench theme (D10/D11) — dark-only.
- * Values are DESIGN.md's normative palette converted to OKLCH; DESIGN.md
- * stays the source of truth for what each token may be used for.
+ * Electric Workbench theme (D10/D11, values revised by D15 to match the
+ * ratified Preview Atlas mockup) — dark-only. Near-black violet surfaces;
+ * berry appears in active tints, Signal Red in decisive actions.
+ * DESIGN.md stays the source of truth for what each token may be used for.
  */
 :root {
 	color-scheme: dark;
 
-	--background: oklch(0.237 0.059 328.7); /* Mulberry Canvas #2D132C */
-	--foreground: oklch(0.958 0.008 337.4); /* Workbench Ink #F5EFF3 */
-	--card: oklch(0.267 0.071 329.6); /* Mulberry Surface #381736 */
-	--card-foreground: oklch(0.958 0.008 337.4);
-	--popover: oklch(0.325 0.09 330.9); /* Overlay Mulberry #4D2049 */
-	--popover-foreground: oklch(0.958 0.008 337.4);
-	--primary: oklch(0.547 0.19 19.4); /* Signal Red #C72C41 */
-	--primary-foreground: oklch(0.958 0.008 337.4);
-	--secondary: oklch(0.297 0.082 330.3); /* Raised Mulberry #431B40 */
-	--secondary-foreground: oklch(0.958 0.008 337.4);
-	--muted: oklch(0.267 0.071 329.6);
-	--muted-foreground: oklch(0.749 0.024 337); /* Muted Ink #B8A8B3 */
-	--accent: oklch(0.297 0.082 330.3); /* hover fields = Raised Mulberry */
-	--accent-foreground: oklch(0.958 0.008 337.4);
-	--destructive: oklch(0.547 0.19 19.4); /* Signal family; pair icon + wording */
-	--border: oklch(0.398 0.063 332.2); /* Quiet Edge #5B3A56 */
-	--input: oklch(0.398 0.063 332.2);
-	--ring: oklch(0.547 0.19 19.4); /* focus = Signal Red, crisp not glowy */
+	--background: oklch(0.188 0.02 288.9); /* Void Plum #13121C */
+	--foreground: oklch(0.97 0.008 293.9); /* Workbench Ink #F5F4FA */
+	--card: oklch(0.216 0.023 288.1); /* Shadow Plum #191824 */
+	--card-foreground: oklch(0.97 0.008 293.9);
+	--popover: oklch(0.249 0.028 290.3); /* Overlay Plum #211F2E */
+	--popover-foreground: oklch(0.97 0.008 293.9);
+	--primary: oklch(0.477 0.172 19.2); /* Signal Red #A81D33 */
+	--primary-foreground: oklch(0.97 0.008 293.9);
+	--secondary: oklch(0.269 0.026 291.1); /* Raised Plum #262432 */
+	--secondary-foreground: oklch(0.97 0.008 293.9);
+	--muted: oklch(0.216 0.023 288.1);
+	--muted-foreground: oklch(0.644 0.021 295.6); /* Muted Ink #8E8B99 */
+	--accent: oklch(0.269 0.026 291.1); /* hover fields = Raised Plum */
+	--accent-foreground: oklch(0.97 0.008 293.9);
+	--destructive: oklch(0.477 0.172 19.2); /* Signal family; pair icon + wording */
+	--border: oklch(0.29 0.027 290.7); /* Quiet Edge #2B2938 */
+	--input: oklch(0.29 0.027 290.7);
+	--ring: oklch(0.477 0.172 19.2); /* focus = Signal Red, crisp not glowy */
 	--radius: 0.375rem; /* 6px control radius */
 
 	/* Electric Workbench tokens beyond shadcn's vocabulary */
-	--primary-hover: oklch(0.508 0.178 19.5); /* Pressed Signal #B52539 */
-	--surface: oklch(0.267 0.071 329.6); /* Mulberry Surface #381736 */
-	--surface-raised: oklch(0.297 0.082 330.3); /* Raised Mulberry #431B40 */
-	--surface-overlay: oklch(0.325 0.09 330.9); /* Overlay Mulberry #4D2049 */
-	--selected: oklch(0.395 0.143 8.9); /* Deep Berry #801336 — quiet active structure */
-	--signature: oklch(0.636 0.207 26.7); /* Hot Coral #EE4540 — brand-mark spark ONLY */
+	--primary-hover: oklch(0.424 0.151 16.5); /* Pressed Signal #8E1930 */
+	--surface: oklch(0.216 0.023 288.1); /* Shadow Plum #191824 */
+	--surface-raised: oklch(0.269 0.026 291.1); /* Raised Plum #262432 */
+	--surface-overlay: oklch(0.249 0.028 290.3); /* Overlay Plum #211F2E */
+	--selected: oklch(0.25 0.041 319); /* Berry Shadow #2A1B2E — quiet active fields */
+	--signature: oklch(0.599 0.218 24.9); /* Hot Coral #E52C35 — brand-mark spark ONLY */
+	--favorite: oklch(0.632 0.166 10.2); /* Favorite Rose #DA5672 — active star state */
 	--viewport: oklch(0.085 0 0); /* Viewport Black #020202 — shader surrounds */
-	--ink-subtle: oklch(0.599 0.037 337.2); /* Subtle Ink #8F7888 — disabled/tertiary */
+	--ink-subtle: oklch(0.521 0.022 295.4); /* Subtle Ink #6A6775 — disabled/tertiary */
 
 	/* Discovery rail */
-	--sidebar: oklch(0.237 0.059 328.7);
-	--sidebar-foreground: oklch(0.958 0.008 337.4);
-	--sidebar-primary: oklch(0.547 0.19 19.4);
-	--sidebar-primary-foreground: oklch(0.958 0.008 337.4);
-	--sidebar-accent: oklch(0.267 0.071 329.6); /* rail hover = Mulberry Surface */
-	--sidebar-accent-foreground: oklch(0.958 0.008 337.4);
-	--sidebar-border: oklch(0.398 0.063 332.2);
-	--sidebar-ring: oklch(0.547 0.19 19.4);
+	--sidebar: oklch(0.216 0.023 288.1);
+	--sidebar-foreground: oklch(0.97 0.008 293.9);
+	--sidebar-primary: oklch(0.477 0.172 19.2);
+	--sidebar-primary-foreground: oklch(0.97 0.008 293.9);
+	--sidebar-accent: oklch(0.269 0.026 291.1);
+	--sidebar-accent-foreground: oklch(0.97 0.008 293.9);
+	--sidebar-border: oklch(0.29 0.027 290.7);
+	--sidebar-ring: oklch(0.477 0.172 19.2);
 
-	--chart-1: oklch(0.547 0.19 19.4);
-	--chart-2: oklch(0.395 0.143 8.9);
-	--chart-3: oklch(0.749 0.024 337);
-	--chart-4: oklch(0.398 0.063 332.2);
-	--chart-5: oklch(0.297 0.082 330.3);
+	--chart-1: oklch(0.477 0.172 19.2);
+	--chart-2: oklch(0.25 0.041 319);
+	--chart-3: oklch(0.644 0.021 295.6);
+	--chart-4: oklch(0.29 0.027 290.7);
+	--chart-5: oklch(0.269 0.026 291.1);
 }
 
 @theme inline {
@@ -101,6 +103,7 @@
 	--color-surface-overlay: var(--surface-overlay);
 	--color-selected: var(--selected);
 	--color-signature: var(--signature);
+	--color-favorite: var(--favorite);
 	--color-viewport: var(--viewport);
 	--color-ink-subtle: var(--ink-subtle);
 	--radius-sm: calc(var(--radius) * 0.6);

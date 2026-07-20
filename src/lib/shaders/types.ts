@@ -24,4 +24,6 @@ export interface ShaderEntry {
 	fragment: string;
 	/** Absent → the harness supplies a default vertex shader. */
 	vertex?: string;
+	/** Raw notes.md contents when the entry ships one (design intent + porting notes). */
+	notes?: string;
 }
