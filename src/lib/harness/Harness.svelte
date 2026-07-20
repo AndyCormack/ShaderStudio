@@ -1,27 +1,23 @@
 <script lang="ts">
 	import { Canvas } from '@threlte/core';
+	import type { RawShaderMaterial } from 'three';
 	import type { MeshPrimitive, ShaderEntry } from '$lib/shaders/types';
 	import type { SceneComponent } from './scenes';
-	import { createEntryMaterial } from './material';
 	import HarnessScene from './HarnessScene.svelte';
 
+	// The material is owned (created + disposed) by the caller, so panels
+	// and other consumers can share it.
 	let {
 		entry,
+		material,
 		primitive = 'sphere',
 		sceneComponent
 	}: {
 		entry: ShaderEntry;
+		material: RawShaderMaterial;
 		primitive?: MeshPrimitive;
 		sceneComponent?: SceneComponent;
 	} = $props();
-
-	// Recreated when the entry changes (including shader HMR updates).
-	const material = $derived(createEntryMaterial(entry));
-
-	$effect(() => {
-		const m = material;
-		return () => m.dispose();
-	});
 
 	function onpointermove(event: PointerEvent) {
 		const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();

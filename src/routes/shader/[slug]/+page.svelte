@@ -1,10 +1,20 @@
 <script lang="ts">
 	import type { MeshPrimitive } from '$lib/shaders/types';
 	import { loadCustomScene, type SceneComponent } from '$lib/harness/scenes';
+	import { createEntryMaterial } from '$lib/harness/material';
 	import Harness from '$lib/harness/Harness.svelte';
+	import UniformPanel from '$lib/harness/UniformPanel.svelte';
 
 	let { data } = $props();
 	const entry = $derived(data.entry);
+
+	// Recreated when the entry changes (including shader HMR updates).
+	const material = $derived(createEntryMaterial(entry));
+
+	$effect(() => {
+		const m = material;
+		return () => m.dispose();
+	});
 
 	const primitives: MeshPrimitive[] = ['sphere', 'box', 'torus', 'torusknot', 'plane'];
 	let primitive = $state<MeshPrimitive>('sphere');
@@ -57,8 +67,11 @@
 		{/if}
 	</header>
 
-	<div class="viewport">
-		<Harness {entry} {primitive} {sceneComponent} />
+	<div class="content">
+		<div class="viewport">
+			<Harness {entry} {material} {primitive} {sceneComponent} />
+		</div>
+		<UniformPanel {entry} {material} />
 	</div>
 </main>
 
@@ -82,9 +95,15 @@
 		margin: 0;
 	}
 
-	.viewport {
+	.content {
+		display: flex;
 		flex: 1;
 		min-height: 0;
+	}
+
+	.viewport {
+		flex: 1;
+		min-width: 0;
 		background: #111;
 	}
 </style>

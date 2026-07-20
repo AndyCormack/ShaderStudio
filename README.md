@@ -11,7 +11,7 @@ pnpm install
 pnpm dev --open
 ```
 
-The front page lists shader entries discovered under `shaders/`; click one to open its studio view (`/shader/<slug>`) — live canvas, orbit camera + geometry switcher for mesh shaders, custom-scene toggle where an entry ships a `Scene.svelte`. Edit an entry's `.glsl` with the dev server running to see it hot-reload. The uniform control panel is next in [PLAN.md](PLAN.md).
+The front page lists shader entries discovered under `shaders/`; click one to open its studio view (`/shader/<slug>`) — live canvas, orbit camera + geometry switcher for mesh shaders, custom-scene toggle where an entry ships a `Scene.svelte`, and a uniform panel auto-generated from `meta.json` (sliders + color pickers, live). Edit an entry's `.glsl` with the dev server running to see it hot-reload. The gallery grid is next in [PLAN.md](PLAN.md).
 
 ## How it will work
 

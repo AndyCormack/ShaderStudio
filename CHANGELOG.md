@@ -5,6 +5,7 @@ Notable changes, newest first. What/when only — the *why* lives in the [design
 ## 2026-07-20
 
 ### Added
+- Uniform panel (PLAN item 4): studio sidebar auto-generated from `meta.json` uniform declarations — range sliders for floats (min/max/step), color pickers for colors, live write-through into the running material's uniforms, per-entry reset. Values are re-applied when the material is recreated, so tweaks survive shader HMR. Material ownership moved from `Harness` to the studio page so panel and canvas share it. ([D5], [D6])
 - Render harness + studio route (PLAN item 3): `src/lib/harness/` renders entries via `RawShaderMaterial` with the standard uniform contract (`u_time`, `u_resolution`, `u_mouse` from pointer tracking). Quad mode draws a fullscreen quad (default vertex shader supplies `vUv`); mesh mode adds PerspectiveCamera + OrbitControls + a 5-primitive geometry switcher; custom scenes (`Scene.svelte`, lazy-loaded, material passed as prop) render arbitrary Threlte geometry — demonstrated by fireball's core-plus-orbiting-embers scene. Studio view at `/shader/[slug]` (404 on unknown slugs); catalog validates `meta.json` `"scene"` against `Scene.svelte` presence. ([D3], [D4], [D8])
 
 ### Removed
