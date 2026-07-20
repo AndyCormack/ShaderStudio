@@ -39,7 +39,7 @@
 	class={cn(
 		'group relative flex h-full flex-col overflow-hidden rounded-tile border transition-[border-color,box-shadow] duration-150',
 		selected
-			? 'border-primary/60 shadow-[0_0_18px_-6px_oklch(0.55_0.21_18/0.28)]'
+			? 'border-primary/60 shadow-[0_0_40px_-4px_oklch(0.55_0.21_18/0.14)]'
 			: 'border-border'
 	)}
 >
@@ -47,12 +47,13 @@
 
 	<!-- Corner mask + an edge feather that dissolves the render into the card
 	     surface on every side (the scissored canvas can't be CSS-masked, so
-	     the blend is painted over it); selection adds an inset Signal glow. -->
+	     the blend is painted over it); selection adds a large, subtle inset
+	     Signal glow that hazes most of the card like the edge vignette. -->
 	<div
 		class={cn(
 			'pointer-events-none absolute inset-0 z-30 rounded-[7px]',
 			selected
-				? 'shadow-[0_0_0_32px_var(--color-background),inset_0_0_30px_2px_oklch(0.55_0.21_18/0.3)]'
+				? 'shadow-[0_0_0_32px_var(--color-background),inset_0_0_100px_oklch(0.55_0.21_18/0.14)]'
 				: 'shadow-[0_0_0_32px_var(--color-background)]'
 		)}
 		style="background:
@@ -99,7 +100,14 @@
 				</div>
 			{/if}
 		</div>
-		<div class="flex h-9 items-center border-t border-border bg-surface px-3.5">
+		<div
+			class={cn(
+				'flex h-9 items-center border-t px-3.5',
+				selected
+					? 'border-primary/25 bg-[color-mix(in_oklab,var(--color-primary)_11%,var(--color-surface))]'
+					: 'border-border bg-surface'
+			)}
+		>
 			<span class="truncate pe-7 text-[0.6875rem] tabular-nums text-muted-foreground">
 				{entry.glslVersion} &nbsp;·&nbsp; {formatSize(entry.glslBytes)} &nbsp;·&nbsp; Updated {formatAgo(
 					entry.updatedAt
