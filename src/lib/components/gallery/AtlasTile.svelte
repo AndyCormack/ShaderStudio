@@ -63,50 +63,44 @@
 			radial-gradient(ellipse 78% 78% at 50% 44%, transparent 38%, color-mix(in oklab, var(--color-surface) 78%, transparent) 82%, var(--color-surface) 100%);"
 	></div>
 
-	<!-- Metadata sits on solid surface; above it a tall eased scrim (ease-in-out
-	     alpha, so no visible band) dissolves the render into the surface over a
-	     long distance, reaching solid just above the title. -->
+	<!-- Title/path/tags overlay the render on a plain linear fade (surface at the
+	     bottom → transparent at the top); the meta row is a separate solid bar
+	     with a top border, matching the mockup's footer strip. -->
 	<div class="absolute inset-x-0 bottom-0 z-30 flex flex-col">
 		<div
-			class="h-32"
-			style="background: linear-gradient(to top,
-				var(--color-surface) 0%,
-				color-mix(in oklab, var(--color-surface) 97%, transparent) 12%,
-				color-mix(in oklab, var(--color-surface) 91%, transparent) 24%,
-				color-mix(in oklab, var(--color-surface) 80%, transparent) 36%,
-				color-mix(in oklab, var(--color-surface) 65%, transparent) 48%,
-				color-mix(in oklab, var(--color-surface) 48%, transparent) 60%,
-				color-mix(in oklab, var(--color-surface) 31%, transparent) 72%,
-				color-mix(in oklab, var(--color-surface) 16%, transparent) 84%,
-				transparent 100%);"
-		></div>
-		<div class="flex flex-col gap-1.5 rounded-b-[7px] bg-surface px-3.5 pb-3">
+			class="flex flex-col gap-1.5 bg-gradient-to-t from-surface to-transparent px-3.5 pb-3 pt-11"
+		>
 			<div class="flex items-center gap-2">
-			<span
-				class={cn(
-					'min-w-0 truncate font-[650] text-foreground',
-					featured ? 'text-[1.25rem] tracking-[-0.015em]' : 'text-[1rem]'
-				)}
-			>
-				{entry.meta.name}
-			</span>
-			<Badge variant="outline" class="shrink-0 text-[0.6875rem] capitalize text-muted-foreground">
-				{entry.meta.harness}
-			</Badge>
-		</div>
-		<span class="truncate font-mono text-xs text-muted-foreground">{fragmentPath}</span>
-		{#if entry.meta.tags?.length}
-			<div class="flex flex-wrap gap-1">
-				{#each entry.meta.tags as tag (tag)}
-					<span
-						class="rounded-[5px] border border-border/70 bg-surface-raised/60 px-2 py-0.5 text-[0.6875rem] text-muted-foreground"
-					>
-						{tag}
-					</span>
-				{/each}
+				<span
+					class={cn(
+						'min-w-0 truncate font-[650] text-foreground',
+						featured ? 'text-[1.25rem] tracking-[-0.015em]' : 'text-[1rem]'
+					)}
+				>
+					{entry.meta.name}
+				</span>
+				<Badge
+					variant="outline"
+					class="shrink-0 text-[0.6875rem] capitalize text-muted-foreground"
+				>
+					{entry.meta.harness}
+				</Badge>
 			</div>
-		{/if}
-			<span class="mt-1 truncate pe-7 text-[0.6875rem] tabular-nums text-muted-foreground">
+			<span class="truncate font-mono text-xs text-muted-foreground">{fragmentPath}</span>
+			{#if entry.meta.tags?.length}
+				<div class="flex flex-wrap gap-1">
+					{#each entry.meta.tags as tag (tag)}
+						<span
+							class="rounded-[5px] border border-border/70 bg-surface-raised/60 px-2 py-0.5 text-[0.6875rem] text-muted-foreground"
+						>
+							{tag}
+						</span>
+					{/each}
+				</div>
+			{/if}
+		</div>
+		<div class="flex h-9 items-center border-t border-border bg-surface px-3.5">
+			<span class="truncate pe-7 text-[0.6875rem] tabular-nums text-muted-foreground">
 				{entry.glslVersion} &nbsp;·&nbsp; {formatSize(entry.glslBytes)} &nbsp;·&nbsp; Updated {formatAgo(
 					entry.updatedAt
 				)}
@@ -143,7 +137,7 @@
 	<!-- Overflow actions: bottom-right of the meta row, per the mockup. -->
 	<DropdownMenu.Root>
 		<DropdownMenu.Trigger
-			class="absolute bottom-2 end-2 z-30 flex size-6 items-center justify-center rounded-[5px] text-muted-foreground transition-colors duration-150 hover:bg-surface-raised hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring data-open:bg-surface-raised data-open:text-foreground"
+			class="absolute bottom-1.5 end-2 z-30 flex size-6 items-center justify-center rounded-[5px] text-muted-foreground transition-colors duration-150 hover:bg-surface-raised hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring data-open:bg-surface-raised data-open:text-foreground"
 			aria-label={`More actions for ${entry.meta.name}`}
 		>
 			<DotsThree size={18} weight="bold" />
