@@ -33,6 +33,9 @@ Notable changes, newest first. What/when only — the *why* lives in the [design
 ### Fixed
 - Gallery preview post-fx tiles rendered a **grey-washed background** instead of the dark plum surround (the studio was correct): the offscreen bloom composite cleared its render target with `setClearColor`, which sRGB-encoded the surround twice (once on clear, once at output). Previews now run the same pipeline as the studio — `RenderPass → UnrealBloomPass → OutputPass` with the surround as `scene.background` and a raw passthrough blit — so preview bloom and background match the full render 1:1.
 
+### Docs
+- Added the selected **Raw Signal** Shader Studio banner beneath the README title and stored the source asset with the design mockups.
+
 ## 2026-07-20
 
 ### Changed
