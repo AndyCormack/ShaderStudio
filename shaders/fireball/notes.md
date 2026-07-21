@@ -18,7 +18,7 @@ The pattern's **structure is static** — no per-feature boiling — but the who
 - `u_crustColor` — cold rough rock (the cold end of the ramp).
 - `u_rimColor` — fiery Fresnel rim tint.
 - `u_rimPower` — Fresnel exponent: how far the rim encroaches from the silhouette edge (low = wide/deep, high = a thin edge line).
-- `u_rimBlend` — how the rim colour combines with the surface: Add (additive glow) · Screen · Overlay · Mix (tint toward the rim colour by Fresnel).
+- `u_rimBlend` — how the rim colour blends onto the surface: the full Photoshop set (Normal, Add, Screen, Multiply, Overlay, Darken, Lighten, Color Dodge/Burn, Linear Burn/Light, Hard/Soft/Vivid/Pin Light, Hard Mix, Difference, Exclusion, Subtract, Divide). Composited as a masked layer weighted by the Fresnel term, so the mode only acts along the silhouette.
 
 Post-fx (in `meta.json`, live-tweakable in the studio Post-FX panel): a bloom pass with a colour tint so the glow stays in-colour rather than washing to white. Gallery previews run the same pipeline as the studio (`RenderPass → UnrealBloomPass → OutputPass`, blitted into each tile) so their bloom and background match the full render.
 

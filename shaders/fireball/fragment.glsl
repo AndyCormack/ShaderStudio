@@ -106,11 +106,20 @@ vec3 fireGradient(float h) {
 
 vec3 srgb2lin(vec3 c) { return pow(c, vec3(2.2)); }   // hex sRGB -> linear working space
 
-// Photoshop-style per-channel overlay blend (used by the rim blend-mode select).
+// Photoshop-style per-channel blend helpers (used by the rim blend-mode select).
 vec3 overlayBlend(vec3 base, vec3 blend) {
     vec3 lo = 2.0 * base * blend;
     vec3 hi = 1.0 - 2.0 * (1.0 - base) * (1.0 - blend);
     return mix(lo, hi, step(vec3(0.5), base));
+}
+vec3 softLightBlend(vec3 b, vec3 s) { return (1.0 - 2.0 * s) * b * b + 2.0 * s * b; } // pegtop
+vec3 vividBlend(vec3 b, vec3 s) {
+    vec3 burn = 1.0 - (1.0 - b) / max(2.0 * s, 1e-4);
+    vec3 dodge = b / max(2.0 * (1.0 - s), 1e-4);
+    return mix(burn, dodge, step(vec3(0.5), s));
+}
+vec3 pinBlend(vec3 b, vec3 s) {
+    return mix(min(b, 2.0 * s), max(b, 2.0 * s - 1.0), step(vec3(0.5), s));
 }
 
 // ---------- Sharp-falloff lava ramp: one heat scalar runs the whole surface.
@@ -202,16 +211,34 @@ void main() {
     vec2 np = normalize(vLocalPos).xy * 3.0;
     float rflick = 0.75 + 0.25 * vnoise(vec3(np * 2.0, u_time * u_churn * 0.5));
     float rim = fres * rflick;
-    vec3 rimCol = fireGradient(rim * 1.3) * u_rimColor * rim * 0.6;
-    if (u_rimBlend == 1) {          // Screen — soft glow that never clips to white
-        col = 1.0 - (1.0 - max(col, 0.0)) * (1.0 - max(rimCol, 0.0));
-    } else if (u_rimBlend == 2) {   // Overlay — contrast the rim against the surface
-        col = overlayBlend(col, rimCol);
-    } else if (u_rimBlend == 3) {   // Mix — tint toward the rim colour by Fresnel amount
-        col = mix(col, fireGradient(rim * 1.3) * u_rimColor, saturate(rim * 0.6));
-    } else {                        // Add (0, default) — the additive emissive glow
-        col += rimCol;
-    }
+    // The rim is a Photoshop-style layer: its colour `s` (HDR) composited over
+    // the surface `b` through the chosen blend mode at coverage `a` (Fresnel), so
+    // the interior (a≈0) is untouched and the mode only acts along the silhouette.
+    vec3 b = max(col, 0.0);
+    vec3 s = fireGradient(rim * 1.3) * u_rimColor;
+    float a = saturate(rim * 0.6);
+    vec3 blended;
+    if      (u_rimBlend == 1)  blended = b + s;                           // Add (Linear Dodge)
+    else if (u_rimBlend == 2)  blended = 1.0 - (1.0 - b) * (1.0 - s);     // Screen
+    else if (u_rimBlend == 3)  blended = b * s;                           // Multiply
+    else if (u_rimBlend == 4)  blended = overlayBlend(b, s);              // Overlay
+    else if (u_rimBlend == 5)  blended = min(b, s);                       // Darken
+    else if (u_rimBlend == 6)  blended = max(b, s);                       // Lighten
+    else if (u_rimBlend == 7)  blended = b / max(1.0 - s, 1e-4);          // Color Dodge
+    else if (u_rimBlend == 8)  blended = 1.0 - (1.0 - b) / max(s, 1e-4);  // Color Burn
+    else if (u_rimBlend == 9)  blended = b + s - 1.0;                     // Linear Burn
+    else if (u_rimBlend == 10) blended = b + 2.0 * s - 1.0;               // Linear Light
+    else if (u_rimBlend == 11) blended = overlayBlend(s, b);             // Hard Light
+    else if (u_rimBlend == 12) blended = softLightBlend(b, s);           // Soft Light
+    else if (u_rimBlend == 13) blended = vividBlend(b, s);               // Vivid Light
+    else if (u_rimBlend == 14) blended = pinBlend(b, s);                 // Pin Light
+    else if (u_rimBlend == 15) blended = step(1.0 - s, b);               // Hard Mix
+    else if (u_rimBlend == 16) blended = abs(b - s);                     // Difference
+    else if (u_rimBlend == 17) blended = b + s - 2.0 * b * s;            // Exclusion
+    else if (u_rimBlend == 18) blended = b - s;                          // Subtract
+    else if (u_rimBlend == 19) blended = b / max(s, 1e-4);               // Divide
+    else                       blended = s;                              // Normal (0)
+    col = max(mix(b, blended, a), 0.0);
 
     // HDR cracks/rim (values >1) pass through to the bloom pass (D21).
     gl_FragColor = vec4(col, 1.0);

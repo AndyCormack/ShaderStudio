@@ -188,7 +188,7 @@
 		<div class="min-h-0 flex-1 overflow-y-auto p-2">
 			{#each defs as definition (definition.name)}
 				<div
-					class="grid grid-cols-[6.75rem_minmax(0,1fr)] items-center gap-x-2.5 rounded-md px-2 py-1.5 transition-colors hover:bg-surface-raised/50"
+					class="grid grid-cols-[6.75rem_minmax(0,1fr)] items-center gap-x-2.5 rounded-md px-2 py-1.5 hover:bg-surface-raised/50"
 				>
 					<div class="min-w-0" title={definition.name}>
 						<p id={`uniform-label-${definition.name}`} class="truncate text-xs font-medium leading-4">
@@ -288,7 +288,7 @@
 				</div>
 				{#each bloomFloats as control (control.key)}
 					<div
-						class="grid grid-cols-[6.75rem_minmax(0,1fr)] items-center gap-x-2.5 rounded-md px-2 py-1.5 transition-colors hover:bg-surface-raised/50"
+						class="grid grid-cols-[6.75rem_minmax(0,1fr)] items-center gap-x-2.5 rounded-md px-2 py-1.5 hover:bg-surface-raised/50"
 					>
 						<div class="min-w-0">
 							<p id={`bloom-label-${control.key}`} class="truncate text-xs font-medium leading-4">
@@ -327,7 +327,7 @@
 					</div>
 				{/each}
 				<div
-					class="grid grid-cols-[6.75rem_minmax(0,1fr)] items-center gap-x-2.5 rounded-md px-2 py-1.5 transition-colors hover:bg-surface-raised/50"
+					class="grid grid-cols-[6.75rem_minmax(0,1fr)] items-center gap-x-2.5 rounded-md px-2 py-1.5 hover:bg-surface-raised/50"
 				>
 					<div class="min-w-0">
 						<p id="bloom-label-color" class="truncate text-xs font-medium leading-4">Bloom Color</p>
