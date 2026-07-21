@@ -19,12 +19,16 @@ pnpm dev --open
 
 The front page is the gallery: a live preview of every entry under `shaders/`, all drawn from one shared WebGL context. You can search (inline or ⌘K), filter by tag or harness, and mark favorites; recently opened shaders float up too. Clicking a tile opens a detail strip, and "Open shader" takes you into the studio.
 
+![The gallery — live previews, tag filters, and a detail strip for the selected shader](docs/assets/screenshots/gallery.png)
+
 The studio (`/shader/<slug>`) is where you actually work on a shader:
 
 - Save the `.glsl` file in your editor and the canvas updates in place.
 - The uniform panel is generated from the entry's `meta.json` — sliders and color pickers that update the shader as you drag.
 - Orbit camera and a geometry switcher, for mesh shaders.
 - If the entry ships its own `Scene.svelte`, there's a toggle to render that custom scene instead.
+
+![The studio — the Fireball shader open with its auto-generated uniform panel](docs/assets/screenshots/viewer.png)
 
 ## Adding a shader
 
