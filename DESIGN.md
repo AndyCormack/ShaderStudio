@@ -166,7 +166,7 @@ The palette is restrained and dark: a near-black violet-plum architecture derive
 - **Workbench Ink** (`ink`): primary text and icons.
 - **Muted Ink** (`ink-muted`): secondary descriptions and metadata.
 - **Subtle Ink** (`ink-subtle`): disabled and decorative text only; real metadata uses Muted Ink for contrast.
-- **Viewport Black** (`viewport`): neutral surround for shader rendering so preview color is not contaminated by the brand surface.
+- **Viewport Black** (`viewport`): _legacy._ Was the neutral surround for shader rendering (so preview color wasn't contaminated by the brand surface); mesh shaders — studio canvas and preview tiles — now clear to **Surface** (Shadow Plum) instead ([D22]). Token retained for reference.
 
 **The Berry-Structures Rule.** Berry Shadow carries broad selected fields — rail items, selected chips, active filters, persistent active destinations. Signal Red carries decisive interaction, state fills (checks, completed tracks, thumbs), and the dimmed selected-card edge.
 
@@ -245,7 +245,7 @@ Components are compact, tactile, precise, and familiar. Controls use restrained 
 ### Cards / Containers
 
 - **Corner Style:** 8px for shader tiles, 10px for persistent panels, and 12px only for transient overlays.
-- **Background:** Shadow Plum for panels and tile metadata; Viewport Black behind live previews.
+- **Background:** Shadow Plum for panels, tile metadata, and the mesh shader surround (studio canvas and preview tiles, [D22]). Gallery previews feather that surround into the card.
 - **Shadow Strategy:** flat at rest. Only transient or actively dragged surfaces use the Elevation vocabulary.
 - **Border:** one-pixel Quiet Edge only where tonal separation is insufficient. Never combine it decoratively with a broad shadow.
 - **Internal Padding:** 12px for compact tiles and 16px for panels.

@@ -1,19 +1,63 @@
 <script lang="ts">
 	import { useTask, useThrelte } from '@threlte/core';
-	import { Color } from 'three';
+	import { Mesh, MeshBasicMaterial, OrthographicCamera, PlaneGeometry, Scene, Vector2 } from 'three';
+	import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+	import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+	import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 	import { getEntry } from '$lib/shaders/catalog';
+	import { cssColor } from '$lib/harness/theme';
+	import { applyBloom } from '$lib/harness/bloom';
 	import { createPreviewScene, type PreviewScene } from './preview-scenes';
+	import { resolveBloom } from '$lib/shaders/types';
 	import type { PreviewRegistry } from './preview-registry';
 
 	let { registry }: { registry: PreviewRegistry } = $props();
 
 	const { renderer, autoRender } = useThrelte();
 
-	// Tiles sit on Viewport Black so preview color isn't contaminated by the
-	// brand surface (DESIGN.md).
-	const viewportBlack = new Color('#020202');
+	// Mesh tiles sit on the raised Shadow Plum surface, matching the studio (D22).
+	const surround = cssColor('--surface');
 
 	const cache = new Map<string, PreviewScene>();
+
+	// Per-tile bloom rigs (D21 — post-fx now renders in previews too). Keyed per
+	// tile so differently-sized tiles don't thrash render-target reallocation.
+	type BloomRig = { composer: EffectComposer; renderPass: RenderPass; bloomPass: UnrealBloomPass };
+	const bloomRigs = new Map<string, BloomRig>();
+
+	// One shared quad blits a rig's composited (bloomed) texture into a tile's
+	// scissored region of the shared canvas — the composite itself renders
+	// offscreen unscissored, so bloom blur isn't clipped to the tile rect.
+	const blitCamera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
+	const blitMaterial = new MeshBasicMaterial({ depthTest: false, depthWrite: false });
+	blitMaterial.toneMapped = false;
+	const blitScene = new Scene();
+	blitScene.add(new Mesh(new PlaneGeometry(2, 2), blitMaterial));
+
+	function bloomRigFor(key: string, ps: PreviewScene): BloomRig {
+		let rig = bloomRigs.get(key);
+		if (!rig) {
+			const composer = new EffectComposer(renderer);
+			composer.renderToScreen = false; // result stays in readBuffer for the blit
+			const renderPass = new RenderPass(ps.scene, ps.camera);
+			const bloomPass = new UnrealBloomPass(new Vector2(1, 1), 0.7, 0.6, 0.55);
+			composer.addPass(renderPass);
+			composer.addPass(bloomPass);
+			rig = { composer, renderPass, bloomPass };
+			bloomRigs.set(key, rig);
+		}
+		rig.renderPass.scene = ps.scene;
+		rig.renderPass.camera = ps.camera;
+		return rig;
+	}
+
+	function disposeRig(key: string) {
+		const rig = bloomRigs.get(key);
+		if (rig) {
+			rig.composer.dispose();
+			bloomRigs.delete(key);
+		}
+	}
 
 	$effect(() => {
 		const before = autoRender.current;
@@ -23,6 +67,8 @@
 			autoRender.set(before);
 			for (const ps of cache.values()) ps.dispose();
 			cache.clear();
+			for (const key of [...bloomRigs.keys()]) disposeRig(key);
+			blitMaterial.dispose();
 		};
 	});
 
@@ -38,12 +84,14 @@
 			if (!registry.has(key)) {
 				cache.get(key)!.dispose();
 				cache.delete(key);
+				disposeRig(key);
 			}
 		}
 
 		renderer.setScissorTest(false);
 		renderer.setViewport(0, 0, canvasRect.width, canvasRect.height);
 		renderer.setClearColor(0x000000, 0);
+		renderer.setRenderTarget(null);
 		renderer.clear();
 		renderer.setScissorTest(true);
 
@@ -81,6 +129,7 @@
 			let ps = cache.get(key);
 			if (ps && ps.entry.slug !== slug) {
 				ps.dispose();
+				disposeRig(key);
 				ps = undefined;
 			}
 			if (!ps) {
@@ -123,11 +172,36 @@
 			if (!frozen) ps.tick(delta);
 			ps.setSize(Math.round(width * dpr), Math.round(height * dpr));
 
-			renderer.setViewport(x, y, width, height);
-			renderer.setScissor(sx, sy, sw, sh);
-			renderer.setClearColor(viewportBlack, 1);
-			renderer.clear();
-			renderer.render(ps.scene, ps.camera);
+			const bloomCfg = entry.meta.postfx?.bloom;
+			if (bloomCfg) {
+				// Composite the tile (scene + bloom) offscreen, unscissored…
+				const rig = bloomRigFor(key, ps);
+				const dh = Math.round(height * dpr);
+				rig.composer.setSize(Math.round(width * dpr), dh);
+				applyBloom(rig.bloomPass, resolveBloom(bloomCfg), dh);
+				renderer.setScissorTest(false);
+				renderer.setRenderTarget(null);
+				renderer.setClearColor(surround, 1);
+				rig.composer.render(delta);
+
+				// …then blit the result into the tile's scissored region.
+				if (blitMaterial.map !== rig.composer.readBuffer.texture) {
+					blitMaterial.map = rig.composer.readBuffer.texture;
+					blitMaterial.needsUpdate = true;
+				}
+				renderer.setRenderTarget(null);
+				renderer.setViewport(x, y, width, height);
+				renderer.setScissor(sx, sy, sw, sh);
+				renderer.setScissorTest(true);
+				renderer.render(blitScene, blitCamera);
+			} else {
+				renderer.setViewport(x, y, width, height);
+				renderer.setScissor(sx, sy, sw, sh);
+				renderer.setScissorTest(true);
+				renderer.setClearColor(surround, 1);
+				renderer.clear();
+				renderer.render(ps.scene, ps.camera);
+			}
 		}
 		renderer.setScissorTest(false);
 	});

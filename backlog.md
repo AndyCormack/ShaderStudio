@@ -2,7 +2,7 @@
 
 Deferred tickets: recorded, justified, not scheduled. Groomed most-promotable-first. Promote to [PLAN.md](PLAN.md) when committed; roll to [CHANGELOG.md](CHANGELOG.md) when done.
 
-1. **Multi-pass / post-processing support** — `Deferred` — outline-glow-class effects often need a post-process or multi-pass technique (e.g. inverted hull vs. blurred-mask compositing); the MVP harness is single-pass. ([D9](docs/design/log.md))
+1. **Multi-pass techniques (outline hull, mask compositing)** — `Deferred` — the per-shader post-fx stack now ships (studio bloom via `EffectComposer`, [D21](docs/design/log.md)); still deferred are the genuinely multi-pass techniques outline-glow-class effects need — inverted-hull outlines, blurred-mask compositing — beyond a single screen-space pass. ([D9](docs/design/log.md), [D21](docs/design/log.md))
 2. **Custom-scene live previews in gallery tiles** — `Deferred` — gallery tiles for entries with a `Scene.svelte` currently preview the entry's default primitive; rendering the real custom scene needs a way to compose Threlte scene components into the shared scissored-context renderer. ([D7](docs/design/log.md), [D8](docs/design/log.md), [D14](docs/design/log.md))
 3. **Collections** — `Deferred` — user-curated groups of shader entries in the discovery rail; needs a data-model decision (where collections live in a local-first tool) before build. ([D14](docs/design/log.md))
 4. **Presets** — `Deferred` — saved uniform-value snapshots per shader, surfaced in the rail; needs a persistence decision (sidecar file vs. meta.json vs. localStorage). ([D14](docs/design/log.md))

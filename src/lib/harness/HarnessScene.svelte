@@ -2,22 +2,32 @@
 	import { T, useTask, useThrelte } from '@threlte/core';
 	import { OrbitControls } from '@threlte/extras';
 	import type { RawShaderMaterial } from 'three';
-	import type { MeshPrimitive, ShaderEntry } from '$lib/shaders/types';
+	import type { BloomControls, MeshPrimitive, ShaderEntry } from '$lib/shaders/types';
 	import type { SceneComponent } from './scenes';
+	import PostFx from './PostFx.svelte';
+	import { cssColor } from './theme';
 
 	let {
 		entry,
 		material,
 		primitive,
-		sceneComponent
+		sceneComponent,
+		bloom
 	}: {
 		entry: ShaderEntry;
 		material: RawShaderMaterial;
 		primitive: MeshPrimitive;
 		sceneComponent?: SceneComponent;
+		bloom?: BloomControls;
 	} = $props();
 
-	const { size } = useThrelte();
+	const { size, scene } = useThrelte();
+
+	// The canvas surround is the raised Shadow Plum surface (D22) rather than the
+	// renderer's black clear, so meshes sit on the workbench chrome.
+	$effect(() => {
+		scene.background = cssColor('--surface');
+	});
 
 	useTask((delta) => {
 		material.uniforms.u_time.value += delta;
@@ -48,4 +58,8 @@
 	{:else if primitive === 'plane'}
 		<T.Mesh {material}><T.PlaneGeometry args={[2.4, 2.4, 64, 64]} /></T.Mesh>
 	{/if}
+{/if}
+
+{#if bloom}
+	<PostFx {bloom} />
 {/if}

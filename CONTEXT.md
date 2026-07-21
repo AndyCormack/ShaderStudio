@@ -16,6 +16,8 @@ Canonical terms for shader-studio. One term per concept; alternatives listed und
 
 **uniform contract** — the standard uniforms every harness supplies (`u_time`, `u_resolution`, `u_mouse`) plus the entry's own uniforms declared in `meta.json`.
 
+**post-fx** — a shader entry's optional post-processing stack, declared as `postfx` in `meta.json` (bloom today) and applied in both the **studio** and the **gallery previews**, via an `EffectComposer` built from `three/addons`. _Avoid: postprocessing, effects, filters._
+
 **uniform panel** — the auto-generated live controls (sliders, color pickers) built from `meta.json`'s uniform declarations. _Avoid: inspector, tweakpane._
 
 **uniform label** — the human-readable name the uniform panel derives from a uniform's **raw name** (its GLSL identifier): Hungarian prefix dropped, words split and title-cased. Both are shown; the raw name is the one referenced in shader source. _Avoid: pretty name, display name._

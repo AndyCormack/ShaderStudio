@@ -47,6 +47,17 @@ function validateMeta(slug: string, raw: unknown): ShaderMeta {
 	if (!meta.scene && hasSceneFile) {
 		throw new Error(`shaders/${slug}/ has a Scene.svelte not declared in meta.json ("scene")`);
 	}
+	if (meta.postfx !== undefined) {
+		const bloom = meta.postfx.bloom;
+		if (bloom) {
+			for (const key of ['strength', 'radius', 'threshold'] as const) {
+				const v = bloom[key];
+				if (v !== undefined && (typeof v !== 'number' || !isFinite(v))) {
+					throw new Error(`shaders/${slug}/meta.json: postfx.bloom.${key} must be a number`);
+				}
+			}
+		}
+	}
 	for (const u of meta.uniforms ?? []) {
 		const { name, type } = u as { name?: unknown; type?: unknown };
 		if (typeof name !== 'string' || !name.startsWith('u_')) {

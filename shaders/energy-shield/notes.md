@@ -1,4 +1,6 @@
-# Fireball — notes
+# Energy Shield — notes
+
+Forked as an exact duplicate of the **Fireball** shader to diverge from (same cellular-lava sphere, controls, and bloom); retune the colours/uniforms toward a shield look.
 
 A magma sphere built in layers. An animated 3D Worley network paints glowing cracks between cooler cells, domain-warped by value-noise fbm so the crust reads as molten rather than geometric. A **burnt, crispy charred-rock crust** (fbm plates + grit speckle) fills the cell interiors with warm lava breathing through the low crevices, so it reads as hot lava rather than veins-on-black. The vertex shader adds a subtle **displacement map** (the same crust fbm along the normal) so the surface is physically uneven. A blackbody palette keeps most of the surface dark ember and pushes only the crack lines to orange→core→white-hot, and a world-space Fresnel term rings the silhouette with fire. The hottest seams and rim are emitted as HDR values (>1) so the studio **bloom** pass ([D21]) gives them their glow and the ember halo that bleeds onto the plum background.
 
