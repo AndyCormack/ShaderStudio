@@ -2,11 +2,11 @@
 
 ![Shader Studio — Local-first GLSL look-dev](docs/design/mockups/readme-banner.png)
 
-A **local-first gallery + development studio for WebGL shaders** — a look-dev sandbox for quickly iterating on effects destined for games (Unreal Engine 5/6) and websites.
+A local-first gallery and dev studio for WebGL shaders. It's a sandbox to iterate on effects before they end up in a game (Unreal Engine 5/6) or on a website.
 
-You edit GLSL in your own editor; the running studio hot-reloads it in place, with live-tweakable uniform controls and an orbitable 3D camera. (An on-canvas compile-error overlay is the next planned piece — see [PLAN.md](PLAN.md).)
+You edit GLSL in your own editor; the running app hot-reloads it in place, with sliders for the uniforms and an orbitable camera. Compile errors don't show up on the canvas yet — that's the next thing on [PLAN.md](PLAN.md).
 
-**Status: MVP in progress.** [PLAN.md](PLAN.md) has what's next; [CHANGELOG.md](CHANGELOG.md) has history.
+Still an MVP. [PLAN.md](PLAN.md) has what's next, [CHANGELOG.md](CHANGELOG.md) has what's happened.
 
 ## Quick start
 
@@ -17,18 +17,18 @@ pnpm dev --open
 
 ## Using it
 
-The front page is the **gallery**: live previews of every entry under `shaders/`, all rendered from one shared WebGL context. It has search (inline or ⌘K overlay), tag and harness filters, and favorites and recents. Selecting a tile opens a detail strip; **Open shader** jumps into the studio.
+The front page is the gallery: a live preview of every entry under `shaders/`, all drawn from one shared WebGL context. You can search (inline or ⌘K), filter by tag or harness, and mark favorites; recently opened shaders float up too. Clicking a tile opens a detail strip, and "Open shader" takes you into the studio.
 
-The **studio** (`/shader/<slug>`) is where you work on a single shader:
+The studio (`/shader/<slug>`) is where you actually work on a shader:
 
-- **Live canvas with hot reload** — save the `.glsl` file in your editor and it updates in place.
-- **Uniform panel** auto-generated from the entry's `meta.json` — sliders, color pickers, all live.
-- **Orbit camera + geometry switcher** for mesh shaders.
-- **Custom-scene toggle** when the entry ships its own `Scene.svelte`.
+- Save the `.glsl` file in your editor and the canvas updates in place.
+- The uniform panel is generated from the entry's `meta.json` — sliders and color pickers that update the shader as you drag.
+- Orbit camera and a geometry switcher, for mesh shaders.
+- If the entry ships its own `Scene.svelte`, there's a toggle to render that custom scene instead.
 
 ## Adding a shader
 
-A shader is just a folder under `shaders/` — drop one in and it appears in the gallery; there's no registry to update:
+Make a folder under `shaders/` and it shows up in the gallery. There's no registry or config to touch anywhere else.
 
 ```
 shaders/my-effect/
@@ -39,13 +39,13 @@ shaders/my-effect/
 └── Scene.svelte     # optional — custom Threlte geometry
 ```
 
-Entries render in one of three **harness modes**: fullscreen quad (Shadertoy-style), mesh primitive, or a custom scene component that receives the compiled material as a prop.
+An entry renders in one of three harness modes: a fullscreen quad (Shadertoy-style), a mesh primitive, or a custom scene component that receives the compiled material as a prop.
 
 ## Under the hood
 
-- **Stack:** SvelteKit + Vite + TypeScript; Three.js via [Threlte](https://threlte.xyz/).
-- **UI:** Tailwind v4 + shadcn-svelte, themed by [DESIGN.md](DESIGN.md)'s tokens.
-- **Shaders are raw, portable GLSL** (`RawShaderMaterial`) — no Three-specific material plumbing, so effects port cleanly elsewhere.
+- SvelteKit + Vite + TypeScript, with Three.js through [Threlte](https://threlte.xyz/).
+- Tailwind v4 and shadcn-svelte for the UI, themed by the tokens in [DESIGN.md](DESIGN.md).
+- Shaders are plain, portable GLSL (`RawShaderMaterial`) — no Three-specific material plumbing, so effects port cleanly to other engines.
 
 ## Repo map
 
