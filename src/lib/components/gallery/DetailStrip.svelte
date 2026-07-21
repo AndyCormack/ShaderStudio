@@ -64,7 +64,7 @@
 	     raised rounded panel inset within it (the mockup's double container).
 	     Panel bg/border sampled from the mockup: a dark plum panel with a
 	     subtle top→bottom lift and a lighter purple edge. -->
-	<div class="shrink-0 border-t border-[#221d2a] px-4 py-3.5">
+	<div class="shrink-0 border-t border-[#221d2a] bg-[#181320] px-4 py-3.5">
 		<div
 			class="flex flex-col gap-4 rounded-panel border border-[#332738] bg-gradient-to-b from-[#211d2b] to-[#1b1725] px-5 py-4 lg:flex-row lg:items-start lg:gap-8"
 		>
