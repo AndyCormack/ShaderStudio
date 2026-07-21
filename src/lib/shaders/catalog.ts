@@ -63,8 +63,27 @@ function validateMeta(slug: string, raw: unknown): ShaderMeta {
 		if (typeof name !== 'string' || !name.startsWith('u_')) {
 			throw new Error(`shaders/${slug}/meta.json: uniform names must start with "u_"`);
 		}
-		if (type !== 'float' && type !== 'color') {
+		if (type !== 'float' && type !== 'color' && type !== 'select') {
 			throw new Error(`shaders/${slug}/meta.json: uniform "${name}" has unknown type`);
+		}
+		if (type === 'select') {
+			const { options, default: def } = u as { options?: unknown; default?: unknown };
+			if (!Array.isArray(options) || options.length === 0) {
+				throw new Error(
+					`shaders/${slug}/meta.json: select uniform "${name}" needs a non-empty "options" array`
+				);
+			}
+			for (const opt of options) {
+				const o = opt as { value?: unknown; label?: unknown };
+				if (typeof o.value !== 'number' || typeof o.label !== 'string') {
+					throw new Error(
+						`shaders/${slug}/meta.json: select uniform "${name}" options need { value: number, label: string }`
+					);
+				}
+			}
+			if (typeof def !== 'number') {
+				throw new Error(`shaders/${slug}/meta.json: select uniform "${name}" needs a numeric "default"`);
+			}
 		}
 	}
 	return meta;

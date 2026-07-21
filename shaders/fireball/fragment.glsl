@@ -12,6 +12,8 @@ uniform vec3 u_coreColor;    // hot core / gold band of the ramp
 uniform vec3 u_emberColor;   // deep low-heat ember (the red glow)
 uniform vec3 u_crustColor;   // rough cold rock (cold end of the ramp)
 uniform vec3 u_rimColor;     // fiery Fresnel rim tint
+uniform float u_rimPower;    // Fresnel exponent — how far the rim encroaches from the edge
+uniform int u_rimBlend;      // how the rim colour combines with the surface (0 add · 1 screen · 2 overlay · 3 mix)
 
 varying vec3 vLocalPos;
 varying vec3 vWorldNormal;
@@ -104,6 +106,13 @@ vec3 fireGradient(float h) {
 
 vec3 srgb2lin(vec3 c) { return pow(c, vec3(2.2)); }   // hex sRGB -> linear working space
 
+// Photoshop-style per-channel overlay blend (used by the rim blend-mode select).
+vec3 overlayBlend(vec3 base, vec3 blend) {
+    vec3 lo = 2.0 * base * blend;
+    vec3 hi = 1.0 - 2.0 * (1.0 - base) * (1.0 - blend);
+    return mix(lo, hi, step(vec3(0.5), base));
+}
+
 // ---------- Sharp-falloff lava ramp: one heat scalar runs the whole surface.
 // A sharp peaked core (u_coreColor, default #FEF9BA) falls off QUICKLY to a
 // glowing orange (u_emberColor, default #F76023), then MORE SLOWLY down to a
@@ -185,13 +194,24 @@ void main() {
     // the whole surface to white (which is what desaturated it).
     col *= 1.0 + clamp(heat - 0.95, 0.0, 0.9) * 1.2;
 
-    // --- Fiery Fresnel rim — the silhouette glow. ---
+    // --- Fiery Fresnel rim — the silhouette glow. u_rimPower sets how far the
+    // rim encroaches from the edge (low = wide/deep, high = a thin edge line);
+    // u_rimBlend picks how the rim colour combines with the surface. ---
     vec3 V = normalize(cameraPosition - vWorldPos);
-    float fres = pow(1.0 - saturate(dot(N, V)), 3.2);
+    float fres = pow(1.0 - saturate(dot(N, V)), u_rimPower);
     vec2 np = normalize(vLocalPos).xy * 3.0;
     float rflick = 0.75 + 0.25 * vnoise(vec3(np * 2.0, u_time * u_churn * 0.5));
     float rim = fres * rflick;
-    col += fireGradient(rim * 1.3) * u_rimColor * rim * 0.6;
+    vec3 rimCol = fireGradient(rim * 1.3) * u_rimColor * rim * 0.6;
+    if (u_rimBlend == 1) {          // Screen — soft glow that never clips to white
+        col = 1.0 - (1.0 - max(col, 0.0)) * (1.0 - max(rimCol, 0.0));
+    } else if (u_rimBlend == 2) {   // Overlay — contrast the rim against the surface
+        col = overlayBlend(col, rimCol);
+    } else if (u_rimBlend == 3) {   // Mix — tint toward the rim colour by Fresnel amount
+        col = mix(col, fireGradient(rim * 1.3) * u_rimColor, saturate(rim * 0.6));
+    } else {                        // Add (0, default) — the additive emissive glow
+        col += rimCol;
+    }
 
     // HDR cracks/rim (values >1) pass through to the bloom pass (D21).
     gl_FragColor = vec4(col, 1.0);

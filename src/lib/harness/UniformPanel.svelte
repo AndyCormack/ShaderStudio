@@ -6,12 +6,14 @@
 	import { Input } from '$lib/components/ui/input';
 	import { InputGroup, InputGroupAddon, InputGroupInput } from '$lib/components/ui/input-group';
 	import { Slider } from '$lib/components/ui/slider';
+	import * as Select from '$lib/components/ui/select';
 	import * as Tooltip from '$lib/components/ui/tooltip';
 	import type { BloomControls, ShaderEntry, UniformDef } from '$lib/shaders/types';
 	import { uniformLabel } from './uniform-label';
 
 	type FloatDef = Extract<UniformDef, { type: 'float' }>;
 	type ColorDef = Extract<UniformDef, { type: 'color' }>;
+	type SelectDef = Extract<UniformDef, { type: 'select' }>;
 
 	let {
 		entry,
@@ -82,6 +84,15 @@
 
 	function colorValue(definition: ColorDef): string {
 		return (values[definition.name] as string | undefined) ?? definition.default;
+	}
+
+	function selectValue(definition: SelectDef): number {
+		return (values[definition.name] as number | undefined) ?? definition.default;
+	}
+
+	function selectLabel(definition: SelectDef): string {
+		const value = selectValue(definition);
+		return definition.options.find((o) => o.value === value)?.label ?? String(value);
 	}
 
 	// Trims slider float artifacts (0.1 + 0.05 → 0.15000000000000002) while
@@ -214,7 +225,7 @@
 								onblur={(event) => commitFloat(definition, event.currentTarget as HTMLInputElement)}
 							/>
 						</div>
-					{:else}
+					{:else if definition.type === 'color'}
 						<InputGroup class="h-7 rounded-md">
 							<InputGroupAddon>
 								<span
@@ -245,6 +256,26 @@
 								onblur={(event) => commitHex(definition, event.currentTarget as HTMLInputElement)}
 							/>
 						</InputGroup>
+					{:else}
+						<Select.Select
+							type="single"
+							bind:value={
+								() => String(selectValue(definition)),
+								(next) => (values[definition.name] = Number(next))
+							}
+						>
+							<Select.SelectTrigger
+								class="h-7 w-full rounded-md text-xs"
+								aria-labelledby={`uniform-label-${definition.name}`}
+							>
+								{selectLabel(definition)}
+							</Select.SelectTrigger>
+							<Select.SelectContent>
+								{#each definition.options as option (option.value)}
+									<Select.SelectItem value={String(option.value)}>{option.label}</Select.SelectItem>
+								{/each}
+							</Select.SelectContent>
+						</Select.Select>
 					{/if}
 				</div>
 			{/each}

@@ -2,9 +2,16 @@ export type HarnessMode = 'quad' | 'mesh';
 
 export type MeshPrimitive = 'sphere' | 'box' | 'torus' | 'torusknot' | 'plane';
 
+/** One choice in a `select` uniform: an int `value` bound to the GLSL uniform, shown as `label`. */
+export interface SelectOption {
+	value: number;
+	label: string;
+}
+
 export type UniformDef =
 	| { name: string; type: 'float'; min: number; max: number; step?: number; default: number }
-	| { name: string; type: 'color'; default: string };
+	| { name: string; type: 'color'; default: string }
+	| { name: string; type: 'select'; options: SelectOption[]; default: number };
 
 /** UnrealBloom parameters for a shader's post-fx pass (D21). */
 export interface BloomConfig {

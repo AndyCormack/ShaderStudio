@@ -17,6 +17,18 @@
 		{ "name": "u_coreColor", "type": "color", "default": "#fef9ba" },
 		{ "name": "u_emberColor", "type": "color", "default": "#f76023" },
 		{ "name": "u_crustColor", "type": "color", "default": "#1d1d25" },
-		{ "name": "u_rimColor", "type": "color", "default": "#ffb380" }
+		{ "name": "u_rimColor", "type": "color", "default": "#ffb380" },
+		{ "name": "u_rimPower", "type": "float", "min": 0.5, "max": 8, "step": 0.1, "default": 3.2 },
+		{
+			"name": "u_rimBlend",
+			"type": "select",
+			"default": 0,
+			"options": [
+				{ "value": 0, "label": "Add" },
+				{ "value": 1, "label": "Screen" },
+				{ "value": 2, "label": "Overlay" },
+				{ "value": 3, "label": "Mix" }
+			]
+		}
 	]
 }

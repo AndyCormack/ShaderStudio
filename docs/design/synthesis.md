@@ -35,7 +35,7 @@ shaders/fireball/
   Scene.svelte    # optional — custom Threlte scene
 ```
 
-`meta.json`'s uniform declarations (type, range, default) drive an **auto-generated control panel** — sliders and color pickers, live-tweakable, with no per-shader UI code. Controls render at dat.gui-style single-row density on shadcn primitives, headed by a derived uniform label with the raw GLSL name muted beneath it ([D18]).
+`meta.json`'s uniform declarations (type, range, default) drive an **auto-generated control panel** — sliders, color pickers, and labelled dropdowns (`select`, bound to a GLSL `int`), live-tweakable, with no per-shader UI code. Controls render at dat.gui-style single-row density on shadcn primitives, headed by a derived uniform label with the raw GLSL name muted beneath it ([D18]).
 
 ## Visual system
 
