@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { useTask, useThrelte } from '@threlte/core';
-	import { Mesh, MeshBasicMaterial, OrthographicCamera, PlaneGeometry, Scene, Vector2 } from 'three';
+	import { Mesh, OrthographicCamera, PlaneGeometry, Scene, ShaderMaterial, Vector2 } from 'three';
 	import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
 	import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 	import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+	import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 	import { getEntry } from '$lib/shaders/catalog';
 	import { cssColor } from '$lib/harness/theme';
 	import { applyBloom } from '$lib/harness/bloom';
@@ -29,8 +30,18 @@
 	// scissored region of the shared canvas — the composite itself renders
 	// offscreen unscissored, so bloom blur isn't clipped to the tile rect.
 	const blitCamera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
-	const blitMaterial = new MeshBasicMaterial({ depthTest: false, depthWrite: false });
-	blitMaterial.toneMapped = false;
+	// RAW passthrough copy. The composer ends in an OutputPass, so its readBuffer
+	// already holds display-ready (tone-mapped + sRGB-encoded) pixels — exactly
+	// what the studio writes to screen. Blitting through a colour-managed material
+	// (MeshBasicMaterial) would sRGB-encode a SECOND time, lifting the dark
+	// surround to grey; this shader copies the texel verbatim instead.
+	const blitMaterial = new ShaderMaterial({
+		uniforms: { map: { value: null } },
+		vertexShader: 'varying vec2 vUv; void main() { vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }',
+		fragmentShader: 'uniform sampler2D map; varying vec2 vUv; void main() { gl_FragColor = texture2D(map, vUv); }',
+		depthTest: false,
+		depthWrite: false
+	});
 	const blitScene = new Scene();
 	blitScene.add(new Mesh(new PlaneGeometry(2, 2), blitMaterial));
 
@@ -43,6 +54,9 @@
 			const bloomPass = new UnrealBloomPass(new Vector2(1, 1), 0.7, 0.6, 0.55);
 			composer.addPass(renderPass);
 			composer.addPass(bloomPass);
+			// Final tone-map + sRGB conversion, matching the studio's pipeline so the
+			// readBuffer holds display-ready pixels for a raw blit (see blitMaterial).
+			composer.addPass(new OutputPass());
 			rig = { composer, renderPass, bloomPass };
 			bloomRigs.set(key, rig);
 		}
@@ -134,6 +148,11 @@
 			}
 			if (!ps) {
 				ps = createPreviewScene(entry);
+				// Match the studio: render the surround as the scene background so the
+				// composer's RenderPass writes it colour-managed (a raw setClearColor
+				// into the linear render target would get sRGB-encoded twice — once on
+				// clear, once by OutputPass — lifting the dark plum to grey).
+				ps.scene.background = surround;
 				if (frozen) {
 					// Freeze at the frame the live tile is showing right now, so
 					// the thumbnail matches what was on screen at selection.
@@ -185,10 +204,7 @@
 				rig.composer.render(delta);
 
 				// …then blit the result into the tile's scissored region.
-				if (blitMaterial.map !== rig.composer.readBuffer.texture) {
-					blitMaterial.map = rig.composer.readBuffer.texture;
-					blitMaterial.needsUpdate = true;
-				}
+				blitMaterial.uniforms.map.value = rig.composer.readBuffer.texture;
 				renderer.setRenderTarget(null);
 				renderer.setViewport(x, y, width, height);
 				renderer.setScissor(sx, sy, sw, sh);

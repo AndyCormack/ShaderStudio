@@ -18,7 +18,7 @@ The pattern's **structure is static** — no per-feature boiling — but the who
 - `u_crustColor` — cold rough rock (the cold end of the ramp).
 - `u_rimColor` — fiery Fresnel rim tint.
 
-Post-fx (in `meta.json`, live-tweakable in the studio Post-FX panel): a bloom pass with a colour tint so the glow stays in-colour rather than washing to white; strength scales with render resolution so previews match the full render.
+Post-fx (in `meta.json`, live-tweakable in the studio Post-FX panel): a bloom pass with a colour tint so the glow stays in-colour rather than washing to white. Gallery previews run the same pipeline as the studio (`RenderPass → UnrealBloomPass → OutputPass`, blitted into each tile) so their bloom and background match the full render.
 
 ## UE porting notes
 

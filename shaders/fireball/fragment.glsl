@@ -114,10 +114,17 @@ vec3 lavaRamp(float h, float rockShade) {
     vec3 cDeep = srgb2lin(vec3(0.275, 0.031, 0.031));   // #460808 deep red
     vec3 cMid  = u_emberColor;                          // #F76023 glowing orange
     vec3 cPeak = u_coreColor;                           // #FEF9BA sharp peak
-    vec3 c = mix(cRock, cDeep, smoothstep(0.0, 0.05, h));    // fade into crust
-    c = mix(c, cMid,  smoothstep(0.18, 0.62, h));            // hold deep red, then orange
-    c = mix(c, cPeak, smoothstep(0.86, 0.97, h));            // quick -> thin sharp peak
-    return c;
+    // The lava GLOW colour (deep red -> orange -> peak), independent of the rock.
+    vec3 lava = mix(cDeep, cMid, smoothstep(0.30, 0.62, h));
+    lava = mix(lava, cPeak, smoothstep(0.86, 0.97, h));
+    // How strongly the glow shows over the rock — a smooth ramp from zero so it
+    // eases in gradually rather than a hard edge.
+    float glow = smoothstep(0.0, 0.34, h);
+
+    // Screen-blend the glow over the rock: the rock texture stays visible through
+    // the red, and the glow fades softly into the cooling rock (no harsh edge).
+    // HDR peak (>1 after the boost) still comes through for bloom.
+    return 1.0 - (1.0 - cRock) * (1.0 - lava * glow);
 }
 
 void main() {
