@@ -10,6 +10,7 @@ Notable changes, newest first. What/when only — the *why* lives in the [design
 - New **Energy Shield** shader (`shaders/energy-shield/`): an exact duplicate of the Fireball shader to diverge from, tagged `energy · sphere · shield`.
 
 ### Changed
+- Fireball lava reworked to a **sharp fractal crack network** — four rising frequencies of turbulence (main cracks → branches → tendrils → sparks) — dropping the smooth "rivers"; thin jagged cracks and lightning tendrils through dark rock, punchy saturation, quick falloff.
 - Fireball lava ramp reworked to a **sharp-falloff gradient** with explicit stops — sharp-peaked core `#FEF9BA` → quick to orange `#F76023` → slow to deep red `#460808` → crust — with an HDR boost on the hottest cores for bloom (sRGB→linear converted so the hexes land true).
 - Fireball lava reworked to **layered turbulence tiers** (primary rivers + branches + fine tendrils) over a connected base, driven through a **richer many-stop ramp** (near-black red → deep red → red → orange → amber → gold → white) with large-scale temperature variation; defaults retuned (intensity 1.25, crack width 0.13).
 - Fireball pattern reworked to domain-warped **turbulence** ("fractal clouds") driven through a single **multi-stop heat ramp** (cold rock → red ember → orange → gold core → white-hot); defaults retuned (intensity 3, scale 4.2, crack width 0.05).

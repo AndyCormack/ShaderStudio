@@ -114,9 +114,9 @@ vec3 lavaRamp(float h, float rockShade) {
     vec3 cDeep = srgb2lin(vec3(0.275, 0.031, 0.031));   // #460808 deep red
     vec3 cMid  = u_emberColor;                          // #F76023 glowing orange
     vec3 cPeak = u_coreColor;                           // #FEF9BA sharp peak
-    vec3 c = mix(cRock, cDeep, smoothstep(0.0, 0.06, h));    // fade into crust
-    c = mix(c, cMid,  smoothstep(0.06, 0.62, h));            // slow -> orange
-    c = mix(c, cPeak, smoothstep(0.80, 0.94, h));            // quick -> sharp peak
+    vec3 c = mix(cRock, cDeep, smoothstep(0.0, 0.05, h));    // fade into crust
+    c = mix(c, cMid,  smoothstep(0.18, 0.62, h));            // hold deep red, then orange
+    c = mix(c, cPeak, smoothstep(0.86, 0.97, h));            // quick -> thin sharp peak
     return c;
 }
 
@@ -134,22 +134,26 @@ void main() {
     // the whole network up as one sheet (stable molten flow, no boiling). ---
     // Brightness variation times a large-scale temperature field, so whole
     // regions run hotter (amber/gold) or cooler (deep red) — richer, varied lava.
-    float crackVar = (0.4 + 0.8 * fbm(q * 0.6 + 5.0)) * (0.7 + 0.65 * fbm(q * 0.22 + 50.0));
+    float crackVar = (0.62 + 0.55 * fbm(q * 0.6 + 5.0)) * (0.8 + 0.45 * fbm(q * 0.22 + 50.0));
     float shimmer = 0.85 + 0.15 * sin(u_time * u_churn * 2.5 + fbm(q * 1.1) * TAU);
 
-    float t1 = turbTier(q);                        // primary rivers (coarse)
-    float t2 = turbTier(q * 2.3 + 11.0);           // secondary branches
-    float t3 = turbTier(q * 4.9 + 27.0);           // fine capillary tendrils
+    // Smooth (2-octave) rivers give LONG continuous seams; the cloudy sharp
+    // fractal turbulence is overlaid on top to perturb those seams into jagged,
+    // branching cracks (continuity of the rivers + sharpness of the fractal).
+    // Sharp, detailed fractal crack network at four rising frequencies — thin
+    // jagged cracks, branches, and fine tendrils, with NO big smooth curves.
+    float m1 = turbTier(q * 1.5 + 7.0);            // main cracks (semi-connected)
+    float m2 = turbTier(q * 3.1 + 27.0);           // secondary branches
+    float m3 = turbTier(q * 6.3 + 51.0);           // fine tendrils
+    float m4 = turbTier(q * 11.0 + 71.0);          // finest tendrils / sparks
+    float ca = 1.0 - smoothstep(0.0, u_crackWidth * 0.85, m1);
+    float cb = (1.0 - smoothstep(0.0, u_crackWidth * 0.58, m2)) * 0.9;
+    float cc = (1.0 - smoothstep(0.0, u_crackWidth * 0.42, m3)) * 0.78;
+    float cd = (1.0 - smoothstep(0.0, u_crackWidth * 0.30, m4)) * 0.6;
+    float veins = max(max(ca, cb), max(cc, cd));
 
-    // Bright thin vein cores from each tier's creases; finer tiers thinner + dimmer.
-    float c1 = 1.0 - smoothstep(0.0, u_crackWidth, t1);
-    float c2 = (1.0 - smoothstep(0.0, u_crackWidth * 0.65, t2)) * 0.8;
-    float c3 = (1.0 - smoothstep(0.0, u_crackWidth * 0.45, t3)) * 0.55;
-    float veins = max(c1, max(c2, c3));
-
-    // A wider connected molten base from the primary tier joins the veins into
-    // rivers with a deep-red glow (instead of isolated spots).
-    float base = 1.0 - smoothstep(0.0, u_crackWidth * 3.0, t1);
+    // Thin red glow hugging the main cracks — quick falloff, not big smooth channels.
+    float base = 1.0 - smoothstep(0.0, u_crackWidth * 2.0, m1);
 
     // Heat drives the multi-stop ramp: bright white cores fall off quickly into
     // the deep-red connected base, then cold dark rock.
@@ -167,8 +171,12 @@ void main() {
     rockShade = mix(1.0, rockShade, u_crust);
 
     vec3 col = lavaRamp(heat, rockShade);
-    // HDR-boost the hottest peaked cores (keeps the #FEF9BA hue) so they bloom.
-    col *= 1.0 + clamp(heat - 0.85, 0.0, 1.2) * 1.8;
+    // Punch the saturation so the lava reads vivid, not washed.
+    float lum = dot(col, vec3(0.299, 0.587, 0.114));
+    col = max(mix(vec3(lum), col, 1.35), 0.0);
+    // HDR-boost only the very hottest peaked cores so they bloom without blowing
+    // the whole surface to white (which is what desaturated it).
+    col *= 1.0 + clamp(heat - 0.95, 0.0, 0.9) * 1.2;
 
     // --- Fiery Fresnel rim — the silhouette glow. ---
     vec3 V = normalize(cameraPosition - vWorldPos);
