@@ -2,12 +2,13 @@
 
 A magma sphere built in layers. A **fractal crack network** — the thin contour (level-set) of a domain-warped value-noise fbm field, its width normalised by the field gradient (computed with finite differences, since the `GL_OES_standard_derivatives` extension isn't available on this ES-1.00-on-WebGL2 context) so the seams stay uniformly thin — glows between a **rough charred-rock crust** (ridged noise + grain + sharp pits) that fills the interiors. A blackbody palette keeps most of the surface dark rock and pushes only the crack lines to orange→core→white-hot; a world-space Fresnel term rings the silhouette with fire. Hot seams and rim are emitted as HDR (>1) so the studio **bloom** pass ([D21]) gives them their glow.
 
-The pattern is **static** — there is no time in the sample coordinates, so the bands and crust never warp; the vertex displacement is static too. `u_churn` only drives a gentle brightness shimmer.
+The pattern's **structure is static** — no per-feature warping — but the whole texture (cracks + crust + the vertex displacement) **scrolls up the Y axis** at `u_scroll`: a uniform translation of the sample domain, so cracks, crust, and relief all move together rather than distorting. `u_churn` only drives a gentle brightness shimmer.
 
 ## Uniforms
 
 - `u_intensity` — overall brightness / HDR push into the highlights.
 - `u_churn` — brightness shimmer speed (does not move the pattern).
+- `u_scroll` — speed the whole texture scrolls up the Y axis (0 = still).
 - `u_scale` — scale of the fractal crack network.
 - `u_crackWidth` — thickness of the glowing seams.
 - `u_displace` — amplitude of the (static) rock displacement.

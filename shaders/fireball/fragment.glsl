@@ -4,6 +4,7 @@ uniform vec3 cameraPosition; // world-space camera, supplied by three for the me
 uniform float u_time;
 uniform float u_intensity;   // overall heat / HDR push into the highlights
 uniform float u_churn;       // brightness shimmer speed (does NOT move the pattern)
+uniform float u_scroll;      // speed the whole texture scrolls up the Y axis
 uniform float u_scale;       // scale of the fractal crack network
 uniform float u_crackWidth;  // seam thickness of the glowing cracks
 uniform float u_crust;       // strength/visibility of the rough rock crust
@@ -98,9 +99,10 @@ vec3 fireGradient(float h) {
 void main() {
     vec3 N = normalize(vWorldNormal);
 
-    // STATIC domain — the crack network and crust never move (no time in the
-    // coordinates), so the crust doesn't warp. u_churn only shimmers brightness.
-    vec3 p = warp(vLocalPos * u_scale);
+    // The crack network + crust never warp (the structure is static), but the
+    // whole pattern scrolls up the Y axis at u_scroll — a uniform translation of
+    // the sample domain, so crust and cracks move together. u_churn only shimmers.
+    vec3 p = warp((vLocalPos - vec3(0.0, u_time * u_scroll, 0.0)) * u_scale);
 
     // --- Fractal crack network as the thin contour (level-set) of a
     // domain-warped fbm field: genuinely fractal, and thin lines by
