@@ -102,30 +102,21 @@ vec3 fireGradient(float h) {
     return c;
 }
 
-// ---------- Multi-stop lava ramp: one heat scalar drives the whole surface —
-// cold rough rock -> deep-red ember glow -> orange -> gold core -> white-hot.
-// rockShade is the rough rock texture applied to the cold stop. ----------
+vec3 srgb2lin(vec3 c) { return pow(c, vec3(2.2)); }   // hex sRGB -> linear working space
+
+// ---------- Sharp-falloff lava ramp: one heat scalar runs the whole surface.
+// A sharp peaked core (u_coreColor, default #FEF9BA) falls off QUICKLY to a
+// glowing orange (u_emberColor, default #F76023), then MORE SLOWLY down to a
+// deep red (#460808) before fading into the cold crust. ----------
 vec3 lavaRamp(float h, float rockShade) {
     h = saturate(h);
-    vec3 cRock   = u_crustColor * rockShade;                     // cold rough rock
-    vec3 cDeep   = u_emberColor * 0.45;                          // near-black blood red
-    vec3 cEmber  = u_emberColor;                                 // deep red
-    vec3 cRed    = u_emberColor * 2.7;                           // rich glowing red
-    vec3 cOrange = mix(u_emberColor, u_coreColor, 0.42) * 1.9;   // deep orange
-    vec3 cAmber  = mix(u_emberColor, u_coreColor, 0.78) * 2.0;   // amber
-    vec3 cCore   = u_coreColor * 1.9;                            // gold
-    vec3 cHot    = vec3(3.4, 3.0, 2.2);                          // white-hot core
-    // A rich, many-stopped body — near-black red → deep red → glowing red →
-    // orange → amber → gold — then a NARROW white core so the bright tendril
-    // centres fall off quickly into deep orangey reds.
-    vec3 c = cRock;
-    c = mix(c, cDeep,   smoothstep(0.02, 0.08, h));
-    c = mix(c, cEmber,  smoothstep(0.08, 0.18, h));
-    c = mix(c, cRed,    smoothstep(0.18, 0.34, h));
-    c = mix(c, cOrange, smoothstep(0.34, 0.50, h));
-    c = mix(c, cAmber,  smoothstep(0.50, 0.68, h));
-    c = mix(c, cCore,   smoothstep(0.68, 0.85, h));
-    c = mix(c, cHot,    smoothstep(0.91, 1.00, h));
+    vec3 cRock = u_crustColor * rockShade;              // cold crust
+    vec3 cDeep = srgb2lin(vec3(0.275, 0.031, 0.031));   // #460808 deep red
+    vec3 cMid  = u_emberColor;                          // #F76023 glowing orange
+    vec3 cPeak = u_coreColor;                           // #FEF9BA sharp peak
+    vec3 c = mix(cRock, cDeep, smoothstep(0.0, 0.06, h));    // fade into crust
+    c = mix(c, cMid,  smoothstep(0.06, 0.62, h));            // slow -> orange
+    c = mix(c, cPeak, smoothstep(0.80, 0.94, h));            // quick -> sharp peak
     return c;
 }
 
@@ -162,7 +153,7 @@ void main() {
 
     // Heat drives the multi-stop ramp: bright white cores fall off quickly into
     // the deep-red connected base, then cold dark rock.
-    float heat = (veins * 0.95 + base * 0.5) * crackVar * shimmer * u_intensity;
+    float heat = (veins * 1.0 + base * 0.4) * crackVar * shimmer * u_intensity;
 
     // --- Rough rock texture — the cold end of the ramp. ---
     float rough = ridged(q * 3.0 + 20.0);
@@ -176,6 +167,8 @@ void main() {
     rockShade = mix(1.0, rockShade, u_crust);
 
     vec3 col = lavaRamp(heat, rockShade);
+    // HDR-boost the hottest peaked cores (keeps the #FEF9BA hue) so they bloom.
+    col *= 1.0 + clamp(heat - 0.85, 0.0, 1.2) * 1.8;
 
     // --- Fiery Fresnel rim — the silhouette glow. ---
     vec3 V = normalize(cameraPosition - vWorldPos);

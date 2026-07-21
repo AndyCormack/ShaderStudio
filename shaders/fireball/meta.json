@@ -14,8 +14,8 @@
 		{ "name": "u_crackWidth", "type": "float", "min": 0.01, "max": 0.3, "step": 0.005, "default": 0.105 },
 		{ "name": "u_displace", "type": "float", "min": 0, "max": 0.5, "step": 0.005, "default": 0.315 },
 		{ "name": "u_crust", "type": "float", "min": 0, "max": 2, "step": 0.05, "default": 1 },
-		{ "name": "u_coreColor", "type": "color", "default": "#ffb340" },
-		{ "name": "u_emberColor", "type": "color", "default": "#7a1500" },
+		{ "name": "u_coreColor", "type": "color", "default": "#fef9ba" },
+		{ "name": "u_emberColor", "type": "color", "default": "#f76023" },
 		{ "name": "u_crustColor", "type": "color", "default": "#1d1d25" },
 		{ "name": "u_rimColor", "type": "color", "default": "#ffb380" }
 	]
