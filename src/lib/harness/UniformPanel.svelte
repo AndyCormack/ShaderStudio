@@ -6,18 +6,50 @@
 	import { Input } from '$lib/components/ui/input';
 	import { InputGroup, InputGroupAddon, InputGroupInput } from '$lib/components/ui/input-group';
 	import { Slider } from '$lib/components/ui/slider';
+	import * as Select from '$lib/components/ui/select';
 	import * as Tooltip from '$lib/components/ui/tooltip';
-	import type { ShaderEntry, UniformDef } from '$lib/shaders/types';
+	import type { BloomControls, ShaderEntry, UniformDef } from '$lib/shaders/types';
 	import { uniformLabel } from './uniform-label';
 
 	type FloatDef = Extract<UniformDef, { type: 'float' }>;
 	type ColorDef = Extract<UniformDef, { type: 'color' }>;
+	type SelectDef = Extract<UniformDef, { type: 'select' }>;
 
 	let {
 		entry,
 		material,
+		bloom,
 		onhide
-	}: { entry: ShaderEntry; material: RawShaderMaterial; onhide: () => void } = $props();
+	}: {
+		entry: ShaderEntry;
+		material: RawShaderMaterial;
+		bloom?: BloomControls;
+		onhide: () => void;
+	} = $props();
+
+	// Live post-fx (bloom) controls, when the entry declares a post-fx stack (D21).
+	type BloomFloat = { key: 'strength' | 'radius' | 'threshold'; label: string; min: number; max: number; step: number };
+	const bloomFloats: BloomFloat[] = [
+		{ key: 'strength', label: 'Bloom Strength', min: 0, max: 3, step: 0.05 },
+		{ key: 'radius', label: 'Bloom Radius', min: 0, max: 1, step: 0.01 },
+		{ key: 'threshold', label: 'Bloom Threshold', min: 0, max: 2, step: 0.05 }
+	];
+
+	function commitBloomFloat(control: BloomFloat, input: HTMLInputElement) {
+		if (!bloom) return;
+		const parsed = Number.parseFloat(input.value);
+		if (Number.isFinite(parsed)) {
+			bloom[control.key] = Math.min(control.max, Math.max(control.min, parsed));
+		}
+		input.value = formatFloat(bloom[control.key]);
+	}
+
+	function commitBloomHex(input: HTMLInputElement) {
+		if (!bloom) return;
+		const normalized = normalizeHex(input.value);
+		if (normalized) bloom.color = normalized;
+		input.value = bloom.color;
+	}
 
 	const defs = $derived(entry.meta.uniforms ?? []);
 	let values = $state<Record<string, number | string>>({});
@@ -52,6 +84,15 @@
 
 	function colorValue(definition: ColorDef): string {
 		return (values[definition.name] as string | undefined) ?? definition.default;
+	}
+
+	function selectValue(definition: SelectDef): number {
+		return (values[definition.name] as number | undefined) ?? definition.default;
+	}
+
+	function selectLabel(definition: SelectDef): string {
+		const value = selectValue(definition);
+		return definition.options.find((o) => o.value === value)?.label ?? String(value);
 	}
 
 	// Trims slider float artifacts (0.1 + 0.05 → 0.15000000000000002) while
@@ -143,11 +184,11 @@
 		</Tooltip.Provider>
 	</header>
 
-	{#if defs.length}
+	{#if defs.length || bloom}
 		<div class="min-h-0 flex-1 overflow-y-auto p-2">
 			{#each defs as definition (definition.name)}
 				<div
-					class="grid grid-cols-[6.75rem_minmax(0,1fr)] items-center gap-x-2.5 rounded-md px-2 py-1.5 transition-colors hover:bg-surface-raised/50"
+					class="grid grid-cols-[6.75rem_minmax(0,1fr)] items-center gap-x-2.5 rounded-md px-2 py-1.5 hover:bg-surface-raised/50"
 				>
 					<div class="min-w-0" title={definition.name}>
 						<p id={`uniform-label-${definition.name}`} class="truncate text-xs font-medium leading-4">
@@ -184,7 +225,7 @@
 								onblur={(event) => commitFloat(definition, event.currentTarget as HTMLInputElement)}
 							/>
 						</div>
-					{:else}
+					{:else if definition.type === 'color'}
 						<InputGroup class="h-7 rounded-md">
 							<InputGroupAddon>
 								<span
@@ -215,9 +256,117 @@
 								onblur={(event) => commitHex(definition, event.currentTarget as HTMLInputElement)}
 							/>
 						</InputGroup>
+					{:else}
+						<Select.Select
+							type="single"
+							bind:value={
+								() => String(selectValue(definition)),
+								(next) => (values[definition.name] = Number(next))
+							}
+						>
+							<Select.SelectTrigger
+								class="h-7 w-full rounded-md text-xs"
+								aria-labelledby={`uniform-label-${definition.name}`}
+							>
+								{selectLabel(definition)}
+							</Select.SelectTrigger>
+							<Select.SelectContent>
+								{#each definition.options as option (option.value)}
+									<Select.SelectItem value={String(option.value)}>{option.label}</Select.SelectItem>
+								{/each}
+							</Select.SelectContent>
+						</Select.Select>
 					{/if}
 				</div>
 			{/each}
+
+			{#if bloom}
+				<div class="mt-1 px-2 pb-1 pt-2">
+					<p class="text-[0.6875rem] font-[650] uppercase tracking-wide text-muted-foreground">
+						Post-FX
+					</p>
+				</div>
+				{#each bloomFloats as control (control.key)}
+					<div
+						class="grid grid-cols-[6.75rem_minmax(0,1fr)] items-center gap-x-2.5 rounded-md px-2 py-1.5 hover:bg-surface-raised/50"
+					>
+						<div class="min-w-0">
+							<p id={`bloom-label-${control.key}`} class="truncate text-xs font-medium leading-4">
+								{control.label}
+							</p>
+							<code class="block truncate font-mono text-[0.6875rem] leading-4 text-muted-foreground">
+								bloom.{control.key}
+							</code>
+						</div>
+						<div class="flex items-center gap-2">
+							<Slider
+								type="single"
+								min={control.min}
+								max={control.max}
+								step={control.step}
+								bind:value={
+									() => bloom![control.key], (next) => (bloom![control.key] = next)
+								}
+								aria-labelledby={`bloom-label-${control.key}`}
+								class="min-w-0 grow"
+							/>
+							<Input
+								class="h-6 w-14 shrink-0 rounded-md border-transparent bg-transparent px-1 text-right font-mono text-xs tabular-nums text-muted-foreground focus-visible:text-foreground dark:bg-transparent"
+								value={formatFloat(bloom![control.key])}
+								inputmode="decimal"
+								aria-label={`${control.label} value`}
+								onkeydown={(event) =>
+									onCommitKeydown(
+										event,
+										(input) => commitBloomFloat(control, input),
+										() => formatFloat(bloom![control.key])
+									)}
+								onblur={(event) => commitBloomFloat(control, event.currentTarget as HTMLInputElement)}
+							/>
+						</div>
+					</div>
+				{/each}
+				<div
+					class="grid grid-cols-[6.75rem_minmax(0,1fr)] items-center gap-x-2.5 rounded-md px-2 py-1.5 hover:bg-surface-raised/50"
+				>
+					<div class="min-w-0">
+						<p id="bloom-label-color" class="truncate text-xs font-medium leading-4">Bloom Color</p>
+						<code class="block truncate font-mono text-[0.6875rem] leading-4 text-muted-foreground">
+							bloom.color
+						</code>
+					</div>
+					<InputGroup class="h-7 rounded-md">
+						<InputGroupAddon>
+							<span
+								class="relative size-4.5 shrink-0 overflow-hidden rounded-[5px] border border-border"
+								style={`background:${bloom.color}`}
+							>
+								<input
+									type="color"
+									class="absolute inset-0 size-full cursor-pointer opacity-0"
+									value={bloom.color}
+									aria-label="Bloom Color color picker"
+									oninput={(event) =>
+										(bloom!.color = (event.currentTarget as HTMLInputElement).value)}
+								/>
+							</span>
+						</InputGroupAddon>
+						<InputGroupInput
+							class="px-1.5 font-mono text-xs tabular-nums text-muted-foreground focus-visible:text-foreground md:text-xs"
+							value={bloom.color}
+							spellcheck={false}
+							aria-label="Bloom Color hex value"
+							onkeydown={(event) =>
+								onCommitKeydown(
+									event,
+									(input) => commitBloomHex(input),
+									() => bloom!.color
+								)}
+							onblur={(event) => commitBloomHex(event.currentTarget as HTMLInputElement)}
+						/>
+					</InputGroup>
+				</div>
+			{/if}
 		</div>
 	{:else}
 		<div

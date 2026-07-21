@@ -10,7 +10,7 @@
 	});
 </script>
 
-<!-- Core fireball plus orbiting embers, all sharing the entry's material -->
+<!-- Core blob plus orbiting droplets, all sharing the entry's material -->
 <T.Mesh {material}>
 	<T.SphereGeometry args={[1, 96, 96]} />
 </T.Mesh>

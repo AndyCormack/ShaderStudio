@@ -5,7 +5,7 @@
 	import SlidersHorizontalIcon from 'phosphor-svelte/lib/SlidersHorizontalIcon';
 	import { quintOut } from 'svelte/easing';
 	import { fade } from 'svelte/transition';
-	import type { MeshPrimitive } from '$lib/shaders/types';
+	import { resolveBloom, type BloomControls, type MeshPrimitive } from '$lib/shaders/types';
 	import { loadCustomScene, type SceneComponent } from '$lib/harness/scenes';
 	import { createEntryMaterial } from '$lib/harness/material';
 	import { recordRecent } from '$lib/gallery/gallery-state.svelte';
@@ -23,6 +23,13 @@
 
 	// Recreated when the entry changes (including shader HMR updates).
 	const material = $derived(createEntryMaterial(entry));
+
+	// Live post-fx controls, seeded from meta.postfx and tweakable in the panel.
+	// Reset when the entry changes.
+	let bloom = $state<BloomControls | undefined>();
+	$effect(() => {
+		bloom = entry.meta.postfx?.bloom ? resolveBloom(entry.meta.postfx.bloom) : undefined;
+	});
 
 	$effect(() => {
 		const m = material;
@@ -152,7 +159,7 @@
 
 	<section class="viewport-shell" aria-label={`${entry.meta.name} live preview`}>
 		<div class="viewport">
-			<Harness {entry} {material} {primitive} {sceneComponent} />
+			<Harness {entry} {material} {primitive} {sceneComponent} {bloom} />
 		</div>
 		<div class="viewport-label">
 			<span class="viewport-dot"></span>
@@ -165,7 +172,7 @@
 
 	{#if panelOpen}
 		<div id="uniform-panel-region" class="uniform-region" transition:fade={panelFade}>
-			<UniformPanel {entry} {material} onhide={() => (panelOpen = false)} />
+			<UniformPanel {entry} {material} {bloom} onhide={() => (panelOpen = false)} />
 		</div>
 	{:else}
 		<button
@@ -401,7 +408,8 @@
 		min-width: 0;
 		min-height: 0;
 		overflow: hidden;
-		background: var(--viewport);
+		/* Matches the WebGL clear colour so there's no surround flash (D22). */
+		background: var(--surface);
 	}
 
 	.viewport {

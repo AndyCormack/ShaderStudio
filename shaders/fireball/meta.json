@@ -1,11 +1,50 @@
 {
 	"name": "Fireball",
-	"tags": ["fire", "material"],
+	"tags": ["energy", "sphere", "additive"],
 	"harness": "mesh",
 	"primitive": "sphere",
-	"scene": "Scene.svelte",
+	"postfx": {
+		"bloom": { "strength": 0.55, "radius": 1, "threshold": 0.25, "color": "#ffb060" }
+	},
 	"uniforms": [
-		{ "name": "u_intensity", "type": "float", "min": 0, "max": 3, "step": 0.05, "default": 1 },
-		{ "name": "u_coreColor", "type": "color", "default": "#ffdd66" }
+		{ "name": "u_intensity", "type": "float", "min": 0, "max": 4, "step": 0.05, "default": 1.5 },
+		{ "name": "u_churn", "type": "float", "min": 0, "max": 2, "step": 0.05, "default": 0.6 },
+		{ "name": "u_scroll", "type": "float", "min": 0, "max": 1, "step": 0.005, "default": 0.05 },
+		{ "name": "u_scale", "type": "float", "min": 1, "max": 10, "step": 0.1, "default": 3.1 },
+		{ "name": "u_crackWidth", "type": "float", "min": 0.01, "max": 0.3, "step": 0.005, "default": 0.105 },
+		{ "name": "u_displace", "type": "float", "min": 0, "max": 0.5, "step": 0.005, "default": 0.315 },
+		{ "name": "u_crust", "type": "float", "min": 0, "max": 2, "step": 0.05, "default": 1 },
+		{ "name": "u_coreColor", "type": "color", "default": "#fef9ba" },
+		{ "name": "u_emberColor", "type": "color", "default": "#f76023" },
+		{ "name": "u_crustColor", "type": "color", "default": "#1d1d25" },
+		{ "name": "u_rimColor", "type": "color", "default": "#ffb380" },
+		{ "name": "u_rimPower", "type": "float", "min": 0.5, "max": 8, "step": 0.1, "default": 5.5 },
+		{
+			"name": "u_rimBlend",
+			"type": "select",
+			"default": 11,
+			"options": [
+				{ "value": 0, "label": "Normal" },
+				{ "value": 1, "label": "Add" },
+				{ "value": 2, "label": "Screen" },
+				{ "value": 3, "label": "Multiply" },
+				{ "value": 4, "label": "Overlay" },
+				{ "value": 5, "label": "Darken" },
+				{ "value": 6, "label": "Lighten" },
+				{ "value": 7, "label": "Color Dodge" },
+				{ "value": 8, "label": "Color Burn" },
+				{ "value": 9, "label": "Linear Burn" },
+				{ "value": 10, "label": "Linear Light" },
+				{ "value": 11, "label": "Hard Light" },
+				{ "value": 12, "label": "Soft Light" },
+				{ "value": 13, "label": "Vivid Light" },
+				{ "value": 14, "label": "Pin Light" },
+				{ "value": 15, "label": "Hard Mix" },
+				{ "value": 16, "label": "Difference" },
+				{ "value": 17, "label": "Exclusion" },
+				{ "value": 18, "label": "Subtract" },
+				{ "value": 19, "label": "Divide" }
+			]
+		}
 	]
 }

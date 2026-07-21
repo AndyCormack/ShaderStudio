@@ -4,7 +4,7 @@ uniform mat4 projectionMatrix;
 uniform mat4 modelViewMatrix;
 uniform mat4 modelMatrix;
 uniform float u_time;
-uniform float u_scroll;      // Y-axis scroll speed (kept in sync with the fragment)
+uniform float u_churn;
 uniform float u_displace;   // amplitude of the burnt-crust displacement
 
 attribute vec3 position;
@@ -49,11 +49,10 @@ float fbm(vec3 p) {
 void main() {
     vLocalPos = position;
 
-    // Uneven crust height — coarse plates plus finer grit. Scrolls up the Y axis
-    // (same offset as the fragment) so the surface relief tracks the texture.
-    vec3 sp = position - vec3(0.0, u_time * u_scroll, 0.0);
-    float crust = fbm(sp * 3.5);
-    crust += 0.5 * fbm(sp * 8.0);
+    // Rough, uneven crust height — coarse plates plus finer grit, drifting slowly.
+    float t = u_time * 0.15 * u_churn;
+    float crust = fbm(position * 3.5 + vec3(0.0, 0.0, t));
+    crust += 0.5 * fbm(position * 8.0 - vec3(t, 0.0, 0.0));
     crust /= 1.5;
     vCrust = crust;
 

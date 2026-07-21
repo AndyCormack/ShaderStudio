@@ -37,7 +37,9 @@
 -->
 <div
 	class={cn(
-		'group relative flex h-full flex-col overflow-hidden rounded-tile border transition-[border-color,box-shadow] duration-150',
+		// Hover paints a Signal-Red outline matching the selected border; it's an
+		// outline (not in the transition list) so it snaps in with no fade.
+		'group relative flex h-full flex-col overflow-hidden rounded-tile border transition-[border-color,box-shadow] duration-150 hover:outline hover:outline-1 hover:-outline-offset-1 hover:outline-primary/60',
 		selected
 			? 'border-primary/60 shadow-[0_0_40px_-4px_oklch(0.55_0.21_18/0.14)]'
 			: 'border-border'
@@ -45,10 +47,12 @@
 >
 	<div class="absolute inset-0" {@attach (el) => registry.register(entry.slug, entry.slug, el)}></div>
 
-	<!-- Corner mask + an edge feather that dissolves the render into the card
-	     surface on every side (the scissored canvas can't be CSS-masked, so
-	     the blend is painted over it); selection adds a large, subtle inset
-	     Signal glow that hazes most of the card like the edge vignette. -->
+	<!-- Corner mask over the square scissored corners so the rounded card edge
+	     stays clean (the scissored canvas can't be CSS-masked). Only a bottom
+	     feather remains — reinforcing the metadata's legibility; the render no
+	     longer dissolves into the surface on the other edges now that preview
+	     backgrounds render the same dark plum as the card. Selection adds a
+	     large, subtle inset Signal glow. -->
 	<div
 		class={cn(
 			'pointer-events-none absolute inset-0 z-30 rounded-[7px]',
@@ -56,12 +60,7 @@
 				? 'shadow-[0_0_0_32px_var(--color-background),inset_0_0_100px_oklch(0.55_0.21_18/0.14)]'
 				: 'shadow-[0_0_0_32px_var(--color-background)]'
 		)}
-		style="background:
-			linear-gradient(to right, var(--color-surface), transparent 34%),
-			linear-gradient(to left, var(--color-surface), transparent 34%),
-			linear-gradient(to bottom, var(--color-surface), transparent 40%),
-			linear-gradient(to top, var(--color-surface), transparent 22%),
-			radial-gradient(ellipse 78% 78% at 50% 44%, transparent 38%, color-mix(in oklab, var(--color-surface) 78%, transparent) 82%, var(--color-surface) 100%);"
+		style="background: linear-gradient(to top, var(--color-surface), transparent 22%);"
 	></div>
 
 	<!-- Title/path/tags overlay the render on a plain linear fade (surface at the

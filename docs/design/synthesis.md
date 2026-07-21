@@ -12,7 +12,7 @@ shader-studio is a **local-first look-dev sandbox**: a web app you run while wor
 
 **Styling:** Tailwind v4 (CSS-first via `@tailwindcss/vite`) + shadcn-svelte components with phosphor icons, themed entirely through [DESIGN.md](../../DESIGN.md)'s token values (OKLCH) in `src/app.css`; bespoke components consume the same theme vars, and new shadcn components are added per-need with the non-interactive CLI ([D13]).
 
-**Rendering:** Three.js supplies scene/camera/OrbitControls/primitives, via **Threlte** (`@threlte/core`) as the single rendering path ([D3], [D8]). Authored shaders are standalone portable GLSL compiled with `RawShaderMaterial` (`ShaderMaterial` allowed for injected matrices); Three's lighting/fog/shadow chunks are forbidden in authored shaders — effect shaders carry their own lighting math, which is what keeps them portable ([D3], ADR-0001).
+**Rendering:** Three.js supplies scene/camera/OrbitControls/primitives, via **Threlte** (`@threlte/core`) as the single rendering path ([D3], [D8]). Authored shaders are standalone portable GLSL compiled with `RawShaderMaterial` (`ShaderMaterial` allowed for injected matrices); Three's lighting/fog/shadow chunks are forbidden in authored shaders — effect shaders carry their own lighting math, which is what keeps them portable ([D3], ADR-0001). A shader entry may declare a **post-fx stack** (`postfx` in `meta.json` — bloom today) built on a `three/addons` `EffectComposer`, applied in both the studio and the gallery previews; authored shaders emit HDR values for it to pick up ([D21]). Bloom is colour-tinted (glows in-colour, not white) and resolution-scaled (previews match the full render), and live-tweakable in the studio panel's Post-FX section ([D21]). The mesh surround — studio canvas and preview tiles — is the raised **Surface** (Shadow Plum), not a black surround ([D22]).
 
 **Harness modes** ([D4], [D8]):
 
@@ -35,7 +35,7 @@ shaders/fireball/
   Scene.svelte    # optional — custom Threlte scene
 ```
 
-`meta.json`'s uniform declarations (type, range, default) drive an **auto-generated control panel** — sliders and color pickers, live-tweakable, with no per-shader UI code. Controls render at dat.gui-style single-row density on shadcn primitives, headed by a derived uniform label with the raw GLSL name muted beneath it ([D18]).
+`meta.json`'s uniform declarations (type, range, default) drive an **auto-generated control panel** — sliders, color pickers, and labelled dropdowns (`select`, bound to a GLSL `int`), live-tweakable, with no per-shader UI code. Controls render at dat.gui-style single-row density on shadcn primitives, headed by a derived uniform label with the raw GLSL name muted beneath it ([D18]).
 
 ## Visual system
 
@@ -44,7 +44,7 @@ The MVP design target is **the Electric Workbench**: a canvas-first professional
 ## Views
 
 - **Gallery** — a Preview Atlas with a persistent discovery rail (Gallery/Favorites/Recent/Tags, count-aware), search-first command band (search, a Filters menu, sort — Recently updated by default), asymmetric live-preview field with one featured shader, a compact selected-shader detail strip (identity, Description, Details, Tags, Usage, Open shader), and a ⌘K command search overlay ([D12], [D14]). Tiles and the strip carry honest metadata only — full fragment path, GLSL version, source size, and updated-ago from build-time folder stats — with ⋯ overflow menus for open/copy/favorite actions ([D19]). Previews fill their cards with metadata overlaid on edge/bottom vignettes, selection adds a faint Signal Red glow to the dimmed border, and the detail strip is a full-window double container (edge-to-edge divider band holding an inset rounded panel that spans beneath the rail) ([D20]). Previews render from one shared WebGL context via scissored viewports inside a single Threlte canvas (browsers cap live contexts, so no canvas-per-tile) ([D7]); custom-scene entries preview as their default primitive for now (backlog). Favorites and recents persist in localStorage; Collections and Presets are deferred ([D14]). Click through to:
-- **Studio** — the Focus Canvas topology: a full-bleed shader canvas with compact opaque identity, scene, and hideable uniform surfaces lifted at its edges, plus a quiet bottom status strip ([D16]). Reset and collapse are icon-only actions in the uniform-panel heading; collapsed state leaves one show-controls toggle in the Hide action's exact position at 10% resting opacity, fully visible on hover/focus/press. The surrounding panel fades over 150ms with a shorter reduced-motion fade ([D17]). Camera/primitive controls remain directly accessible; below 760px the composition becomes identity, scene controls, canvas, uniform panel, then status. GLSL compile errors will overlay the canvas with line numbers mapped back to the source file.
+- **Studio** — the Focus Canvas topology: a full-bleed shader canvas with compact opaque identity, scene, and hideable uniform surfaces lifted at its edges, plus a quiet bottom status strip ([D16]). Reset and collapse are icon-only actions in the uniform-panel heading; collapsed state leaves one show-controls toggle in the Hide action's exact position at 10% resting opacity, fully visible on hover/focus/press. The surrounding panel fades over 150ms with a shorter reduced-motion fade ([D17]). Camera/primitive controls remain directly accessible; below 760px the composition becomes identity, scene controls, canvas, uniform panel, then status. Entries can opt into a bloom post-fx pass (in the studio and previews), and the mesh surround is the raised Surface rather than black ([D21], [D22]). GLSL compile errors will overlay the canvas with line numbers mapped back to the source file.
 
 [D1]: log.md#d1--shader-studio-is-a-local-first-look-dev-sandbox-2026-07-20
 [D2]: log.md#d2--stack-sveltekit--vite--typescript-2026-07-20
@@ -64,3 +64,5 @@ The MVP design target is **the Electric Workbench**: a canvas-first professional
 [D18]: log.md#d18--uniform-panel-controls-datgui-density-single-rows-on-shadcn-primitives-derived-labels-2026-07-20
 [D19]: log.md#d19--gallery-metadata-reconciled-to-the-preview-atlas-mockup-with-honest-values-2026-07-20
 [D20]: log.md#d20--gallery-visual-fidelity-pass-overlay-metadata-vignettes-selection-glow-double-container-strip-2026-07-21
+[D21]: log.md#d21--per-shader-post-processing-bloom-2026-07-21
+[D22]: log.md#d22--mesh-canvas-surround-is-the-raised-surface-not-viewport-black-2026-07-21

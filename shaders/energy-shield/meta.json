@@ -1,0 +1,21 @@
+{
+	"name": "Energy Shield",
+	"tags": ["energy", "sphere", "shield"],
+	"harness": "mesh",
+	"primitive": "sphere",
+	"postfx": {
+		"bloom": { "strength": 0.3, "radius": 0.35, "threshold": 1.35, "color": "#ffb060" }
+	},
+	"uniforms": [
+		{ "name": "u_intensity", "type": "float", "min": 0, "max": 3, "step": 0.05, "default": 1 },
+		{ "name": "u_churn", "type": "float", "min": 0, "max": 2, "step": 0.05, "default": 0.6 },
+		{ "name": "u_scale", "type": "float", "min": 1, "max": 10, "step": 0.1, "default": 6 },
+		{ "name": "u_crackWidth", "type": "float", "min": 0.02, "max": 0.2, "step": 0.005, "default": 0.06 },
+		{ "name": "u_displace", "type": "float", "min": 0, "max": 0.5, "step": 0.005, "default": 0.12 },
+		{ "name": "u_crust", "type": "float", "min": 0, "max": 2, "step": 0.05, "default": 1 },
+		{ "name": "u_coreColor", "type": "color", "default": "#ffb340" },
+		{ "name": "u_emberColor", "type": "color", "default": "#7a1500" },
+		{ "name": "u_crustColor", "type": "color", "default": "#3a2016" },
+		{ "name": "u_rimColor", "type": "color", "default": "#ff8828" }
+	]
+}

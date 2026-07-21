@@ -1,9 +1,31 @@
 # Fireball — notes
 
-Sum-of-sines wobble displaces a sphere along its normals; displacement doubles as a heat value driving an ember→core color ramp with a time flicker. Deliberately cheap seed shader — no real noise yet.
+A magma sphere built from a single **multi-stop heat ramp**. A **sharp fractal crack network** — four rising frequencies of domain-warped **turbulence** (main cracks → branches → tendrils → sparks) — defines the lava as thin jagged cracks and branching tendrils through the dark rock, with a thin red glow hugging the main cracks (no smooth rivers). The `heat` scalar (varied by a large-scale temperature field so whole regions run hotter or cooler) runs the surface through a **sharp-falloff ramp** — cold rock (`u_crustColor`) → deep red (`#460808`) → glowing orange (`u_emberColor`) → a sharp-peaked hot core (`u_coreColor`) — so the bright seams fall off quickly through the reds. The hottest cores get an HDR boost for bloom. A rough rock texture (ridged noise + grain + sharp pits) shades the cold end, and a world-space Fresnel term rings the silhouette. Hot cores and rim are emitted as HDR (>1) so the studio **bloom** pass ([D21]) gives them their glow.
+
+The pattern's **structure is static** — no per-feature boiling — but the whole texture (the turbulence cloud + crust + the vertex displacement) **scrolls up the Y axis** at `u_scroll`: a rigid translation of the sample domain, so everything moves together as one molten sheet rather than distorting. `u_churn` only drives a gentle brightness shimmer.
+
+## Uniforms
+
+- `u_intensity` — overall heat / HDR push into the highlights.
+- `u_churn` — brightness shimmer speed (does not move the pattern).
+- `u_scroll` — speed the whole texture scrolls up the Y axis (0 = still).
+- `u_scale` — scale of the turbulence cloud (lava density).
+- `u_crackWidth` — how wide the glowing lava reads out of each turbulence dip.
+- `u_displace` — amplitude of the rock displacement.
+- `u_crust` — strength of the rough rock texture on the cold end of the ramp.
+- `u_coreColor` — gold core stop of the ramp.
+- `u_emberColor` — deep-red ember-glow stop of the ramp.
+- `u_crustColor` — cold rough rock (the cold end of the ramp).
+- `u_rimColor` — fiery Fresnel rim tint.
+- `u_rimPower` — Fresnel exponent: how far the rim encroaches from the silhouette edge (low = wide/deep, high = a thin edge line).
+- `u_rimBlend` — how the rim colour blends onto the surface: the full Photoshop set (Normal, Add, Screen, Multiply, Overlay, Darken, Lighten, Color Dodge/Burn, Linear Burn/Light, Hard/Soft/Vivid/Pin Light, Hard Mix, Difference, Exclusion, Subtract, Divide). Composited as a masked layer weighted by the Fresnel term, so the mode only acts along the silhouette.
+
+Post-fx (in `meta.json`, live-tweakable in the studio Post-FX panel): a bloom pass with a colour tint so the glow stays in-colour rather than washing to white. Gallery previews run the same pipeline as the studio (`RenderPass → UnrealBloomPass → OutputPass`, blitted into each tile) so their bloom and background match the full render.
 
 ## UE porting notes
 
-- Displacement → World Position Offset in a UE material: same sum-of-sines on `Time`/local position, scaled by an `Intensity` scalar parameter.
-- Heat ramp → lerp between two Vector parameters driven by the same wobble value; flicker via `Time`-driven sine into emissive.
-- For a production version, replace sum-of-sines with a noise texture sample (cheaper and better-looking than analytic noise in UE).
+- Lava cloud → domain-warped **turbulence** (`Σ abs(noise)`) sampled in a scrolled object-space domain; threshold near its minima for the molten regions.
+- Multi-stop ramp → a Curve Atlas / gradient lerp driven by the `heat` scalar (rock → ember → orange → core → white) into Emissive; keep it HDR for Bloom.
+- Rough crust → ridged/turbulence noise + high-frequency grain into base colour; feed a height into **World Position Offset** (or displacement) for the uneven surface.
+- Fresnel rim → the built-in `Fresnel` node into Emissive.
+- Bloom → post-process Bloom (the studio's post-fx maps straight across). Real *flying* embers → a Niagara ember emitter around the mesh.

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Canvas } from '@threlte/core';
 	import type { RawShaderMaterial } from 'three';
-	import type { MeshPrimitive, ShaderEntry } from '$lib/shaders/types';
+	import type { BloomControls, MeshPrimitive, ShaderEntry } from '$lib/shaders/types';
 	import type { SceneComponent } from './scenes';
 	import HarnessScene from './HarnessScene.svelte';
 
@@ -11,12 +11,14 @@
 		entry,
 		material,
 		primitive = 'sphere',
-		sceneComponent
+		sceneComponent,
+		bloom
 	}: {
 		entry: ShaderEntry;
 		material: RawShaderMaterial;
 		primitive?: MeshPrimitive;
 		sceneComponent?: SceneComponent;
+		bloom?: BloomControls;
 	} = $props();
 
 	function onpointermove(event: PointerEvent) {
@@ -30,7 +32,7 @@
 
 <div class="harness" role="presentation" {onpointermove}>
 	<Canvas>
-		<HarnessScene {entry} {material} {primitive} {sceneComponent} />
+		<HarnessScene {entry} {material} {primitive} {sceneComponent} {bloom} />
 	</Canvas>
 </div>
 
