@@ -1,5 +1,7 @@
 # Shader Studio
 
+![Shader Studio — Local-first GLSL look-dev](docs/design/mockups/readme-banner.png)
+
 A **local-first gallery + development studio for WebGL shaders** — a look-dev sandbox for quickly iterating on effects destined for games (Unreal Engine 5/6) and websites.
 
 You edit GLSL in your own editor; the running studio hot-reloads it in place, with live-tweakable uniform controls and an orbitable 3D camera. (An on-canvas compile-error overlay is the next planned piece — see [PLAN.md](PLAN.md).)
