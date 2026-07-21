@@ -37,7 +37,9 @@
 -->
 <div
 	class={cn(
-		'group relative flex h-full flex-col overflow-hidden rounded-tile border transition-[border-color,box-shadow] duration-150',
+		// Hover paints a Signal-Red outline matching the selected border; it's an
+		// outline (not in the transition list) so it snaps in with no fade.
+		'group relative flex h-full flex-col overflow-hidden rounded-tile border transition-[border-color,box-shadow] duration-150 hover:outline hover:outline-1 hover:-outline-offset-1 hover:outline-primary/60',
 		selected
 			? 'border-primary/60 shadow-[0_0_40px_-4px_oklch(0.55_0.21_18/0.14)]'
 			: 'border-border'
