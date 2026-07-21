@@ -10,6 +10,7 @@ Notable changes, newest first. What/when only — the *why* lives in the [design
 - New **Energy Shield** shader (`shaders/energy-shield/`): an exact duplicate of the Fireball shader to diverge from, tagged `energy · sphere · shield`.
 
 ### Changed
+- Reworked the **Fireball** crack pattern from cellular Worley to a **static fractal contour network** — the gradient-normalised level-set of a domain-warped fbm (finite-difference gradient, since `GL_OES_standard_derivatives` isn't available on this ES-1.00/WebGL2 context) — over a **rough** ridged-rock crust; the pattern no longer moves or warps, and `u_churn` now only shimmers brightness. Defaults retuned toward the reference (intensity 1, scale 3.5, bloom 0.55/0.25/0.75).
 - Fireball palette + crust are now fully controllable — `u_coreColor`/`u_emberColor`/`u_crustColor`/`u_rimColor` and a `u_crust` strength — with the burnt crust made visibly present and the displacement default raised to `0.12` (max `0.5`).
 - Bloom post-fx gained live panel controls (strength/radius/threshold/**colour tint**) and **resolution-scaled** strength ([D21]): the tint keeps the glow in-colour instead of washing to white, and the scaling makes small previews match the full render.
 - Mesh shader **surround** (studio canvas + gallery preview tiles) now clears to the raised Surface (Shadow Plum `#191824`) instead of Viewport Black, read live from the CSS token ([D22]); supersedes the Viewport Black neutral-surround note in DESIGN.md. Quad shaders are unaffected.

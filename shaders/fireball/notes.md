@@ -1,26 +1,28 @@
 # Fireball — notes
 
-A magma sphere built in layers. An animated 3D Worley network paints glowing cracks between cooler cells, domain-warped by value-noise fbm so the crust reads as molten rather than geometric. A **burnt, crispy charred-rock crust** (fbm plates + grit speckle) fills the cell interiors with warm lava breathing through the low crevices, so it reads as hot lava rather than veins-on-black. The vertex shader adds a subtle **displacement map** (the same crust fbm along the normal) so the surface is physically uneven. A blackbody palette keeps most of the surface dark ember and pushes only the crack lines to orange→core→white-hot, and a world-space Fresnel term rings the silhouette with fire. The hottest seams and rim are emitted as HDR values (>1) so the studio **bloom** pass ([D21]) gives them their glow and the ember halo that bleeds onto the plum background.
+A magma sphere built in layers. A **fractal crack network** — the thin contour (level-set) of a domain-warped value-noise fbm field, its width normalised by the field gradient (computed with finite differences, since the `GL_OES_standard_derivatives` extension isn't available on this ES-1.00-on-WebGL2 context) so the seams stay uniformly thin — glows between a **rough charred-rock crust** (ridged noise + grain + sharp pits) that fills the interiors. A blackbody palette keeps most of the surface dark rock and pushes only the crack lines to orange→core→white-hot; a world-space Fresnel term rings the silhouette with fire. Hot seams and rim are emitted as HDR (>1) so the studio **bloom** pass ([D21]) gives them their glow.
+
+The pattern is **static** — there is no time in the sample coordinates, so the bands and crust never warp; the vertex displacement is static too. `u_churn` only drives a gentle brightness shimmer.
 
 ## Uniforms
 
 - `u_intensity` — overall brightness / HDR push into the highlights.
-- `u_churn` — speed of the molten surface churn (also drifts the displacement).
-- `u_scale` — cell density of the lava network (maps directly to Worley density).
-- `u_crackWidth` — thickness of the glowing veins.
-- `u_displace` — amplitude of the burnt-crust vertex displacement.
-- `u_crust` — strength/visibility of the burnt rock crust.
+- `u_churn` — brightness shimmer speed (does not move the pattern).
+- `u_scale` — scale of the fractal crack network.
+- `u_crackWidth` — thickness of the glowing seams.
+- `u_displace` — amplitude of the (static) rock displacement.
+- `u_crust` — how much of the surface the rough crust reclaims.
 - `u_coreColor` — hot core / gold band of the fire ramp.
 - `u_emberColor` — deep low-heat ember (the reds of the ramp).
-- `u_crustColor` — charred rock filling the cell interiors.
+- `u_crustColor` — rough charred rock filling the interiors.
 - `u_rimColor` — fiery Fresnel rim tint.
 
 Post-fx (in `meta.json`, live-tweakable in the studio Post-FX panel): a bloom pass with a colour tint so the glow stays in-colour rather than washing to white; strength scales with render resolution so previews match the full render.
 
 ## UE porting notes
 
-- Worley cracks → a Voronoi node (or baked Worley texture) feeding a thin-line mask via `F2 - F1`; cheaper to sample a tiling 3D noise texture than to evaluate analytic Worley in a UE material.
-- Burnt crust → a tiling fbm/noise into base-colour darkening + the same height into **World Position Offset** (or a tessellation/displacement material) for the uneven surface.
+- Fractal cracks → threshold a domain-warped noise field near a level and normalise the line width by its screen-space derivative (`ddx`/`ddy`), or bake the crack mask to a tiling texture.
+- Rough crust → ridged/turbulence noise + high-frequency grain into base-colour darkening; feed a height into **World Position Offset** (or displacement) for the uneven surface.
 - Fire ramp → a Curve Atlas / gradient lerp driven by the crack heat scalar into Emissive; keep it HDR for Bloom.
 - Fresnel rim → the built-in `Fresnel` node into Emissive, multiplied by the crack mask for the edge flare.
-- Bloom → post-process Bloom (the studio's post-fx maps straight across). Real *flying* embers → a Niagara ember emitter around the mesh, rather than faking it in-shader.
+- Bloom → post-process Bloom (the studio's post-fx maps straight across). Real *flying* embers → a Niagara ember emitter around the mesh.

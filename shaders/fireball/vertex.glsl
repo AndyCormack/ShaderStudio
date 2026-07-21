@@ -49,10 +49,10 @@ float fbm(vec3 p) {
 void main() {
     vLocalPos = position;
 
-    // Rough, uneven crust height — coarse plates plus finer grit, drifting slowly.
-    float t = u_time * 0.15 * u_churn;
-    float crust = fbm(position * 3.5 + vec3(0.0, 0.0, t));
-    crust += 0.5 * fbm(position * 8.0 - vec3(t, 0.0, 0.0));
+    // Static, uneven crust height — coarse plates plus finer grit. Kept static
+    // (no time) so the crust surface never warps.
+    float crust = fbm(position * 3.5);
+    crust += 0.5 * fbm(position * 8.0);
     crust /= 1.5;
     vCrust = crust;
 
